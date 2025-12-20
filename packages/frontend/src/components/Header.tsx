@@ -4,7 +4,7 @@ const navItems = [
   { to: "/docs", label: "Docs" },
   { to: "/gallery", label: "Gallery" },
   { to: "/pricing", label: "Pricing" },
-  { href: "https://github.com/imgflo/imgflo", label: "GitHub", external: true },
+  { href: "https://github.com/floimg/floimg", label: "GitHub", external: true },
 ];
 
 export default function Header() {
@@ -13,7 +13,7 @@ export default function Header() {
       <nav className="mx-auto max-w-7xl px-6 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-xl font-bold text-white">
-            imgflo
+            floimg
           </Link>
 
           <div className="flex items-center gap-8">

@@ -71,15 +71,15 @@ export default function Home() {
             <code className="text-zinc-300">
               <span className="text-violet-400">import</span> createClient{" "}
               <span className="text-violet-400">from</span>{" "}
-              <span className="text-green-400">'imgflo'</span>;{"\n"}
+              <span className="text-green-400">'floimg'</span>;{"\n"}
               <span className="text-violet-400">import</span> quickchart{" "}
               <span className="text-violet-400">from</span>{" "}
-              <span className="text-green-400">'imgflo-quickchart'</span>;{"\n\n"}
-              <span className="text-violet-400">const</span> imgflo = createClient();{"\n"}
-              imgflo.registerGenerator(quickchart());{"\n\n"}
+              <span className="text-green-400">'floimg-quickchart'</span>;{"\n\n"}
+              <span className="text-violet-400">const</span> floimg = createClient();{"\n"}
+              floimg.registerGenerator(quickchart());{"\n\n"}
               <span className="text-zinc-500">// Generate a chart</span>{"\n"}
               <span className="text-violet-400">const</span> chart ={" "}
-              <span className="text-violet-400">await</span> imgflo.generate({"{"}
+              <span className="text-violet-400">await</span> floimg.generate({"{"}
               {"\n"}
               {"  "}generator: <span className="text-green-400">'quickchart'</span>,{"\n"}
               {"  "}params: {"{"} type: <span className="text-green-400">'bar'</span>, data:{" "}
@@ -88,14 +88,14 @@ export default function Home() {
               {"}"});{"\n\n"}
               <span className="text-zinc-500">// Transform it</span>{"\n"}
               <span className="text-violet-400">const</span> resized ={" "}
-              <span className="text-violet-400">await</span> imgflo.transform(chart, {"{"}
+              <span className="text-violet-400">await</span> floimg.transform(chart, {"{"}
               {"\n"}
               {"  "}op: <span className="text-green-400">'resize'</span>,{"\n"}
               {"  "}params: {"{"} width: <span className="text-amber-400">800</span> {"}"}
               {"\n"}
               {"}"});{"\n\n"}
               <span className="text-zinc-500">// Save to S3</span>{"\n"}
-              <span className="text-violet-400">await</span> imgflo.save(resized,{" "}
+              <span className="text-violet-400">await</span> floimg.save(resized,{" "}
               <span className="text-green-400">'s3://bucket/chart.png'</span>);
             </code>
           </pre>
@@ -105,7 +105,7 @@ export default function Home() {
       {/* Features */}
       <section className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
-          <h2 className="text-center text-3xl font-bold text-white">Why imgflo?</h2>
+          <h2 className="text-center text-3xl font-bold text-white">Why floimg?</h2>
           <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {features.map((feature) => (
               <div
@@ -132,7 +132,7 @@ export default function Home() {
                 key={gen.name}
                 className="flex items-center gap-4 rounded-lg border border-white/10 bg-zinc-950 p-4"
               >
-                <code className="text-sm text-violet-400">imgflo-{gen.name}</code>
+                <code className="text-sm text-violet-400">floimg-{gen.name}</code>
                 <span className="text-sm text-zinc-500">{gen.desc}</span>
               </div>
             ))}
@@ -153,11 +153,11 @@ export default function Home() {
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold text-white">Ready to start?</h2>
           <p className="mt-4 text-zinc-400">
-            Install imgflo and generate your first image in minutes.
+            Install floimg and generate your first image in minutes.
           </p>
           <div className="mt-8">
             <code className="rounded-lg bg-zinc-900 px-4 py-2 text-violet-400">
-              npm install imgflo
+              npm install floimg
             </code>
           </div>
           <div className="mt-8 flex items-center justify-center gap-4">
@@ -168,7 +168,7 @@ export default function Home() {
               Read the Docs
             </Link>
             <a
-              href="https://github.com/imgflo/imgflo"
+              href="https://github.com/floimg/floimg"
               className="rounded-lg border border-white/20 px-6 py-3 font-medium text-white hover:bg-white/5 transition-colors"
               target="_blank"
               rel="noopener noreferrer"

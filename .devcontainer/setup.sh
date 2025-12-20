@@ -1,16 +1,16 @@
 #!/bin/bash
-# Dev container setup script for imgflo-web
+# Dev container setup script for floimg-web
 # This runs automatically after the container is created (postCreateCommand)
 
 set -e  # Exit on error
 
-echo "Starting imgflo-web dev container setup..."
+echo "Starting floimg-web dev container setup..."
 
 # Verify .env file exists
-ROOT_ENV="/workspaces/imgflo-web/.env"
+ROOT_ENV="/workspaces/floimg-web/.env"
 if [ ! -f "$ROOT_ENV" ]; then
   echo "No .env file found, copying from .env.example..."
-  cp /workspaces/imgflo-web/.env.example "$ROOT_ENV"
+  cp /workspaces/floimg-web/.env.example "$ROOT_ENV"
   echo "Created $ROOT_ENV from .env.example"
 fi
 
@@ -26,8 +26,8 @@ set +a
 SYSTEM_BASHRC="/etc/bash.bashrc"
 
 # Add environment variables (idempotent)
-if ! grep -Fq "source /workspaces/imgflo-web/.env" "$SYSTEM_BASHRC" 2>/dev/null; then
-  echo "set -a; source /workspaces/imgflo-web/.env 2>/dev/null; set +a" >> "$SYSTEM_BASHRC"
+if ! grep -Fq "source /workspaces/floimg-web/.env" "$SYSTEM_BASHRC" 2>/dev/null; then
+  echo "set -a; source /workspaces/floimg-web/.env 2>/dev/null; set +a" >> "$SYSTEM_BASHRC"
   echo "Added environment variables to $SYSTEM_BASHRC"
 fi
 
@@ -75,7 +75,7 @@ fi
 
 echo ""
 echo "=================================================="
-echo "imgflo-web dev container setup complete!"
+echo "floimg-web dev container setup complete!"
 echo "=================================================="
 echo ""
 echo "Available commands:"

@@ -4,7 +4,7 @@ export default function Docs() {
   return (
     <div className="mx-auto max-w-4xl px-6 py-24">
       <h1 className="text-4xl font-bold text-white">Documentation</h1>
-      <p className="mt-4 text-zinc-400">Learn how to use imgflo to build image workflows.</p>
+      <p className="mt-4 text-zinc-400">Learn how to use floimg to build image workflows.</p>
 
       <div className="mt-12 space-y-8">
         <section>
@@ -85,7 +85,7 @@ export default function Docs() {
             </li>
             <li>
               <Link to="/docs/studio" className="text-violet-400 hover:text-violet-300">
-                imgflo Studio
+                floimg Studio
               </Link>
             </li>
           </ul>

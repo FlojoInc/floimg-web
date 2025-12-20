@@ -11,7 +11,7 @@ export default function Gallery() {
       <div className="text-center">
         <h1 className="text-4xl font-bold text-white">Gallery</h1>
         <p className="mt-4 text-zinc-400">
-          Images created with imgflo. Get inspired and remix workflows.
+          Images created with floimg. Get inspired and remix workflows.
         </p>
       </div>
 
@@ -57,7 +57,7 @@ export default function Gallery() {
       </div>
 
       <div className="mt-12 text-center">
-        <p className="text-zinc-500">Gallery powered by imgflo-cloud API</p>
+        <p className="text-zinc-500">Gallery powered by floimg-cloud API</p>
       </div>
     </div>
   );

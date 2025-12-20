@@ -12,9 +12,9 @@ const sections = [
   {
     title: "Open Source",
     links: [
-      { href: "https://github.com/imgflo/imgflo", label: "imgflo Core" },
-      { href: "https://github.com/imgflo/imgflo-studio", label: "imgflo Studio" },
-      { href: "https://www.npmjs.com/package/imgflo", label: "npm" },
+      { href: "https://github.com/floimg/floimg", label: "floimg Core" },
+      { href: "https://github.com/floimg/floimg-studio", label: "floimg Studio" },
+      { href: "https://www.npmjs.com/package/floimg", label: "npm" },
     ],
   },
   {
@@ -33,7 +33,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <span className="text-lg font-bold text-white">imgflo</span>
+            <span className="text-lg font-bold text-white">floimg</span>
             <p className="mt-2 text-sm text-zinc-400">
               Universal image workflow engine for developers and AI agents.
             </p>

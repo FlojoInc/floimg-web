@@ -1,13 +1,13 @@
-# imgflo-web
+# floimg-web
 
-Public website for the imgflo ecosystem: marketing, documentation, and gallery.
+Public website for the floimg ecosystem: marketing, documentation, and gallery.
 
 ## Structure
 
 ```
 packages/
 ├── frontend/        # React 19 + Vite (marketing, docs, gallery UI)
-└── shared/          # Shared types with imgflo-cloud
+└── shared/          # Shared types with floimg-cloud
 ```
 
 ## Tech Stack
@@ -33,6 +33,6 @@ pnpm build
 
 ## Related Repos
 
-- [imgflo](../imgflo) - Core library
-- [imgflo-studio](../imgflo-studio) - Visual builder
-- imgflo-cloud (private) - Cloud API that powers gallery and auth
+- [floimg](../floimg) - Core library
+- [floimg-studio](../floimg-studio) - Visual builder
+- floimg-cloud (private) - Cloud API that powers gallery and auth

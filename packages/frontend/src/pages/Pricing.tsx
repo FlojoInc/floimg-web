@@ -4,7 +4,7 @@ const tiers = [
   {
     name: "Free",
     price: "$0",
-    description: "For trying out imgflo",
+    description: "For trying out floimg",
     features: [
       "50 images/month",
       "100MB storage",
@@ -134,7 +134,7 @@ export default function Pricing() {
         <p className="text-zinc-400">
           Prefer to self-host?{" "}
           <Link to="/docs/self-hosting" className="text-violet-400 hover:text-violet-300">
-            Run imgflo Studio on your own infrastructure for free →
+            Run floimg Studio on your own infrastructure for free →
           </Link>
         </p>
       </div>
