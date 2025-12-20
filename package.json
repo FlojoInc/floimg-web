@@ -1,0 +1,14 @@
+{
+  "name": "floimg-web-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeamFlojo/floimg-web.git"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @floimg-web/frontend dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck"
+  }
+}

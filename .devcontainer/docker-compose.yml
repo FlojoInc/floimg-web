@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: ${CONTAINER_PREFIX:-imgflo-web}_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    init: true
+    volumes:
+      - ../..:/workspaces:cached
+      - ../.claude-sessions:/root/.claude
+    command: sleep infinity
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - ../.env
+    ports:
+      - "${IMGFLO_WEB_PORT:-5174}:5174"
+      - "${IMGFLO_WEB_CHROME_PORT:-9224}:9222"
