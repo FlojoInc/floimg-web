@@ -1,0 +1,228 @@
+---
+title: D3
+description: Generate custom data visualizations
+---
+
+The D3 plugin enables custom data visualizations using D3.js.
+
+## Installation
+
+```bash
+pnpm add @teamflojo/floimg-d3
+```
+
+## Registration
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import d3 from '@teamflojo/floimg-d3';
+
+const floimg = createClient();
+floimg.registerGenerator(d3());
+```
+
+## Usage
+
+```typescript
+const visualization = await floimg.generate({
+  generator: 'd3',
+  params: {
+    width: 600,
+    height: 400,
+    render: (svg, d3) => {
+      // D3.js code here
+      svg.append('circle')
+        .attr('cx', 300)
+        .attr('cy', 200)
+        .attr('r', 50)
+        .attr('fill', '#7c3aed');
+    }
+  }
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `width` | number | Yes | SVG width in pixels |
+| `height` | number | Yes | SVG height in pixels |
+| `render` | function | Yes | D3 render function |
+| `backgroundColor` | string | No | Background color |
+
+## Examples
+
+### Bar Chart
+
+```typescript
+const data = [
+  { label: 'A', value: 30 },
+  { label: 'B', value: 80 },
+  { label: 'C', value: 45 },
+  { label: 'D', value: 60 },
+  { label: 'E', value: 20 }
+];
+
+const chart = await floimg.generate({
+  generator: 'd3',
+  params: {
+    width: 500,
+    height: 300,
+    render: (svg, d3) => {
+      const margin = { top: 20, right: 20, bottom: 30, left: 40 };
+      const width = 500 - margin.left - margin.right;
+      const height = 300 - margin.top - margin.bottom;
+
+      const g = svg.append('g')
+        .attr('transform', `translate(${margin.left},${margin.top})`);
+
+      const x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.1)
+        .domain(data.map(d => d.label));
+
+      const y = d3.scaleLinear()
+        .range([height, 0])
+        .domain([0, d3.max(data, d => d.value)]);
+
+      g.selectAll('.bar')
+        .data(data)
+        .enter().append('rect')
+        .attr('class', 'bar')
+        .attr('x', d => x(d.label))
+        .attr('y', d => y(d.value))
+        .attr('width', x.bandwidth())
+        .attr('height', d => height - y(d.value))
+        .attr('fill', '#7c3aed');
+
+      g.append('g')
+        .attr('transform', `translate(0,${height})`)
+        .call(d3.axisBottom(x));
+
+      g.append('g')
+        .call(d3.axisLeft(y));
+    }
+  }
+});
+```
+
+### Force-Directed Graph
+
+```typescript
+const nodes = [
+  { id: 'A' }, { id: 'B' }, { id: 'C' }, { id: 'D' }, { id: 'E' }
+];
+const links = [
+  { source: 'A', target: 'B' },
+  { source: 'A', target: 'C' },
+  { source: 'B', target: 'D' },
+  { source: 'C', target: 'E' }
+];
+
+const graph = await floimg.generate({
+  generator: 'd3',
+  params: {
+    width: 600,
+    height: 400,
+    render: (svg, d3) => {
+      const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(links).id(d => d.id))
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force('center', d3.forceCenter(300, 200));
+
+      // Run simulation synchronously
+      for (let i = 0; i < 300; i++) simulation.tick();
+
+      svg.selectAll('line')
+        .data(links)
+        .enter().append('line')
+        .attr('x1', d => d.source.x)
+        .attr('y1', d => d.source.y)
+        .attr('x2', d => d.target.x)
+        .attr('y2', d => d.target.y)
+        .attr('stroke', '#94a3b8');
+
+      svg.selectAll('circle')
+        .data(nodes)
+        .enter().append('circle')
+        .attr('cx', d => d.x)
+        .attr('cy', d => d.y)
+        .attr('r', 20)
+        .attr('fill', '#7c3aed');
+
+      svg.selectAll('text')
+        .data(nodes)
+        .enter().append('text')
+        .attr('x', d => d.x)
+        .attr('y', d => d.y)
+        .attr('text-anchor', 'middle')
+        .attr('dy', 5)
+        .attr('fill', 'white')
+        .text(d => d.id);
+    }
+  }
+});
+```
+
+### Treemap
+
+```typescript
+const data = {
+  name: 'root',
+  children: [
+    { name: 'A', value: 100 },
+    { name: 'B', value: 80 },
+    { name: 'C', value: 60 },
+    { name: 'D', value: 40 },
+    { name: 'E', value: 20 }
+  ]
+};
+
+const treemap = await floimg.generate({
+  generator: 'd3',
+  params: {
+    width: 600,
+    height: 400,
+    render: (svg, d3) => {
+      const root = d3.hierarchy(data).sum(d => d.value);
+
+      d3.treemap()
+        .size([600, 400])
+        .padding(2)(root);
+
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+      svg.selectAll('rect')
+        .data(root.leaves())
+        .enter().append('rect')
+        .attr('x', d => d.x0)
+        .attr('y', d => d.y0)
+        .attr('width', d => d.x1 - d.x0)
+        .attr('height', d => d.y1 - d.y0)
+        .attr('fill', d => color(d.data.name));
+
+      svg.selectAll('text')
+        .data(root.leaves())
+        .enter().append('text')
+        .attr('x', d => d.x0 + 5)
+        .attr('y', d => d.y0 + 20)
+        .text(d => d.data.name)
+        .attr('fill', 'white');
+    }
+  }
+});
+```
+
+## Tips
+
+1. **Synchronous rendering**: The render function must complete synchronously. For force simulations, run ticks in a loop.
+
+2. **Data binding**: Pass data through closure or include it in the render function.
+
+3. **Scales and axes**: Use D3's scale and axis functions for proper data visualization.
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Core generation method
+- [QuickChart](/docs/plugins/quickchart) - Simple charts
+- [Mermaid](/docs/plugins/mermaid) - Diagrams

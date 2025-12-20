@@ -1,0 +1,166 @@
+---
+title: MCP Tool Reference
+description: Available floimg MCP tools for AI agents
+---
+
+The floimg MCP server exposes these tools for AI agents.
+
+## floimg_generate
+
+Generate an image from parameters.
+
+### Parameters
+
+```typescript
+{
+  generator: string;    // Generator name
+  params: object;       // Generator-specific parameters
+  output?: string;      // Output path (optional)
+}
+```
+
+### Example
+
+```json
+{
+  "generator": "quickchart",
+  "params": {
+    "type": "bar",
+    "data": {
+      "labels": ["A", "B", "C"],
+      "datasets": [{ "data": [10, 20, 30] }]
+    }
+  },
+  "output": "chart.png"
+}
+```
+
+### Available Generators
+
+| Generator | Description |
+|-----------|-------------|
+| `quickchart` | Chart.js charts |
+| `mermaid` | Diagrams and flowcharts |
+| `qr` | QR codes |
+| `d3` | D3 visualizations |
+| `screenshot` | Web page screenshots |
+
+---
+
+## floimg_transform
+
+Transform an existing image.
+
+### Parameters
+
+```typescript
+{
+  input: string;        // Input image path or URL
+  op: string;           // Transform operation
+  params: object;       // Operation parameters
+  output?: string;      // Output path (optional)
+}
+```
+
+### Example
+
+```json
+{
+  "input": "chart.png",
+  "op": "resize",
+  "params": {
+    "width": 800,
+    "height": 600
+  },
+  "output": "chart-resized.png"
+}
+```
+
+### Available Operations
+
+| Operation | Parameters | Description |
+|-----------|------------|-------------|
+| `resize` | `width`, `height`, `fit` | Change dimensions |
+| `blur` | `sigma` | Apply gaussian blur |
+| `sharpen` | `sigma` | Sharpen edges |
+| `rotate` | `angle` | Rotate by degrees |
+| `crop` | `left`, `top`, `width`, `height` | Crop to region |
+| `convert` | `format`, `quality` | Change format |
+
+---
+
+## floimg_save
+
+Save an image to storage.
+
+### Parameters
+
+```typescript
+{
+  image: string;        // Image reference from generate/transform
+  path: string;         // Destination path
+}
+```
+
+### Example
+
+```json
+{
+  "image": "generated-chart",
+  "path": "s3://my-bucket/charts/report.png"
+}
+```
+
+### Supported Destinations
+
+| Prefix | Description |
+|--------|-------------|
+| `./` or `/` | Local filesystem |
+| `s3://` | Amazon S3 |
+| `custom://` | Registered custom storage |
+
+---
+
+## Tool Responses
+
+All tools return a response object:
+
+### Success
+
+```json
+{
+  "success": true,
+  "path": "/path/to/output.png",
+  "width": 800,
+  "height": 600,
+  "format": "png",
+  "size": 45678
+}
+```
+
+### Error
+
+```json
+{
+  "success": false,
+  "error": "Generator not found: unknown"
+}
+```
+
+---
+
+## Chaining Tools
+
+AI agents can chain tools together:
+
+1. **Generate** a chart
+2. **Transform** to resize and convert
+3. **Save** to S3
+
+The MCP server tracks image references between calls, so subsequent operations can reference previous outputs.
+
+## See Also
+
+- [MCP Overview](/docs/mcp) - Introduction to MCP
+- [Claude Integration](/docs/mcp/claude-integration) - Setup guide
+- [Examples](/docs/mcp/examples) - Common use cases

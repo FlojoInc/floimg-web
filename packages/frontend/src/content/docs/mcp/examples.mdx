@@ -1,0 +1,267 @@
+---
+title: MCP Examples
+description: Common floimg use cases with AI agents
+---
+
+Real-world examples of using floimg with AI agents via MCP.
+
+## Data Visualization
+
+### Sales Report Chart
+
+**Prompt:**
+> "Create a bar chart showing our Q4 sales by region: North $45k, South $32k, East $28k, West $51k. Save it to reports/q4-sales.png"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "quickchart",
+    "params": {
+      "type": "bar",
+      "data": {
+        "labels": ["North", "South", "East", "West"],
+        "datasets": [{
+          "label": "Q4 Sales ($k)",
+          "data": [45, 32, 28, 51],
+          "backgroundColor": "#7c3aed"
+        }]
+      },
+      "options": {
+        "plugins": {
+          "title": { "display": true, "text": "Q4 Sales by Region" }
+        }
+      }
+    },
+    "output": "reports/q4-sales.png"
+  }
+}
+```
+
+### Trend Line
+
+**Prompt:**
+> "Show me a line chart of our daily active users for the past week: Mon 1200, Tue 1350, Wed 1100, Thu 1450, Fri 1600, Sat 900, Sun 850"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "quickchart",
+    "params": {
+      "type": "line",
+      "data": {
+        "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        "datasets": [{
+          "label": "Daily Active Users",
+          "data": [1200, 1350, 1100, 1450, 1600, 900, 850],
+          "borderColor": "#7c3aed",
+          "fill": false
+        }]
+      }
+    },
+    "output": "dau-chart.png"
+  }
+}
+```
+
+---
+
+## Technical Documentation
+
+### Architecture Diagram
+
+**Prompt:**
+> "Create a diagram showing our microservices: API Gateway connects to Auth Service and User Service. User Service connects to Database. Auth Service connects to Redis."
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "mermaid",
+    "params": {
+      "code": "graph TD\n  GW[API Gateway] --> Auth[Auth Service]\n  GW --> User[User Service]\n  User --> DB[(Database)]\n  Auth --> Redis[(Redis)]",
+      "theme": "default"
+    },
+    "output": "docs/architecture.png"
+  }
+}
+```
+
+### Sequence Diagram
+
+**Prompt:**
+> "Document the login flow: Client sends credentials to API, API validates with Auth service, Auth checks database, returns token to API, API sends token to Client"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "mermaid",
+    "params": {
+      "code": "sequenceDiagram\n  participant C as Client\n  participant A as API\n  participant Auth as Auth Service\n  participant DB as Database\n  C->>A: POST /login (credentials)\n  A->>Auth: Validate credentials\n  Auth->>DB: Check user\n  DB-->>Auth: User data\n  Auth-->>A: JWT Token\n  A-->>C: 200 OK (token)"
+    },
+    "output": "docs/login-flow.png"
+  }
+}
+```
+
+---
+
+## Marketing & Social
+
+### Social Media Card
+
+**Prompt:**
+> "Create an Open Graph image for my blog post titled 'Building Scalable APIs' with a purple gradient background"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "screenshot",
+    "params": {
+      "html": "<div style=\"width:1200px;height:630px;background:linear-gradient(135deg,#7c3aed,#a855f7);display:flex;align-items:center;justify-content:center;font-family:system-ui;color:white;\"><h1 style=\"font-size:64px;text-align:center;padding:40px;\">Building Scalable APIs</h1></div>",
+      "width": 1200,
+      "height": 630
+    },
+    "output": "og-image.png"
+  }
+}
+```
+
+### QR Code for Event
+
+**Prompt:**
+> "Generate a QR code linking to our event registration page at https://example.com/events/2024-summit"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "qr",
+    "params": {
+      "data": "https://example.com/events/2024-summit",
+      "size": 400,
+      "color": "#7c3aed"
+    },
+    "output": "event-qr.png"
+  }
+}
+```
+
+---
+
+## Image Processing
+
+### Batch Optimization
+
+**Prompt:**
+> "Resize hero.png to 1200px wide and convert to WebP with 85% quality"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_transform",
+  "params": {
+    "input": "hero.png",
+    "op": "resize",
+    "params": { "width": 1200 }
+  }
+}
+```
+
+Then:
+```json
+{
+  "tool": "floimg_transform",
+  "params": {
+    "input": "hero-resized",
+    "op": "convert",
+    "params": { "format": "webp", "quality": 85 },
+    "output": "hero.webp"
+  }
+}
+```
+
+### Screenshot Documentation
+
+**Prompt:**
+> "Take a screenshot of our dashboard at localhost:3000/dashboard, resize to 800px wide, and save to docs/"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "screenshot",
+    "params": {
+      "url": "http://localhost:3000/dashboard",
+      "width": 1920,
+      "height": 1080
+    }
+  }
+}
+```
+
+Then:
+```json
+{
+  "tool": "floimg_transform",
+  "params": {
+    "input": "screenshot",
+    "op": "resize",
+    "params": { "width": 800 },
+    "output": "docs/dashboard-screenshot.png"
+  }
+}
+```
+
+---
+
+## CI/CD Integration
+
+### Automated Report Charts
+
+In a CI pipeline, the agent can generate charts from test results:
+
+**Prompt:**
+> "Create a chart from our test coverage data and upload to S3"
+
+**Agent uses:**
+```json
+{
+  "tool": "floimg_generate",
+  "params": {
+    "generator": "quickchart",
+    "params": {
+      "type": "doughnut",
+      "data": {
+        "labels": ["Covered", "Uncovered"],
+        "datasets": [{
+          "data": [87, 13],
+          "backgroundColor": ["#22c55e", "#ef4444"]
+        }]
+      },
+      "options": {
+        "plugins": {
+          "title": { "display": true, "text": "Test Coverage: 87%" }
+        }
+      }
+    },
+    "output": "s3://reports-bucket/coverage/latest.png"
+  }
+}
+```
+
+## See Also
+
+- [MCP Overview](/docs/mcp) - Introduction to MCP
+- [Tool Reference](/docs/mcp/tools) - All available tools
+- [Claude Integration](/docs/mcp/claude-integration) - Setup guide

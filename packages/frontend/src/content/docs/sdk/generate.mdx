@@ -1,0 +1,67 @@
+---
+title: Generate
+description: Create images with floimg generators
+---
+
+The `generate` method creates images from structured parameters using registered generators.
+
+## Basic Usage
+
+```typescript
+const image = await floimg.generate({
+  generator: 'quickchart',
+  params: {
+    type: 'bar',
+    data: { /* Chart.js config */ }
+  }
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `generator` | string | Yes | Name of the registered generator |
+| `params` | object | Yes | Generator-specific parameters |
+
+## Return Value
+
+Returns a `Blob` representing the generated image.
+
+## Registering Generators
+
+Before using a generator, you must register it:
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import quickchart from '@teamflojo/floimg-quickchart';
+import qr from '@teamflojo/floimg-qr';
+
+const floimg = createClient();
+floimg.registerGenerator(quickchart());
+floimg.registerGenerator(qr());
+```
+
+## Error Handling
+
+```typescript
+try {
+  const image = await floimg.generate({
+    generator: 'quickchart',
+    params: { type: 'bar', data: {} }
+  });
+} catch (error) {
+  console.error('Generation failed:', error.message);
+}
+```
+
+Common errors:
+- `Generator not found` - Generator not registered
+- `Invalid params` - Parameters don't match generator schema
+- `Generation failed` - Generator-specific error
+
+## See Also
+
+- [Transform](/docs/sdk/transform) - Modify generated images
+- [Save](/docs/sdk/save) - Output images to storage
+- [Plugins](/docs/plugins/quickchart) - Available generators

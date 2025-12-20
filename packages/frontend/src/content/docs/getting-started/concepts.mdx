@@ -1,0 +1,110 @@
+---
+title: Core Concepts
+description: Understanding how floimg works
+---
+
+floimg is built around three simple operations: **Generate**, **Transform**, and **Save**.
+
+## The Workflow Model
+
+Every floimg workflow follows this pattern:
+
+```
+Generate → Transform (optional, repeatable) → Save
+```
+
+1. **Generate**: Create an image from parameters (charts, diagrams, QR codes, etc.)
+2. **Transform**: Modify the image (resize, blur, convert format, etc.)
+3. **Save**: Output to filesystem, S3, or other storage
+
+## Generators
+
+Generators create images from structured data. Each generator is a plugin with its own parameter schema.
+
+```typescript
+const image = await floimg.generate({
+  generator: 'quickchart',  // Which generator to use
+  params: { ... }           // Generator-specific parameters
+});
+```
+
+Available generators:
+- `quickchart` - Charts via Chart.js
+- `mermaid` - Diagrams and flowcharts
+- `qr` - QR codes
+- `d3` - D3 data visualizations
+- `screenshot` - Website screenshots
+
+## Transforms
+
+Transforms modify existing images. They can be chained:
+
+```typescript
+let image = await floimg.generate({ ... });
+
+// Chain multiple transforms
+image = await floimg.transform(image, { op: 'resize', params: { width: 800 } });
+image = await floimg.transform(image, { op: 'blur', params: { sigma: 2 } });
+image = await floimg.transform(image, { op: 'convert', params: { format: 'webp' } });
+```
+
+Available transforms:
+- `resize` - Change dimensions
+- `blur` - Apply gaussian blur
+- `sharpen` - Sharpen edges
+- `convert` - Change format (PNG, JPEG, WebP, etc.)
+- `rotate` - Rotate by degrees
+- `crop` - Crop to region
+
+## The Image Object
+
+When you generate or transform, you get an image object (a Blob) that can be:
+- Passed to another transform
+- Saved to storage
+- Converted to a Buffer or base64
+
+```typescript
+const image = await floimg.generate({ ... });
+
+// Get as Buffer
+const buffer = await image.arrayBuffer();
+
+// Get as base64
+const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+```
+
+## Storage Adapters
+
+floimg can save to different storage backends:
+
+```typescript
+// Local filesystem
+await floimg.save(image, './output.png');
+
+// S3 bucket
+await floimg.save(image, 's3://bucket/path/image.png');
+
+// Custom adapter
+floimg.registerStorage(myCustomAdapter());
+await floimg.save(image, 'custom://path/image.png');
+```
+
+## Deterministic Execution
+
+floimg is designed for deterministic execution:
+
+> **Same inputs → Same outputs**
+
+This makes floimg ideal for:
+- CI/CD pipelines
+- Automated reporting
+- AI agent workflows (MCP)
+- Testing and QA
+
+Unlike AI image generation, floimg workflows produce identical results every time (when using non-AI generators).
+
+## Next Steps
+
+- [SDK Reference](/docs/sdk/generate) - Detailed API documentation
+- [Plugins](/docs/plugins/quickchart) - Explore available generators
+- [MCP Integration](/docs/mcp/claude-integration) - Use with AI agents

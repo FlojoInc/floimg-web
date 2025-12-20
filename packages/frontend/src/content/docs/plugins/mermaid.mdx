@@ -1,0 +1,211 @@
+---
+title: Mermaid
+description: Generate diagrams from text definitions
+---
+
+The Mermaid plugin renders diagrams and flowcharts from Mermaid syntax.
+
+## Installation
+
+```bash
+pnpm add @teamflojo/floimg-mermaid
+```
+
+## Registration
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import mermaid from '@teamflojo/floimg-mermaid';
+
+const floimg = createClient();
+floimg.registerGenerator(mermaid());
+```
+
+## Usage
+
+```typescript
+const diagram = await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      graph TD
+        A[Start] --> B{Decision}
+        B -->|Yes| C[Action 1]
+        B -->|No| D[Action 2]
+        C --> E[End]
+        D --> E
+    `
+  }
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `code` | string | Yes | Mermaid diagram definition |
+| `theme` | string | No | Theme: 'default', 'dark', 'forest', 'neutral' |
+| `backgroundColor` | string | No | Background color (default: white) |
+| `width` | number | No | Max width in pixels |
+
+## Diagram Types
+
+### Flowchart
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      flowchart LR
+        A[Input] --> B[Process]
+        B --> C[Output]
+    `
+  }
+});
+```
+
+### Sequence Diagram
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      sequenceDiagram
+        participant Client
+        participant Server
+        participant Database
+
+        Client->>Server: Request
+        Server->>Database: Query
+        Database-->>Server: Results
+        Server-->>Client: Response
+    `
+  }
+});
+```
+
+### Class Diagram
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      classDiagram
+        class Animal {
+          +name: string
+          +age: int
+          +makeSound()
+        }
+        class Dog {
+          +breed: string
+          +bark()
+        }
+        Animal <|-- Dog
+    `
+  }
+});
+```
+
+### State Diagram
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      stateDiagram-v2
+        [*] --> Idle
+        Idle --> Processing: Start
+        Processing --> Complete: Success
+        Processing --> Error: Failure
+        Complete --> [*]
+        Error --> Idle: Retry
+    `
+  }
+});
+```
+
+### Entity Relationship Diagram
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      erDiagram
+        USER ||--o{ ORDER : places
+        ORDER ||--|{ LINE_ITEM : contains
+        PRODUCT ||--o{ LINE_ITEM : "ordered in"
+    `
+  }
+});
+```
+
+### Gantt Chart
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      gantt
+        title Project Timeline
+        dateFormat YYYY-MM-DD
+        section Phase 1
+        Design    :a1, 2024-01-01, 30d
+        Development :a2, after a1, 60d
+        section Phase 2
+        Testing   :a3, after a2, 20d
+        Launch    :a4, after a3, 10d
+    `
+  }
+});
+```
+
+### Pie Chart
+
+```typescript
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `
+      pie title Browser Market Share
+        "Chrome" : 65
+        "Safari" : 19
+        "Firefox" : 10
+        "Other" : 6
+    `
+  }
+});
+```
+
+## Themes
+
+```typescript
+// Dark theme
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `graph TD; A-->B;`,
+    theme: 'dark'
+  }
+});
+
+// Forest theme
+await floimg.generate({
+  generator: 'mermaid',
+  params: {
+    code: `graph TD; A-->B;`,
+    theme: 'forest'
+  }
+});
+```
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Core generation method
+- [QuickChart](/docs/plugins/quickchart) - Data charts
+- [D3](/docs/plugins/d3) - Custom visualizations

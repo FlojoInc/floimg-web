@@ -1,0 +1,136 @@
+---
+title: QR Codes
+description: Generate QR codes from data
+---
+
+The QR plugin generates QR codes from text, URLs, or structured data.
+
+## Installation
+
+```bash
+pnpm add @teamflojo/floimg-qr
+```
+
+## Registration
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import qr from '@teamflojo/floimg-qr';
+
+const floimg = createClient();
+floimg.registerGenerator(qr());
+```
+
+## Usage
+
+```typescript
+const code = await floimg.generate({
+  generator: 'qr',
+  params: {
+    data: 'https://floimg.com'
+  }
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `data` | string | Yes | Content to encode |
+| `size` | number | No | Size in pixels (default: 200) |
+| `errorCorrection` | string | No | Error correction level: 'L', 'M', 'Q', 'H' |
+| `margin` | number | No | Quiet zone margin (default: 4) |
+| `color` | string | No | Foreground color (default: black) |
+| `backgroundColor` | string | No | Background color (default: white) |
+
+## Examples
+
+### Basic URL
+
+```typescript
+const qrCode = await floimg.generate({
+  generator: 'qr',
+  params: {
+    data: 'https://example.com/product/123'
+  }
+});
+```
+
+### Custom Styling
+
+```typescript
+const qrCode = await floimg.generate({
+  generator: 'qr',
+  params: {
+    data: 'https://floimg.com',
+    size: 400,
+    color: '#7c3aed',
+    backgroundColor: '#f5f3ff',
+    margin: 2
+  }
+});
+```
+
+### High Error Correction
+
+For QR codes that may be partially obscured (e.g., with a logo overlay):
+
+```typescript
+const qrCode = await floimg.generate({
+  generator: 'qr',
+  params: {
+    data: 'https://floimg.com',
+    errorCorrection: 'H', // Highest error correction
+    size: 400
+  }
+});
+```
+
+### vCard Contact
+
+```typescript
+const vcard = `BEGIN:VCARD
+VERSION:3.0
+N:Doe;John
+FN:John Doe
+ORG:Example Corp
+TEL:+1-555-123-4567
+EMAIL:john@example.com
+END:VCARD`;
+
+const contactQR = await floimg.generate({
+  generator: 'qr',
+  params: {
+    data: vcard,
+    size: 300
+  }
+});
+```
+
+### WiFi Configuration
+
+```typescript
+const wifi = 'WIFI:T:WPA;S:MyNetwork;P:MyPassword;;';
+
+const wifiQR = await floimg.generate({
+  generator: 'qr',
+  params: {
+    data: wifi,
+    size: 250
+  }
+});
+```
+
+## Error Correction Levels
+
+| Level | Recovery | Use Case |
+|-------|----------|----------|
+| `L` | ~7% | Clean environments, maximum data |
+| `M` | ~15% | Default, general purpose |
+| `Q` | ~25% | Moderate damage expected |
+| `H` | ~30% | Logo overlays, harsh conditions |
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Core generation method
+- [Transform](/docs/sdk/transform) - Modify generated QR codes

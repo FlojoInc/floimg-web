@@ -1,0 +1,187 @@
+---
+title: Screenshot
+description: Capture screenshots of web pages
+---
+
+The Screenshot plugin captures images of web pages or HTML content.
+
+## Installation
+
+```bash
+pnpm add @teamflojo/floimg-screenshot
+```
+
+## Registration
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import screenshot from '@teamflojo/floimg-screenshot';
+
+const floimg = createClient();
+floimg.registerGenerator(screenshot());
+```
+
+## Usage
+
+```typescript
+const image = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    url: 'https://example.com'
+  }
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `url` | string | Yes* | URL to capture |
+| `html` | string | Yes* | HTML content to render |
+| `width` | number | No | Viewport width (default: 1280) |
+| `height` | number | No | Viewport height (default: 720) |
+| `fullPage` | boolean | No | Capture full scrollable page |
+| `selector` | string | No | CSS selector to capture |
+| `waitFor` | number | No | Wait time in ms before capture |
+| `deviceScaleFactor` | number | No | Device scale (default: 1) |
+
+*Either `url` or `html` is required.
+
+## Examples
+
+### Capture URL
+
+```typescript
+const screenshot = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    url: 'https://github.com',
+    width: 1920,
+    height: 1080
+  }
+});
+```
+
+### Full Page Screenshot
+
+```typescript
+const fullPage = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    url: 'https://example.com/long-page',
+    fullPage: true
+  }
+});
+```
+
+### Capture Specific Element
+
+```typescript
+const element = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    url: 'https://example.com',
+    selector: '.hero-section'
+  }
+});
+```
+
+### Render HTML
+
+```typescript
+const html = `
+  <html>
+    <head>
+      <style>
+        body { font-family: sans-serif; padding: 40px; }
+        h1 { color: #7c3aed; }
+      </style>
+    </head>
+    <body>
+      <h1>Hello, World!</h1>
+      <p>This is rendered HTML.</p>
+    </body>
+  </html>
+`;
+
+const rendered = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    html,
+    width: 800,
+    height: 600
+  }
+});
+```
+
+### Wait for Dynamic Content
+
+```typescript
+const dynamic = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    url: 'https://example.com/dashboard',
+    waitFor: 3000 // Wait 3 seconds for JS to load
+  }
+});
+```
+
+### High DPI / Retina
+
+```typescript
+const retina = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    url: 'https://example.com',
+    width: 1280,
+    height: 720,
+    deviceScaleFactor: 2 // 2x resolution
+  }
+});
+```
+
+### Social Media Card
+
+```typescript
+const card = await floimg.generate({
+  generator: 'screenshot',
+  params: {
+    html: `
+      <div style="
+        width: 1200px;
+        height: 630px;
+        background: linear-gradient(135deg, #7c3aed, #a855f7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: system-ui;
+        color: white;
+      ">
+        <div style="text-align: center;">
+          <h1 style="font-size: 72px; margin: 0;">My Article Title</h1>
+          <p style="font-size: 32px; opacity: 0.9;">A compelling subtitle here</p>
+        </div>
+      </div>
+    `,
+    width: 1200,
+    height: 630
+  }
+});
+```
+
+## Requirements
+
+This plugin requires a Chromium-based browser. In production, ensure Puppeteer can launch Chrome:
+
+```bash
+# On Ubuntu/Debian
+apt-get install chromium-browser
+
+# Or use Puppeteer's bundled Chromium
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false pnpm install
+```
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Core generation method
+- [Transform](/docs/sdk/transform) - Modify screenshots

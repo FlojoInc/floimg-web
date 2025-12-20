@@ -1,0 +1,128 @@
+---
+title: Transform
+description: Modify images with floimg transforms
+---
+
+The `transform` method applies modifications to existing images.
+
+## Basic Usage
+
+```typescript
+const resized = await floimg.transform(image, {
+  op: 'resize',
+  params: { width: 800, height: 600 }
+});
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `image` | Blob | Yes | The image to transform |
+| `op` | string | Yes | Transform operation name |
+| `params` | object | Yes | Operation-specific parameters |
+
+## Available Transforms
+
+### resize
+
+Change image dimensions.
+
+```typescript
+await floimg.transform(image, {
+  op: 'resize',
+  params: {
+    width: 800,     // Target width in pixels
+    height: 600,    // Target height in pixels (optional)
+    fit: 'cover'    // How to fit: 'cover', 'contain', 'fill', 'inside', 'outside'
+  }
+});
+```
+
+### blur
+
+Apply gaussian blur.
+
+```typescript
+await floimg.transform(image, {
+  op: 'blur',
+  params: {
+    sigma: 5  // Blur intensity (1-100)
+  }
+});
+```
+
+### sharpen
+
+Sharpen image edges.
+
+```typescript
+await floimg.transform(image, {
+  op: 'sharpen',
+  params: {
+    sigma: 1  // Sharpen intensity
+  }
+});
+```
+
+### convert
+
+Change image format.
+
+```typescript
+await floimg.transform(image, {
+  op: 'convert',
+  params: {
+    format: 'webp',  // 'png', 'jpeg', 'webp', 'avif'
+    quality: 80      // 1-100 for lossy formats
+  }
+});
+```
+
+### rotate
+
+Rotate the image.
+
+```typescript
+await floimg.transform(image, {
+  op: 'rotate',
+  params: {
+    angle: 90  // Degrees (90, 180, 270, or any angle)
+  }
+});
+```
+
+### crop
+
+Crop to a region.
+
+```typescript
+await floimg.transform(image, {
+  op: 'crop',
+  params: {
+    left: 100,
+    top: 100,
+    width: 400,
+    height: 300
+  }
+});
+```
+
+## Chaining Transforms
+
+Transforms can be chained:
+
+```typescript
+let image = await floimg.generate({ ... });
+
+image = await floimg.transform(image, { op: 'resize', params: { width: 800 } });
+image = await floimg.transform(image, { op: 'blur', params: { sigma: 2 } });
+image = await floimg.transform(image, { op: 'convert', params: { format: 'webp' } });
+
+await floimg.save(image, './output.webp');
+```
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Create images
+- [Save](/docs/sdk/save) - Output images to storage

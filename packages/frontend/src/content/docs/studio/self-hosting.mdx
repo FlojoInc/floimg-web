@@ -1,0 +1,223 @@
+---
+title: Self-Hosting
+description: Deploy floimg-studio on your infrastructure
+---
+
+floimg-studio is open-source and designed for self-hosting. Run it on your own servers with full control.
+
+## Quick Start
+
+### Docker (Recommended)
+
+```bash
+docker run -d \
+  --name floimg-studio \
+  -p 5100:5100 \
+  ghcr.io/teamflojo/floimg-studio
+```
+
+Open `http://localhost:5100` in your browser.
+
+### Docker Compose
+
+```yaml
+version: '3.8'
+services:
+  floimg-studio:
+    image: ghcr.io/teamflojo/floimg-studio
+    ports:
+      - "5100:5100"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+```
+
+```bash
+docker-compose up -d
+```
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `5100` |
+| `NODE_ENV` | Environment | `development` |
+| `CORS_ORIGIN` | Allowed origins | `*` |
+| `OUTPUT_DIR` | Default output directory | `/tmp/floimg` |
+| `AWS_ACCESS_KEY_ID` | For S3 outputs | - |
+| `AWS_SECRET_ACCESS_KEY` | For S3 outputs | - |
+| `AWS_REGION` | For S3 outputs | - |
+
+### Example with S3
+
+```yaml
+services:
+  floimg-studio:
+    image: ghcr.io/teamflojo/floimg-studio
+    ports:
+      - "5100:5100"
+    environment:
+      - NODE_ENV=production
+      - AWS_ACCESS_KEY_ID=your-key
+      - AWS_SECRET_ACCESS_KEY=your-secret
+      - AWS_REGION=us-east-1
+```
+
+## Production Deployment
+
+### With Nginx Reverse Proxy
+
+```nginx
+server {
+    listen 80;
+    server_name studio.yourdomain.com;
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name studio.yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/studio.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/studio.yourdomain.com/privkey.pem;
+
+    location / {
+        proxy_pass http://localhost:5100;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+### With Traefik
+
+```yaml
+services:
+  floimg-studio:
+    image: ghcr.io/teamflojo/floimg-studio
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.studio.rule=Host(`studio.yourdomain.com`)"
+      - "traefik.http.routers.studio.tls.certresolver=letsencrypt"
+      - "traefik.http.services.studio.loadbalancer.server.port=5100"
+```
+
+### With Coolify
+
+1. Add new resource → Docker Image
+2. Image: `ghcr.io/teamflojo/floimg-studio`
+3. Port: `5100`
+4. Add environment variables as needed
+5. Deploy
+
+## Kubernetes
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: floimg-studio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: floimg-studio
+  template:
+    metadata:
+      labels:
+        app: floimg-studio
+    spec:
+      containers:
+      - name: floimg-studio
+        image: ghcr.io/teamflojo/floimg-studio
+        ports:
+        - containerPort: 5100
+        env:
+        - name: NODE_ENV
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: floimg-studio
+spec:
+  selector:
+    app: floimg-studio
+  ports:
+  - port: 80
+    targetPort: 5100
+```
+
+## Building from Source
+
+```bash
+# Clone
+git clone https://github.com/teamflojo/floimg-studio.git
+cd floimg-studio
+
+# Install dependencies
+pnpm install
+
+# Build
+pnpm build
+
+# Run production server
+pnpm start
+```
+
+### Custom Docker Build
+
+```dockerfile
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && pnpm install --frozen-lockfile
+COPY . .
+RUN pnpm build
+
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
+EXPOSE 5100
+CMD ["node", "dist/server.js"]
+```
+
+## Health Checks
+
+The server exposes a health endpoint:
+
+```bash
+curl http://localhost:5100/health
+```
+
+Response:
+```json
+{"status": "ok", "version": "1.0.0"}
+```
+
+## Persistent Storage
+
+For workflow persistence, mount a volume:
+
+```yaml
+services:
+  floimg-studio:
+    image: ghcr.io/teamflojo/floimg-studio
+    volumes:
+      - ./data:/app/data
+    environment:
+      - DATA_DIR=/app/data
+```
+
+## See Also
+
+- [Studio Overview](/docs/studio) - Introduction
+- [Building Workflows](/docs/studio/workflows) - Usage guide

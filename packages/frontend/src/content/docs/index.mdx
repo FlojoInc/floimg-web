@@ -1,0 +1,80 @@
+---
+title: floimg Documentation
+description: Universal image workflow engine for developers and AI agents
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+# Welcome to floimg
+
+**floimg** is a universal image workflow engine that provides three core operations—**generate**, **transform**, **save**—that work consistently across JavaScript, CLI, YAML, and MCP.
+
+## The Problem floimg Solves
+
+**LLMs are non-deterministic.** Great for creativity, terrible for "resize to exactly 800x600."
+
+**Image libraries are fragmented.** Charts need Chart.js. Diagrams need Mermaid. QR codes need node-qrcode. Each has different APIs with no way to chain them.
+
+**floimg solves both.** Deterministic execution with a unified abstraction. LLMs handle natural language; floimg handles precise execution.
+
+## Quick Example
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import quickchart from '@teamflojo/floimg-quickchart';
+
+const floimg = createClient();
+floimg.registerGenerator(quickchart());
+
+// Generate → Transform → Save
+const chart = await floimg.generate({
+  generator: 'quickchart',
+  params: { type: 'bar', data: { /* Chart.js config */ } }
+});
+
+const resized = await floimg.transform(chart, {
+  op: 'resize',
+  params: { width: 800 }
+});
+
+await floimg.save(resized, 's3://bucket/chart.png');
+```
+
+## Get Started
+
+<CardGrid>
+  <Card title="Installation" icon="rocket">
+    Install floimg and your first plugin in under a minute.
+    [Get started →](/docs/getting-started/installation)
+  </Card>
+  <Card title="Core Concepts" icon="open-book">
+    Learn about generators, transforms, and the floimg workflow.
+    [Learn more →](/docs/getting-started/concepts)
+  </Card>
+  <Card title="Plugins" icon="puzzle">
+    Browse available generators for charts, diagrams, QR codes, and more.
+    [View plugins →](/docs/plugins/quickchart)
+  </Card>
+  <Card title="MCP Integration" icon="laptop">
+    Connect floimg to Claude and other AI agents.
+    [Set up MCP →](/docs/mcp/claude-integration)
+  </Card>
+</CardGrid>
+
+## Interfaces
+
+floimg provides multiple interfaces for different use cases:
+
+| Interface | Best For |
+|-----------|----------|
+| **SDK** | TypeScript/JavaScript applications |
+| **CLI** | Shell scripts, CI/CD pipelines |
+| **YAML** | Configuration-driven workflows |
+| **MCP** | AI agents (Claude, etc.) |
+
+## Open Source
+
+floimg is MIT licensed and maintained by [Flojo, Inc](https://flojo.io). Contributions are welcome!
+
+- [GitHub Repository](https://github.com/floimg/floimg)
+- [npm Packages](https://www.npmjs.com/org/teamflojo)

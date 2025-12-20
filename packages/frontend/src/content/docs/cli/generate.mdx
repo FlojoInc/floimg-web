@@ -1,0 +1,137 @@
+---
+title: Generate Command
+description: Create images from the command line
+---
+
+The `generate` command creates images from workflow files or inline parameters.
+
+## Usage
+
+```bash
+floimg generate [file] [options]
+```
+
+## Options
+
+| Option | Alias | Description |
+|--------|-------|-------------|
+| `--output` | `-o` | Output file path (required) |
+| `--generator` | `-g` | Generator name (when not using file) |
+| `--params` | `-p` | JSON params (when not using file) |
+| `--format` | `-f` | Output format (png, jpeg, webp) |
+| `--quiet` | `-q` | Suppress output |
+
+## Examples
+
+### From Workflow File
+
+```bash
+# Generate from JSON workflow
+floimg generate chart-workflow.json -o chart.png
+
+# Generate from YAML workflow
+floimg generate workflow.yaml -o output.png
+```
+
+### Inline Generation
+
+```bash
+# Generate a QR code
+floimg generate -g qr -p '{"data":"https://floimg.com"}' -o qr.png
+
+# Generate a chart
+floimg generate -g quickchart -p '{
+  "type": "bar",
+  "data": {
+    "labels": ["A", "B", "C"],
+    "datasets": [{"data": [10, 20, 30]}]
+  }
+}' -o chart.png
+```
+
+### With Transforms
+
+Workflow file with transforms:
+
+```json
+{
+  "generator": "screenshot",
+  "params": {
+    "url": "https://example.com"
+  },
+  "transforms": [
+    { "op": "resize", "params": { "width": 1200 } },
+    { "op": "convert", "params": { "format": "webp", "quality": 85 } }
+  ]
+}
+```
+
+```bash
+floimg generate screenshot-workflow.json -o page.webp
+```
+
+### Output to S3
+
+```bash
+floimg generate workflow.json -o s3://my-bucket/images/output.png
+```
+
+Requires AWS credentials in environment.
+
+### Piping Output
+
+```bash
+# Pipe to another command
+floimg generate workflow.json -o - | upload-tool
+
+# Read params from stdin
+cat params.json | floimg generate -g quickchart -p - -o chart.png
+```
+
+## Workflow File Format
+
+### JSON
+
+```json
+{
+  "generator": "quickchart",
+  "params": {
+    "type": "line",
+    "data": { ... }
+  },
+  "transforms": [
+    { "op": "resize", "params": { "width": 800 } }
+  ]
+}
+```
+
+### YAML
+
+```yaml
+generator: quickchart
+params:
+  type: line
+  data:
+    labels: [Jan, Feb, Mar]
+    datasets:
+      - data: [10, 20, 30]
+transforms:
+  - op: resize
+    params:
+      width: 800
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Success |
+| 1 | General error |
+| 2 | Invalid arguments |
+| 3 | Generator not found |
+| 4 | Output write failed |
+
+## See Also
+
+- [CLI Overview](/docs/cli) - Installation and basics
+- [Transform Command](/docs/cli/transform) - Transform existing images

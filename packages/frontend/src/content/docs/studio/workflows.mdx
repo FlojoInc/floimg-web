@@ -1,0 +1,170 @@
+---
+title: Building Workflows
+description: Create image pipelines in floimg-studio
+---
+
+This guide walks through building a complete workflow in floimg-studio.
+
+## Creating a Workflow
+
+### 1. Start with a Generator
+
+Drag a **Generate** node onto the canvas. This creates your base image.
+
+Click the node to configure:
+
+```
+Generator: quickchart
+Type: bar
+Data: [configure your chart data]
+```
+
+The preview panel shows your chart in real-time.
+
+### 2. Add Transforms
+
+Drag **Transform** nodes and connect them to your generator.
+
+Example pipeline:
+```
+Generate (chart) → Resize (800px) → Convert (WebP)
+```
+
+Connect nodes by dragging from the output port (right side) to the input port (left side).
+
+### 3. Configure Output
+
+Add an **Output** node to save or export:
+
+```
+Output Type: File
+Path: ./charts/monthly-report.webp
+```
+
+### 4. Run the Workflow
+
+Click **Run** to execute the entire pipeline. The result appears in the output node's preview.
+
+## Example: Sales Chart Workflow
+
+Let's build a complete sales chart workflow:
+
+### Step 1: Add QuickChart Generator
+
+1. Drag "Generate" node to canvas
+2. Select generator: `quickchart`
+3. Configure:
+   - Type: `bar`
+   - Labels: `["Q1", "Q2", "Q3", "Q4"]`
+   - Data: `[12000, 19000, 15000, 25000]`
+   - Background color: `#7c3aed`
+
+### Step 2: Add Resize Transform
+
+1. Drag "Transform" node
+2. Connect to generator output
+3. Configure:
+   - Operation: `resize`
+   - Width: `800`
+   - Height: `600`
+
+### Step 3: Add Format Conversion
+
+1. Drag another "Transform" node
+2. Connect to resize output
+3. Configure:
+   - Operation: `convert`
+   - Format: `webp`
+   - Quality: `85`
+
+### Step 4: Add Output
+
+1. Drag "Output" node
+2. Connect to convert output
+3. Configure:
+   - Path: `./sales-chart.webp`
+
+### Step 5: Run
+
+Click **Run**. Your chart is generated, resized, converted, and saved.
+
+## Workflow Patterns
+
+### Branching
+
+One generator can feed multiple transform chains:
+
+```
+              → Resize (thumb) → Output (thumbnail.png)
+Generate (QR)
+              → Resize (large) → Output (full.png)
+```
+
+### Conditional Logic
+
+Use **Switch** nodes to route based on parameters:
+
+```
+Generate → Switch (format) → [PNG path]
+                          → [WebP path]
+```
+
+## Exporting Workflows
+
+### As JSON
+
+Click **Export → JSON** to get a workflow file:
+
+```json
+{
+  "nodes": [
+    {
+      "id": "gen-1",
+      "type": "generate",
+      "generator": "quickchart",
+      "params": { ... }
+    },
+    {
+      "id": "transform-1",
+      "type": "transform",
+      "op": "resize",
+      "params": { "width": 800 }
+    }
+  ],
+  "edges": [
+    { "from": "gen-1", "to": "transform-1" }
+  ]
+}
+```
+
+Use this with the CLI:
+
+```bash
+floimg generate workflow.json -o output.png
+```
+
+### As Code
+
+Click **Export → TypeScript** for SDK code:
+
+```typescript
+const floimg = createClient();
+floimg.registerGenerator(quickchart());
+
+let image = await floimg.generate({
+  generator: 'quickchart',
+  params: { ... }
+});
+
+image = await floimg.transform(image, {
+  op: 'resize',
+  params: { width: 800 }
+});
+
+await floimg.save(image, './output.png');
+```
+
+## See Also
+
+- [Node Reference](/docs/studio/nodes) - All available nodes
+- [Self-Hosting](/docs/studio/self-hosting) - Run your own instance

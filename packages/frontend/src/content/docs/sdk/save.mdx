@@ -1,0 +1,81 @@
+---
+title: Save
+description: Output images to filesystem or cloud storage
+---
+
+The `save` method writes images to storage.
+
+## Basic Usage
+
+```typescript
+await floimg.save(image, './output.png');
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `image` | Blob | Yes | The image to save |
+| `path` | string | Yes | Destination path (filesystem or URL) |
+
+## Storage Backends
+
+### Local Filesystem
+
+```typescript
+// Relative path
+await floimg.save(image, './output/chart.png');
+
+// Absolute path
+await floimg.save(image, '/var/www/images/chart.png');
+```
+
+### Amazon S3
+
+```typescript
+await floimg.save(image, 's3://my-bucket/charts/monthly.png');
+```
+
+Requires AWS credentials via environment variables or AWS SDK configuration:
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION`
+
+### Custom Storage
+
+Register a custom storage adapter:
+
+```typescript
+floimg.registerStorage({
+  scheme: 'custom',
+  async save(blob, path) {
+    // Your storage logic
+  }
+});
+
+await floimg.save(image, 'custom://path/to/image.png');
+```
+
+## Return Value
+
+Returns `void`. Throws on error.
+
+## Error Handling
+
+```typescript
+try {
+  await floimg.save(image, 's3://bucket/path.png');
+} catch (error) {
+  console.error('Save failed:', error.message);
+}
+```
+
+Common errors:
+- `Path not writable` - Filesystem permission error
+- `Storage not configured` - Missing credentials
+- `Network error` - Cloud storage connectivity issue
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Create images
+- [Transform](/docs/sdk/transform) - Modify images

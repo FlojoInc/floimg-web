@@ -1,0 +1,207 @@
+---
+title: Node Reference
+description: All available nodes in floimg-studio
+---
+
+Complete reference for all node types available in floimg-studio.
+
+## Generator Nodes
+
+Generator nodes create images from parameters.
+
+### QuickChart
+
+Generate Chart.js charts.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `type` | select | Chart type (bar, line, pie, etc.) |
+| `data` | json | Chart.js data configuration |
+| `options` | json | Chart.js options |
+| `width` | number | Output width |
+| `height` | number | Output height |
+
+### Mermaid
+
+Generate diagrams from Mermaid syntax.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `code` | text | Mermaid diagram code |
+| `theme` | select | default, dark, forest, neutral |
+
+### QR Code
+
+Generate QR codes.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `data` | text | Content to encode |
+| `size` | number | Size in pixels |
+| `color` | color | Foreground color |
+| `backgroundColor` | color | Background color |
+| `errorCorrection` | select | L, M, Q, H |
+
+### Screenshot
+
+Capture web pages.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `url` | text | URL to capture |
+| `html` | text | Or HTML to render |
+| `width` | number | Viewport width |
+| `height` | number | Viewport height |
+| `fullPage` | boolean | Capture full scroll |
+| `selector` | text | CSS selector to capture |
+
+### D3
+
+Custom D3 visualizations.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `width` | number | SVG width |
+| `height` | number | SVG height |
+| `code` | code | D3 render function |
+
+---
+
+## Transform Nodes
+
+Transform nodes modify existing images.
+
+### Resize
+
+Change image dimensions.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `width` | number | Target width |
+| `height` | number | Target height (optional) |
+| `fit` | select | cover, contain, fill, inside, outside |
+
+### Blur
+
+Apply gaussian blur.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `sigma` | number | Blur intensity (1-100) |
+
+### Sharpen
+
+Sharpen image edges.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `sigma` | number | Sharpen intensity |
+
+### Rotate
+
+Rotate the image.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `angle` | number | Degrees (any angle) |
+
+### Crop
+
+Crop to a region.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `left` | number | Left offset |
+| `top` | number | Top offset |
+| `width` | number | Crop width |
+| `height` | number | Crop height |
+
+### Convert
+
+Change image format.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `format` | select | png, jpeg, webp, avif |
+| `quality` | number | Quality (1-100) for lossy |
+
+---
+
+## Output Nodes
+
+Output nodes save or export results.
+
+### File Output
+
+Save to local filesystem.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `path` | text | Output file path |
+
+### S3 Output
+
+Save to Amazon S3.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `bucket` | text | S3 bucket name |
+| `key` | text | Object key (path) |
+| `region` | text | AWS region |
+
+### Download
+
+Trigger browser download.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `filename` | text | Download filename |
+
+---
+
+## Utility Nodes
+
+### Variable
+
+Store a value for reuse.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` | text | Variable name |
+| `value` | any | Variable value |
+
+### Switch
+
+Route based on condition.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `condition` | text | Expression to evaluate |
+| `cases` | array | Case values and outputs |
+
+### Merge
+
+Combine multiple inputs.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `mode` | select | How to combine inputs |
+
+---
+
+## Node Ports
+
+### Input Ports (Left Side)
+
+- **Image** - Accepts image data
+- **Params** - Accepts parameter overrides
+
+### Output Ports (Right Side)
+
+- **Image** - Outputs image data
+- **Metadata** - Outputs image metadata (size, format)
+
+## See Also
+
+- [Building Workflows](/docs/studio/workflows) - Step-by-step guide
+- [Self-Hosting](/docs/studio/self-hosting) - Deployment guide

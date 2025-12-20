@@ -1,0 +1,73 @@
+---
+title: Installation
+description: Install floimg and get started in under a minute
+---
+
+## Install the Core Package
+
+```bash
+npm install @teamflojo/floimg
+```
+
+Or with your preferred package manager:
+
+```bash
+pnpm add @teamflojo/floimg
+yarn add @teamflojo/floimg
+```
+
+## Add Plugins
+
+floimg uses a plugin architecture. Install only the generators you need:
+
+```bash
+# Charts via Chart.js
+npm install @teamflojo/floimg-quickchart
+
+# Mermaid diagrams
+npm install @teamflojo/floimg-mermaid
+
+# QR codes
+npm install @teamflojo/floimg-qr
+
+# D3 visualizations
+npm install @teamflojo/floimg-d3
+
+# Screenshots via Playwright
+npm install @teamflojo/floimg-screenshot
+```
+
+## Verify Installation
+
+Create a simple test file:
+
+```typescript
+// test.ts
+import createClient from '@teamflojo/floimg';
+import qr from '@teamflojo/floimg-qr';
+
+const floimg = createClient();
+floimg.registerGenerator(qr());
+
+const qrCode = await floimg.generate({
+  generator: 'qr',
+  params: { text: 'https://floimg.com' }
+});
+
+await floimg.save(qrCode, './test-qr.png');
+console.log('QR code saved to test-qr.png');
+```
+
+Run it:
+
+```bash
+npx tsx test.ts
+```
+
+You should see a QR code saved to `test-qr.png`.
+
+## Next Steps
+
+- [Quick Start](/docs/getting-started/quick-start) - Build your first workflow
+- [Core Concepts](/docs/getting-started/concepts) - Understand how floimg works
+- [Plugins](/docs/plugins/quickchart) - Explore available generators

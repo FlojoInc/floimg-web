@@ -1,0 +1,53 @@
+/* Custom styles for floimg docs - extends Starlight's defaults */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --sl-color-accent-low: #2e1065;
+  --sl-color-accent: #7c3aed;
+  --sl-color-accent-high: #c4b5fd;
+  --sl-color-white: #ffffff;
+  --sl-color-gray-1: #f4f4f5;
+  --sl-color-gray-2: #e4e4e7;
+  --sl-color-gray-3: #a1a1aa;
+  --sl-color-gray-4: #52525b;
+  --sl-color-gray-5: #27272a;
+  --sl-color-gray-6: #18181b;
+  --sl-color-black: #09090b;
+}
+
+:root[data-theme='dark'] {
+  --sl-color-accent-low: #2e1065;
+  --sl-color-accent: #8b5cf6;
+  --sl-color-accent-high: #c4b5fd;
+  --sl-color-white: #18181b;
+  --sl-color-gray-1: #27272a;
+  --sl-color-gray-2: #3f3f46;
+  --sl-color-gray-3: #71717a;
+  --sl-color-gray-4: #a1a1aa;
+  --sl-color-gray-5: #d4d4d8;
+  --sl-color-gray-6: #e4e4e7;
+  --sl-color-black: #fafafa;
+}
+
+/* Marketing page styles */
+.marketing-section {
+  @apply px-6 py-24;
+}
+
+.marketing-container {
+  @apply mx-auto max-w-7xl;
+}
+
+.btn-primary {
+  @apply rounded-lg bg-violet-600 px-6 py-3 font-medium text-white hover:bg-violet-500 transition-colors;
+}
+
+.btn-secondary {
+  @apply rounded-lg border border-white/20 px-6 py-3 font-medium text-white hover:bg-white/5 transition-colors;
+}
+
+.card {
+  @apply rounded-lg border border-white/10 bg-zinc-900/50 p-6;
+}

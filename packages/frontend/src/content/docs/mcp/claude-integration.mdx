@@ -1,0 +1,151 @@
+---
+title: Claude Integration
+description: Set up floimg with Claude Desktop and Claude Code
+---
+
+This guide walks through setting up floimg as an MCP tool for Claude.
+
+## Claude Desktop
+
+### 1. Install the MCP Server
+
+```bash
+npm install -g @teamflojo/floimg-mcp
+```
+
+### 2. Configure Claude Desktop
+
+Edit your Claude Desktop configuration file:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add floimg to the `mcpServers` section:
+
+```json
+{
+  "mcpServers": {
+    "floimg": {
+      "command": "floimg-mcp",
+      "args": [],
+      "env": {
+        "FLOIMG_OUTPUT_DIR": "/Users/you/Pictures/floimg"
+      }
+    }
+  }
+}
+```
+
+### 3. Restart Claude Desktop
+
+After saving the configuration, restart Claude Desktop. You should see floimg listed in the tools menu.
+
+### 4. Test It
+
+Ask Claude to generate an image:
+
+> "Create a pie chart showing browser market share: Chrome 65%, Safari 19%, Firefox 10%, Other 6%"
+
+Claude will use floimg to generate the chart and show you the result.
+
+## Claude Code
+
+### 1. Install the MCP Server
+
+```bash
+npm install -g @teamflojo/floimg-mcp
+```
+
+### 2. Configure Claude Code
+
+Add to your Claude Code MCP configuration:
+
+```json
+{
+  "mcpServers": {
+    "floimg": {
+      "command": "floimg-mcp"
+    }
+  }
+}
+```
+
+### 3. Use in Sessions
+
+Claude Code can now generate images during coding sessions:
+
+> "Generate a sequence diagram for the auth flow in this codebase and save it to docs/auth-flow.png"
+
+## Environment Variables
+
+Configure the MCP server behavior with environment variables:
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `FLOIMG_OUTPUT_DIR` | Where to save images | Current directory |
+| `AWS_ACCESS_KEY_ID` | For S3 output | - |
+| `AWS_SECRET_ACCESS_KEY` | For S3 output | - |
+| `AWS_REGION` | For S3 output | - |
+
+Example configuration with environment:
+
+```json
+{
+  "mcpServers": {
+    "floimg": {
+      "command": "floimg-mcp",
+      "env": {
+        "FLOIMG_OUTPUT_DIR": "/path/to/images",
+        "AWS_ACCESS_KEY_ID": "your-key",
+        "AWS_SECRET_ACCESS_KEY": "your-secret",
+        "AWS_REGION": "us-east-1"
+      }
+    }
+  }
+}
+```
+
+## Prompting Tips
+
+For best results when asking Claude to generate images:
+
+### Be Specific About Data
+
+> "Create a bar chart with these exact values: January: 120, February: 150, March: 180"
+
+### Specify Output Format
+
+> "Generate a flowchart and save it as flowchart.png"
+
+### Request Specific Chart Types
+
+> "Create a line chart (not bar) showing the trend over time"
+
+### Include Styling Preferences
+
+> "Generate a pie chart with a dark background and purple accent color"
+
+## Troubleshooting
+
+### "Tool not found"
+
+Ensure floimg-mcp is installed globally and in your PATH:
+
+```bash
+which floimg-mcp
+```
+
+### "Permission denied"
+
+Check that `FLOIMG_OUTPUT_DIR` exists and is writable.
+
+### Images Not Appearing
+
+Verify the output path in your configuration. Claude will tell you where the image was saved.
+
+## See Also
+
+- [MCP Overview](/docs/mcp) - Introduction to MCP
+- [Tool Reference](/docs/mcp/tools) - Available MCP tools
+- [Examples](/docs/mcp/examples) - Common use cases

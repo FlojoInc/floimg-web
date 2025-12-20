@@ -1,0 +1,134 @@
+---
+title: Quick Start
+description: Build your first floimg workflow in 5 minutes
+---
+
+This guide walks you through creating a complete image workflow using floimg.
+
+## Prerequisites
+
+Make sure you have [installed floimg](/docs/getting-started/installation).
+
+## Step 1: Create a Client
+
+Every floimg workflow starts with a client:
+
+```typescript
+import createClient from '@teamflojo/floimg';
+
+const floimg = createClient();
+```
+
+## Step 2: Register Generators
+
+Generators create images. Register the ones you need:
+
+```typescript
+import quickchart from '@teamflojo/floimg-quickchart';
+import qr from '@teamflojo/floimg-qr';
+
+floimg.registerGenerator(quickchart());
+floimg.registerGenerator(qr());
+```
+
+## Step 3: Generate an Image
+
+Use the `generate` method with a generator name and parameters:
+
+```typescript
+const chart = await floimg.generate({
+  generator: 'quickchart',
+  params: {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+      datasets: [{
+        label: 'Sales',
+        data: [10, 20, 30, 40]
+      }]
+    }
+  }
+});
+```
+
+## Step 4: Transform the Image
+
+Apply transformations like resize, blur, or format conversion:
+
+```typescript
+const resized = await floimg.transform(chart, {
+  op: 'resize',
+  params: { width: 800, height: 600 }
+});
+
+const blurred = await floimg.transform(resized, {
+  op: 'blur',
+  params: { sigma: 2 }
+});
+```
+
+## Step 5: Save the Result
+
+Save to local filesystem or cloud storage:
+
+```typescript
+// Local file
+await floimg.save(blurred, './output/chart.png');
+
+// S3 bucket (requires AWS credentials)
+await floimg.save(blurred, 's3://my-bucket/charts/monthly.png');
+```
+
+## Complete Example
+
+Here's the full workflow:
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import quickchart from '@teamflojo/floimg-quickchart';
+
+async function main() {
+  // Initialize
+  const floimg = createClient();
+  floimg.registerGenerator(quickchart());
+
+  // Generate
+  const chart = await floimg.generate({
+    generator: 'quickchart',
+    params: {
+      type: 'bar',
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{
+          label: 'Revenue',
+          data: [12000, 19000, 15000, 25000],
+          backgroundColor: '#7c3aed'
+        }]
+      },
+      options: {
+        plugins: {
+          title: { display: true, text: '2024 Revenue' }
+        }
+      }
+    }
+  });
+
+  // Transform
+  const final = await floimg.transform(chart, {
+    op: 'resize',
+    params: { width: 800 }
+  });
+
+  // Save
+  await floimg.save(final, './revenue-chart.png');
+  console.log('Chart saved!');
+}
+
+main();
+```
+
+## Next Steps
+
+- [Core Concepts](/docs/getting-started/concepts) - Understand generators, transforms, and more
+- [SDK Reference](/docs/sdk/generate) - Full API documentation
+- [Plugins](/docs/plugins/quickchart) - Explore all available generators

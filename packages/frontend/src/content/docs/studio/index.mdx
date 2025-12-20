@@ -1,0 +1,101 @@
+---
+title: floimg-studio
+description: Visual workflow builder for floimg
+---
+
+floimg-studio is a visual drag-and-drop interface for building image generation workflows.
+
+## What is floimg-studio?
+
+floimg-studio provides a graphical way to:
+
+- Build image workflows without code
+- Preview results in real-time
+- Export workflows as JSON for the SDK or CLI
+- Share workflows with your team
+
+## Self-Hosted vs Managed
+
+floimg-studio is **open-source and self-hostable**. Run it on your own infrastructure with your own API keys.
+
+```bash
+docker run -p 5100:5100 ghcr.io/teamflojo/floimg-studio
+```
+
+*Prefer not to manage infrastructure? A hosted version is available at [studio.floimg.com](https://studio.floimg.com).*
+
+## Quick Start
+
+### Using Docker
+
+```bash
+# Pull and run
+docker run -p 5100:5100 ghcr.io/teamflojo/floimg-studio
+
+# Open in browser
+open http://localhost:5100
+```
+
+### From Source
+
+```bash
+git clone https://github.com/teamflojo/floimg-studio.git
+cd floimg-studio
+pnpm install
+pnpm dev
+```
+
+## The Interface
+
+### Canvas
+
+The main workspace where you build workflows. Drag nodes from the sidebar and connect them to create pipelines.
+
+### Node Types
+
+| Node | Description |
+|------|-------------|
+| **Generate** | Create images (charts, diagrams, QR codes) |
+| **Transform** | Modify images (resize, blur, convert) |
+| **Output** | Save or export the result |
+
+### Connections
+
+Connect nodes by dragging from output ports to input ports. Data flows left to right.
+
+### Preview Panel
+
+See real-time previews of each node's output as you build.
+
+## Features
+
+### Real-Time Preview
+
+Every node shows a live preview. Change parameters and see results instantly.
+
+### Export Options
+
+Export your workflow as:
+- **JSON** - For the SDK or CLI
+- **Code** - TypeScript snippet
+- **Image** - Download the final result
+
+### Workflow Library
+
+Save and organize workflows. Share with team members.
+
+### Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Space` | Pan canvas |
+| `Cmd/Ctrl + Z` | Undo |
+| `Cmd/Ctrl + S` | Save workflow |
+| `Delete` | Remove selected node |
+| `Cmd/Ctrl + D` | Duplicate node |
+
+## See Also
+
+- [Building Workflows](/docs/studio/workflows) - Step-by-step guide
+- [Node Reference](/docs/studio/nodes) - All available nodes
+- [Self-Hosting](/docs/studio/self-hosting) - Deployment guide

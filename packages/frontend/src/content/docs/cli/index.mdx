@@ -1,0 +1,81 @@
+---
+title: CLI Overview
+description: Run floimg workflows from the command line
+---
+
+The floimg CLI lets you run image generation workflows directly from your terminal.
+
+## Installation
+
+```bash
+npm install -g @teamflojo/floimg-cli
+```
+
+Or use npx without installing:
+
+```bash
+npx @teamflojo/floimg-cli generate chart.json -o output.png
+```
+
+## Quick Start
+
+```bash
+# Generate from a workflow file
+floimg generate workflow.json -o output.png
+
+# Generate with inline params
+floimg generate -g quickchart -p '{"type":"bar","data":{...}}' -o chart.png
+
+# Transform an existing image
+floimg transform input.png -o output.webp --resize 800x600 --format webp
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `generate` | Create an image from a workflow or params |
+| `transform` | Apply transforms to an existing image |
+| `version` | Show CLI version |
+| `help` | Show help information |
+
+## Workflow Files
+
+Define reusable workflows as JSON:
+
+```json
+{
+  "generator": "quickchart",
+  "params": {
+    "type": "bar",
+    "data": {
+      "labels": ["A", "B", "C"],
+      "datasets": [{ "data": [10, 20, 30] }]
+    }
+  },
+  "transforms": [
+    { "op": "resize", "params": { "width": 800 } },
+    { "op": "convert", "params": { "format": "webp" } }
+  ]
+}
+```
+
+Run it:
+
+```bash
+floimg generate workflow.json -o output.webp
+```
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `FLOIMG_OUTPUT_DIR` | Default output directory |
+| `AWS_ACCESS_KEY_ID` | For S3 output |
+| `AWS_SECRET_ACCESS_KEY` | For S3 output |
+| `AWS_REGION` | For S3 output |
+
+## See Also
+
+- [Generate Command](/docs/cli/generate) - Full generate options
+- [Transform Command](/docs/cli/transform) - Full transform options

@@ -1,0 +1,131 @@
+---
+title: Transform Command
+description: Modify images from the command line
+---
+
+The `transform` command applies modifications to existing images.
+
+## Usage
+
+```bash
+floimg transform <input> [options]
+```
+
+## Options
+
+| Option | Alias | Description |
+|--------|-------|-------------|
+| `--output` | `-o` | Output file path (required) |
+| `--resize` | `-r` | Resize to WxH (e.g., 800x600) |
+| `--width` | `-w` | Resize to width (maintain aspect) |
+| `--height` | `-h` | Resize to height (maintain aspect) |
+| `--format` | `-f` | Convert format (png, jpeg, webp, avif) |
+| `--quality` | `-q` | Quality for lossy formats (1-100) |
+| `--blur` | | Apply blur (sigma value) |
+| `--sharpen` | | Apply sharpen (sigma value) |
+| `--rotate` | | Rotate degrees (90, 180, 270) |
+| `--crop` | | Crop region (left,top,width,height) |
+
+## Examples
+
+### Resize
+
+```bash
+# Resize to exact dimensions
+floimg transform input.png -o output.png --resize 800x600
+
+# Resize by width (maintain aspect ratio)
+floimg transform input.png -o output.png --width 800
+
+# Resize by height
+floimg transform input.png -o output.png --height 600
+```
+
+### Format Conversion
+
+```bash
+# Convert to WebP
+floimg transform input.png -o output.webp --format webp
+
+# Convert with quality setting
+floimg transform input.png -o output.jpg --format jpeg --quality 85
+
+# Convert to AVIF (smallest size)
+floimg transform input.png -o output.avif --format avif --quality 80
+```
+
+### Effects
+
+```bash
+# Apply blur
+floimg transform input.png -o blurred.png --blur 5
+
+# Apply sharpen
+floimg transform input.png -o sharp.png --sharpen 2
+
+# Rotate 90 degrees
+floimg transform input.png -o rotated.png --rotate 90
+```
+
+### Crop
+
+```bash
+# Crop region: left, top, width, height
+floimg transform input.png -o cropped.png --crop 100,100,400,300
+```
+
+### Chaining Transforms
+
+```bash
+# Multiple transforms in one command
+floimg transform input.png -o output.webp \
+  --resize 800x600 \
+  --sharpen 1 \
+  --format webp \
+  --quality 85
+```
+
+### Batch Processing
+
+```bash
+# Process multiple files
+for f in *.png; do
+  floimg transform "$f" -o "output/${f%.png}.webp" --format webp
+done
+
+# Using find
+find . -name "*.png" -exec floimg transform {} -o {}.webp --format webp \;
+```
+
+### From URL
+
+```bash
+# Transform remote image
+floimg transform https://example.com/image.png -o local.webp --format webp
+```
+
+### Piping
+
+```bash
+# Pipe input
+cat input.png | floimg transform - -o output.webp --format webp
+
+# Pipe output
+floimg transform input.png -o - --format webp | upload-tool
+```
+
+## Transform Order
+
+When multiple transforms are specified, they apply in this order:
+
+1. Crop
+2. Resize
+3. Rotate
+4. Blur / Sharpen
+5. Format conversion
+
+## See Also
+
+- [CLI Overview](/docs/cli) - Installation and basics
+- [Generate Command](/docs/cli/generate) - Create new images
+- [SDK Transform](/docs/sdk/transform) - Programmatic transforms
