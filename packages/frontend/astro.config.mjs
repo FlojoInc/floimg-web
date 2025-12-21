@@ -15,7 +15,7 @@ export default defineConfig({
         replacesTitle: true,
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/floimg/floimg' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/TeamFlojo/floimg' },
       ],
       customCss: ['./src/styles/custom.css'],
       // Disable Starlight's default index page so our marketing page at / works
