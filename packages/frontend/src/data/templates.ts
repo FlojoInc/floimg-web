@@ -24,7 +24,6 @@ export const templates: GalleryTemplate[] = [
     category: "Charts",
     generator: "quickchart",
     tags: ["bar", "sales", "revenue", "quarterly"],
-    preview: { imageUrl: "/gallery/sales-dashboard.png" },
   },
   {
     id: "user-growth",
@@ -33,7 +32,6 @@ export const templates: GalleryTemplate[] = [
     category: "Charts",
     generator: "quickchart",
     tags: ["line", "growth", "users", "monthly"],
-    preview: { imageUrl: "/gallery/user-growth.png" },
   },
   // Diagrams
   {
@@ -43,7 +41,6 @@ export const templates: GalleryTemplate[] = [
     category: "Diagrams",
     generator: "mermaid",
     tags: ["sequence", "api", "authentication", "flow"],
-    preview: { imageUrl: "/gallery/api-flow.png" },
   },
   {
     id: "system-architecture",
@@ -52,7 +49,6 @@ export const templates: GalleryTemplate[] = [
     category: "Diagrams",
     generator: "mermaid",
     tags: ["architecture", "microservices", "system", "flowchart"],
-    preview: { imageUrl: "/gallery/system-architecture.png" },
   },
   {
     id: "git-workflow",
@@ -61,7 +57,6 @@ export const templates: GalleryTemplate[] = [
     category: "Diagrams",
     generator: "mermaid",
     tags: ["git", "branching", "workflow", "development"],
-    preview: { imageUrl: "/gallery/git-workflow.png" },
   },
   // QR Codes
   {
@@ -71,7 +66,6 @@ export const templates: GalleryTemplate[] = [
     category: "QR Codes",
     generator: "qr",
     tags: ["qr", "website", "link", "url"],
-    preview: { imageUrl: "/gallery/website-qr.png" },
   },
   {
     id: "wifi-qr",
@@ -80,7 +74,6 @@ export const templates: GalleryTemplate[] = [
     category: "QR Codes",
     generator: "qr",
     tags: ["qr", "wifi", "network", "guest"],
-    preview: { imageUrl: "/gallery/wifi-qr.png" },
   },
   // Pipelines
   {
@@ -90,7 +83,6 @@ export const templates: GalleryTemplate[] = [
     category: "Pipelines",
     generator: "quickchart",
     tags: ["chart", "watermark", "branded", "pipeline"],
-    preview: { imageUrl: "/gallery/chart-watermark.png" },
   },
   {
     id: "diagram-webp",
@@ -99,7 +91,6 @@ export const templates: GalleryTemplate[] = [
     category: "Pipelines",
     generator: "mermaid",
     tags: ["mermaid", "webp", "optimize", "pipeline"],
-    preview: { imageUrl: "/gallery/diagram-webp.png" },
   },
 ];
 
