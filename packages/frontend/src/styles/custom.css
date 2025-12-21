@@ -3,6 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light mode (default) */
 :root {
   --sl-color-accent-low: #2e1065;
   --sl-color-accent: #7c3aed;
@@ -17,6 +18,24 @@
   --sl-color-black: #09090b;
 }
 
+/* Dark mode - triggered by system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --sl-color-accent-low: #2e1065;
+    --sl-color-accent: #8b5cf6;
+    --sl-color-accent-high: #c4b5fd;
+    --sl-color-white: #18181b;
+    --sl-color-gray-1: #27272a;
+    --sl-color-gray-2: #3f3f46;
+    --sl-color-gray-3: #71717a;
+    --sl-color-gray-4: #a1a1aa;
+    --sl-color-gray-5: #d4d4d8;
+    --sl-color-gray-6: #e4e4e7;
+    --sl-color-black: #fafafa;
+  }
+}
+
+/* Also support Starlight's data-theme attribute */
 :root[data-theme='dark'] {
   --sl-color-accent-low: #2e1065;
   --sl-color-accent: #8b5cf6;
