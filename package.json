@@ -9,6 +9,31 @@
   "scripts": {
     "dev": "pnpm --filter @floimg-web/frontend dev",
     "build": "pnpm -r build",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint packages/*/src --ext .ts,.tsx,.astro",
+    "lint:fix": "eslint packages/*/src --ext .ts,.tsx,.astro --fix",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,tsx,astro,json,css}\"",
+    "format:check": "prettier --check \"packages/*/src/**/*.{ts,tsx,astro,json,css}\"",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,astro}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.7.4"
   }
 }
