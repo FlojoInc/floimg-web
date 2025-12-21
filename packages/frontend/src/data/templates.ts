@@ -1,6 +1,13 @@
 /**
  * Template data for the floimg-web gallery
- * These mirror the templates in floimg-studio for "Open in Studio" links
+ *
+ * NOTE: This is intentionally separate from floimg-studio/src/templates/
+ * - floimg-web needs only metadata (id, name, description) for the gallery
+ * - floimg-studio needs full workflow definitions (nodes, edges)
+ * - floimg-web is statically built, can't fetch from Studio API
+ *
+ * When adding new templates to floimg-studio, add the metadata here too.
+ * Template IDs must match for "Open in Studio" links to work.
  */
 
 export interface GalleryTemplate {
