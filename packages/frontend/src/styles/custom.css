@@ -103,6 +103,38 @@
   --sl-color-text-accent: #a78bfa;
 }
 
+/* Dark mode text color overrides */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4,
+:root[data-theme="dark"] h5,
+:root[data-theme="dark"] h6 {
+  color: #fafafa !important;
+}
+
+:root[data-theme="dark"] .sidebar-content .group-label,
+:root[data-theme="dark"] .sidebar summary {
+  color: #a1a1aa !important;
+}
+
+/* System preference dark mode text overrides */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) h1,
+  :root:not([data-theme="light"]) h2,
+  :root:not([data-theme="light"]) h3,
+  :root:not([data-theme="light"]) h4,
+  :root:not([data-theme="light"]) h5,
+  :root:not([data-theme="light"]) h6 {
+    color: #fafafa !important;
+  }
+
+  :root:not([data-theme="light"]) .sidebar-content .group-label,
+  :root:not([data-theme="light"]) .sidebar summary {
+    color: #a1a1aa !important;
+  }
+}
+
 /* Marketing page styles */
 .marketing-section {
   @apply px-6 py-24;
