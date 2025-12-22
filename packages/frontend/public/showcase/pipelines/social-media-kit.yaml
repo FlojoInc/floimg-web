@@ -1,0 +1,64 @@
+# Social Media Kit Pipeline
+# One hero image → optimized versions for every platform
+name: social-media-kit
+steps:
+  # Generate the source image
+  - kind: generate
+    generator: openai
+    params:
+      prompt: "Modern gradient background with geometric shapes, teal and coral colors, abstract tech aesthetic"
+      size: "1792x1024"
+      quality: hd
+    out: source
+
+  # Open Graph / LinkedIn (1200x630)
+  - kind: transform
+    op: resize
+    in: source
+    params:
+      width: 1200
+      height: 630
+      fit: cover
+    out: og_size
+  - kind: save
+    in: og_size
+    destination: ./output/og-image.png
+
+  # Twitter Card (800x418)
+  - kind: transform
+    op: resize
+    in: source
+    params:
+      width: 800
+      height: 418
+      fit: cover
+    out: twitter_size
+  - kind: save
+    in: twitter_size
+    destination: ./output/twitter-card.png
+
+  # Instagram Square (1080x1080)
+  - kind: transform
+    op: resize
+    in: source
+    params:
+      width: 1080
+      height: 1080
+      fit: cover
+    out: insta_size
+  - kind: save
+    in: insta_size
+    destination: ./output/instagram-square.png
+
+  # Instagram Story (1080x1920)
+  - kind: transform
+    op: resize
+    in: source
+    params:
+      width: 1080
+      height: 1920
+      fit: cover
+    out: story_size
+  - kind: save
+    in: story_size
+    destination: ./output/instagram-story.png

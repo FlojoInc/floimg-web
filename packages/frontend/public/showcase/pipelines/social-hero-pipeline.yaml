@@ -1,0 +1,31 @@
+# Social Media Hero Image Pipeline
+# Generates AI image, resizes for Open Graph, adds branded caption
+name: social-hero-pipeline
+steps:
+  - kind: generate
+    generator: openai
+    params:
+      prompt: "Abstract tech waves in blue and purple gradient, flowing data streams, modern SaaS hero image style"
+      size: "1792x1024"
+      quality: hd
+    out: hero_raw
+  - kind: transform
+    op: resize
+    in: hero_raw
+    params:
+      width: 1200
+      height: 630
+      fit: cover
+    out: hero_resized
+  - kind: transform
+    op: addCaption
+    in: hero_resized
+    params:
+      text: "Build Something Amazing"
+      position: bottom
+      background: "rgba(0,0,0,0.7)"
+      color: "#ffffff"
+    out: hero_captioned
+  - kind: save
+    in: hero_captioned
+    destination: ./social-hero-final.png

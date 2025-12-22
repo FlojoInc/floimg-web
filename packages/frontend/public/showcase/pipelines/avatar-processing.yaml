@@ -1,0 +1,115 @@
+# Avatar Processing Pipeline
+# Take a portrait, crop to circle, add border, create sizes
+name: avatar-processing
+steps:
+  # Generate portrait
+  - kind: generate
+    generator: openai
+    params:
+      prompt: "Professional headshot portrait, friendly smile, neutral gray background, studio lighting, centered face"
+      size: "1024x1024"
+      quality: hd
+    out: portrait
+
+  # Save original
+  - kind: save
+    in: portrait
+    destination: ./output/avatar-original.png
+
+  # Large avatar with rounded corners (256px)
+  - kind: transform
+    op: resize
+    in: portrait
+    params:
+      width: 256
+      height: 256
+      fit: cover
+    out: large
+
+  - kind: transform
+    op: roundCorners
+    in: large
+    params:
+      radius: 128
+    out: large_circle
+
+  - kind: save
+    in: large_circle
+    destination: ./output/avatar-256.png
+
+  # Medium avatar (128px)
+  - kind: transform
+    op: resize
+    in: portrait
+    params:
+      width: 128
+      height: 128
+      fit: cover
+    out: medium
+
+  - kind: transform
+    op: roundCorners
+    in: medium
+    params:
+      radius: 64
+    out: medium_circle
+
+  - kind: save
+    in: medium_circle
+    destination: ./output/avatar-128.png
+
+  # Small avatar with sharpen (64px)
+  - kind: transform
+    op: resize
+    in: portrait
+    params:
+      width: 64
+      height: 64
+      fit: cover
+    out: small
+
+  - kind: transform
+    op: roundCorners
+    in: small
+    params:
+      radius: 32
+    out: small_circle
+
+  - kind: transform
+    op: sharpen
+    in: small_circle
+    params:
+      sigma: 0.8
+    out: small_sharp
+
+  - kind: save
+    in: small_sharp
+    destination: ./output/avatar-64.png
+
+  # Tiny avatar (32px) with extra sharpen
+  - kind: transform
+    op: resize
+    in: portrait
+    params:
+      width: 32
+      height: 32
+      fit: cover
+    out: tiny
+
+  - kind: transform
+    op: roundCorners
+    in: tiny
+    params:
+      radius: 16
+    out: tiny_circle
+
+  - kind: transform
+    op: sharpen
+    in: tiny_circle
+    params:
+      sigma: 1.2
+    out: tiny_sharp
+
+  - kind: save
+    in: tiny_sharp
+    destination: ./output/avatar-32.png
