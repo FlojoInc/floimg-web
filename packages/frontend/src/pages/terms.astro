@@ -1,52 +1,66 @@
 ---
-import MarketingLayout from '../layouts/MarketingLayout.astro';
+import MarketingLayout from "../layouts/MarketingLayout.astro";
 
 const lastUpdated = "December 20, 2024";
 ---
 
-<MarketingLayout title="Terms of Service" description="Terms of Service for floimg and floimg Studio">
+<MarketingLayout
+  title="Terms of Service"
+  description="Terms of Service for floimg and floimg Studio"
+>
   <div class="mx-auto max-w-4xl px-6 py-16">
     <h1 class="text-4xl font-bold text-zinc-900 dark:text-white mb-4">Terms of Service</h1>
     <p class="text-zinc-500 dark:text-zinc-400 mb-12">Last updated: {lastUpdated}</p>
 
     <div class="prose prose-zinc dark:prose-invert max-w-none">
-
       <!-- Introduction -->
       <section class="mb-12">
         <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">1. Introduction</h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          Welcome to floimg, a product of Flojo, Inc. ("Company", "we", "our", "us"). These Terms of Service
-          ("Terms") govern your use of floimg, floimg Studio, and related services (collectively, the "Service").
+          Welcome to floimg, a product of Flojo, Inc. ("Company", "we", "our", "us"). These Terms of
+          Service ("Terms") govern your use of floimg, floimg Studio, and related services
+          (collectively, the "Service").
         </p>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any
-          part of these terms, you may not access the Service.
+          By accessing or using the Service, you agree to be bound by these Terms. If you disagree
+          with any part of these terms, you may not access the Service.
         </p>
       </section>
 
       <!-- Cloud vs Self-Hosted -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">2. Cloud Service vs Self-Hosted</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          2. Cloud Service vs Self-Hosted
+        </h2>
 
-        <div class="bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-lg p-6 mb-6">
-          <h3 class="text-lg font-semibold text-violet-900 dark:text-violet-200 mb-2">floimg Cloud (studio.floimg.com)</h3>
-          <p class="text-violet-800 dark:text-violet-300 mb-4">
-            Our hosted cloud service has strict content policies. All content generated or uploaded is subject
-            to automated moderation and human review. <strong>Absolutely no harmful, illegal, or inappropriate
-            content is permitted.</strong>
+        <div
+          class="bg-teal-50 dark:bg-teal-900/20 border border-teal-200 dark:border-teal-800 rounded-lg p-6 mb-6"
+        >
+          <h3 class="text-lg font-semibold text-teal-900 dark:text-teal-200 mb-2">
+            floimg Cloud (studio.floimg.com)
+          </h3>
+          <p class="text-teal-800 dark:text-teal-300 mb-4">
+            Our hosted cloud service has strict content policies. All content generated or uploaded
+            is subject to automated moderation and human review. <strong
+              >Absolutely no harmful, illegal, or inappropriate content is permitted.</strong
+            >
           </p>
-          <ul class="list-disc list-inside text-violet-800 dark:text-violet-300 space-y-1">
+          <ul class="list-disc list-inside text-teal-800 dark:text-teal-300 space-y-1">
             <li>All content is scanned before being saved</li>
             <li>Violations result in content removal and potential account suspension</li>
             <li>We maintain a zero-tolerance policy for illegal content</li>
           </ul>
         </div>
 
-        <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6">
-          <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">Self-Hosted floimg Studio</h3>
+        <div
+          class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6"
+        >
+          <h3 class="text-lg font-semibold text-zinc-900 dark:text-white mb-2">
+            Self-Hosted floimg Studio
+          </h3>
           <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-            The self-hosted version of floimg Studio is provided under the MIT License. While you are free to
-            use, modify, and distribute the software, you remain responsible for:
+            The self-hosted version of floimg Studio is provided under the MIT License. While you
+            are free to use, modify, and distribute the software, you remain responsible for:
           </p>
           <ul class="list-disc list-inside text-zinc-600 dark:text-zinc-300 space-y-1">
             <li>Content generated on your own infrastructure</li>
@@ -58,68 +72,95 @@ const lastUpdated = "December 20, 2024";
 
       <!-- Prohibited Content -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">3. Prohibited Content</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          3. Prohibited Content
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          The following content is strictly prohibited on our cloud service and may not be created using
-          floimg software for illegal purposes:
+          The following content is strictly prohibited on our cloud service and may not be created
+          using floimg software for illegal purposes:
         </p>
 
-        <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
+        <div
+          class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6"
+        >
           <ul class="space-y-3">
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">1.</span>
               <div>
-                <strong class="text-red-900 dark:text-red-200">Child Sexual Abuse Material (CSAM)</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">This is a criminal offense. We report all instances to appropriate authorities.</p>
+                <strong class="text-red-900 dark:text-red-200"
+                  >Child Sexual Abuse Material (CSAM)</strong
+                >
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  This is a criminal offense. We report all instances to appropriate authorities.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">2.</span>
               <div>
-                <strong class="text-red-900 dark:text-red-200">Pornographic or Sexually Explicit Content</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">Including AI-generated sexual imagery of any kind.</p>
+                <strong class="text-red-900 dark:text-red-200"
+                  >Pornographic or Sexually Explicit Content</strong
+                >
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  Including AI-generated sexual imagery of any kind.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">3.</span>
               <div>
                 <strong class="text-red-900 dark:text-red-200">Violent or Graphic Content</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">Gore, extreme violence, or content depicting harm to individuals.</p>
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  Gore, extreme violence, or content depicting harm to individuals.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">4.</span>
               <div>
-                <strong class="text-red-900 dark:text-red-200">Hate Speech and Discrimination</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">Content that promotes hatred based on race, ethnicity, religion, gender, sexual orientation, disability, or other protected characteristics.</p>
+                <strong class="text-red-900 dark:text-red-200"
+                  >Hate Speech and Discrimination</strong
+                >
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  Content that promotes hatred based on race, ethnicity, religion, gender, sexual
+                  orientation, disability, or other protected characteristics.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">5.</span>
               <div>
                 <strong class="text-red-900 dark:text-red-200">Harassment and Threats</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">Content intended to harass, threaten, or intimidate individuals.</p>
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  Content intended to harass, threaten, or intimidate individuals.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">6.</span>
               <div>
                 <strong class="text-red-900 dark:text-red-200">Copyright Infringement</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">Reproducing copyrighted material without permission.</p>
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  Reproducing copyrighted material without permission.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">7.</span>
               <div>
                 <strong class="text-red-900 dark:text-red-200">Malware and Harmful Links</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">QR codes or content linking to malicious websites or downloads.</p>
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  QR codes or content linking to malicious websites or downloads.
+                </p>
               </div>
             </li>
             <li class="flex items-start gap-3">
               <span class="text-red-600 dark:text-red-400 font-bold">8.</span>
               <div>
                 <strong class="text-red-900 dark:text-red-200">Spam and Abuse</strong>
-                <p class="text-red-700 dark:text-red-300 text-sm">Automated abuse of the service or promotional spam.</p>
+                <p class="text-red-700 dark:text-red-300 text-sm">
+                  Automated abuse of the service or promotional spam.
+                </p>
               </div>
             </li>
           </ul>
@@ -128,25 +169,39 @@ const lastUpdated = "December 20, 2024";
 
       <!-- Content Moderation -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">4. Content Moderation</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          4. Content Moderation
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          To maintain a safe environment, we employ the following moderation measures on our cloud service:
+          To maintain a safe environment, we employ the following moderation measures on our cloud
+          service:
         </p>
         <ul class="list-disc list-inside text-zinc-600 dark:text-zinc-300 space-y-2 mb-4">
-          <li><strong>Automated Scanning:</strong> All generated and uploaded content is scanned by AI moderation systems before being saved.</li>
+          <li>
+            <strong>Automated Scanning:</strong> All generated and uploaded content is scanned by AI moderation
+            systems before being saved.
+          </li>
           <li><strong>Human Review:</strong> Flagged content is reviewed by our team.</li>
-          <li><strong>Pre-moderation for Public Gallery:</strong> Content submitted to the public gallery requires approval before publication.</li>
-          <li><strong>Incident Logging:</strong> Violations are logged for security and legal compliance purposes.</li>
+          <li>
+            <strong>Pre-moderation for Public Gallery:</strong> Content submitted to the public gallery
+            requires approval before publication.
+          </li>
+          <li>
+            <strong>Incident Logging:</strong> Violations are logged for security and legal compliance
+            purposes.
+          </li>
         </ul>
         <p class="text-zinc-600 dark:text-zinc-300">
-          Content that violates our policies will be removed without notice. Repeat violators will have their
-          accounts suspended or permanently banned.
+          Content that violates our policies will be removed without notice. Repeat violators will
+          have their accounts suspended or permanently banned.
         </p>
       </section>
 
       <!-- User Responsibilities -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">5. User Responsibilities</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          5. User Responsibilities
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">By using the Service, you agree to:</p>
         <ul class="list-disc list-inside text-zinc-600 dark:text-zinc-300 space-y-2">
           <li>Not create, upload, or share prohibited content</li>
@@ -159,46 +214,57 @@ const lastUpdated = "December 20, 2024";
 
       <!-- Open Source License -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">6. Open Source License</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          6. Open Source License
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          floimg and floimg Studio are open source software provided under the MIT License. This means you
-          are free to use, modify, and distribute the software.
+          floimg and floimg Studio are open source software provided under the MIT License. This
+          means you are free to use, modify, and distribute the software.
         </p>
-        <div class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 font-mono text-sm">
+        <div
+          class="bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6 font-mono text-sm"
+        >
           <p class="text-zinc-700 dark:text-zinc-300">
-            This software is provided under the MIT License. While you are free to use, modify, and distribute
-            this software, you may NOT use it to create, store, or distribute illegal content. The creators
-            of this software are not responsible for how it is used by third parties.
+            This software is provided under the MIT License. While you are free to use, modify, and
+            distribute this software, you may NOT use it to create, store, or distribute illegal
+            content. The creators of this software are not responsible for how it is used by third
+            parties.
           </p>
         </div>
       </section>
 
       <!-- Disclaimer -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">7. Disclaimer of Warranties</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          7. Disclaimer of Warranties
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS
-          OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-          PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+          THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER
+          EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY,
+          FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
         </p>
       </section>
 
       <!-- Limitation of Liability -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">8. Limitation of Liability</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          8. Limitation of Liability
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          IN NO EVENT SHALL FLOJO, INC. BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR
-          PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE.
+          IN NO EVENT SHALL FLOJO, INC. BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL,
+          CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING OUT OF OR RELATED TO YOUR USE OF THE SERVICE.
         </p>
       </section>
 
       <!-- Changes to Terms -->
       <section class="mb-12">
-        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">9. Changes to Terms</h2>
+        <h2 class="text-2xl font-semibold text-zinc-900 dark:text-white mb-4">
+          9. Changes to Terms
+        </h2>
         <p class="text-zinc-600 dark:text-zinc-300 mb-4">
-          We reserve the right to modify these Terms at any time. We will notify users of significant changes
-          by posting a notice on our website. Your continued use of the Service after changes are posted
-          constitutes acceptance of the modified Terms.
+          We reserve the right to modify these Terms at any time. We will notify users of
+          significant changes by posting a notice on our website. Your continued use of the Service
+          after changes are posted constitutes acceptance of the modified Terms.
         </p>
       </section>
 
@@ -209,11 +275,13 @@ const lastUpdated = "December 20, 2024";
           If you have questions about these Terms, please contact us at:
         </p>
         <p class="text-zinc-600 dark:text-zinc-300">
-          <strong>Email:</strong> legal@flojo.io<br>
-          <strong>Website:</strong> <a href="https://flojo.io" class="text-violet-600 dark:text-violet-400 hover:underline">https://flojo.io</a>
+          <strong>Email:</strong> legal@flojo.io<br />
+          <strong>Website:</strong>
+          <a href="https://flojo.io" class="text-teal-600 dark:text-teal-400 hover:underline"
+            >https://flojo.io</a
+          >
         </p>
       </section>
-
     </div>
   </div>
 </MarketingLayout>

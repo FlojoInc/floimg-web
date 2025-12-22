@@ -86,7 +86,7 @@ const tiers = [
       {
         tiers.map((tier) => (
           <div
-            class={`rounded-lg border p-8 ${tier.highlighted ? "border-violet-500 bg-violet-500/10" : "border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/50"}`}
+            class={`rounded-lg border p-8 ${tier.highlighted ? "border-teal-500 bg-teal-500/10" : "border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/50"}`}
           >
             <h3 class="text-lg font-semibold text-zinc-900 dark:text-white">{tier.name}</h3>
             <div class="mt-4">
@@ -99,7 +99,7 @@ const tiers = [
               {tier.features.map((feature) => (
                 <li class="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-300">
                   <svg
-                    class="h-4 w-4 text-violet-600 dark:text-violet-400"
+                    class="h-4 w-4 text-teal-600 dark:text-teal-400"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -118,7 +118,7 @@ const tiers = [
 
             <a
               href={tier.href}
-              class={`mt-8 block rounded-lg px-4 py-2 text-center text-sm font-medium transition-colors ${tier.highlighted ? "bg-violet-600 text-white hover:bg-violet-500" : "border border-zinc-300 dark:border-white/20 text-zinc-900 dark:text-white hover:bg-zinc-100 dark:hover:bg-white/5"}`}
+              class={`mt-8 block rounded-lg px-4 py-2 text-center text-sm font-medium transition-colors ${tier.highlighted ? "bg-teal-600 text-white hover:bg-teal-500" : "border border-zinc-300 dark:border-white/20 text-zinc-900 dark:text-white hover:bg-zinc-100 dark:hover:bg-white/5"}`}
             >
               {tier.cta}
             </a>
@@ -132,7 +132,7 @@ const tiers = [
         Prefer to self-host?{" "}
         <a
           href="/docs/studio/self-hosting"
-          class="text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300"
+          class="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300"
         >
           Run floimg Studio on your own infrastructure for free →
         </a>
