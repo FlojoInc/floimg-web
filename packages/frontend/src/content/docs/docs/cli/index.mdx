@@ -1,81 +1,180 @@
 ---
 title: CLI Overview
-description: Run floimg workflows from the command line
+description: Run floimg image operations from the command line
 ---
 
-The floimg CLI lets you run image generation workflows directly from your terminal.
+The floimg CLI lets you generate, transform, and save images directly from your terminal - no code required.
+
+## Try It Now (No Install Required)
+
+Use `npx` to run floimg instantly:
+
+```bash
+# Generate a QR code
+npx @teamflojo/floimg qr "https://floimg.com" -o qr.png
+
+# Create a bar chart
+npx @teamflojo/floimg chart bar --labels "Q1,Q2,Q3,Q4" --values "10,20,30,40" -o chart.png
+
+# Resize an image
+npx @teamflojo/floimg resize photo.jpg 800x600 -o thumbnail.jpg
+
+# Convert format
+npx @teamflojo/floimg convert image.png -o image.webp
+
+# Interactive mode - see all options
+npx @teamflojo/floimg
+```
 
 ## Installation
 
-```bash
-npm install -g @teamflojo/floimg-cli
-```
-
-Or use npx without installing:
+For frequent use, install globally:
 
 ```bash
-npx @teamflojo/floimg-cli generate chart.json -o output.png
+npm install -g @teamflojo/floimg
 ```
 
-## Quick Start
+Then run commands without npx:
 
 ```bash
-# Generate from a workflow file
-floimg generate workflow.json -o output.png
-
-# Generate with inline params
-floimg generate -g quickchart -p '{"type":"bar","data":{...}}' -o chart.png
-
-# Transform an existing image
-floimg transform input.png -o output.webp --resize 800x600 --format webp
+floimg qr "https://example.com" -o qr.png
 ```
 
-## Commands
+## Shorthand Commands
+
+These commands are designed for quick, common operations:
+
+| Command | Description | Example |
+|---------|-------------|---------|
+| `qr` | Generate QR codes | `floimg qr "text" -o qr.png` |
+| `chart` | Create charts (bar, line, pie) | `floimg chart bar --labels "A,B" --values "10,20"` |
+| `resize` | Resize images | `floimg resize input.jpg 800x600` |
+| `convert` | Convert formats | `floimg convert input.png -o output.webp` |
+
+### QR Code
+
+```bash
+floimg qr <text> [options]
+
+Options:
+  -o, --out <path>           Output file (default: qr.png)
+  -s, --size <pixels>        Size in pixels (default: 300)
+  -f, --format <format>      png or svg (default: png)
+  -e, --error-correction     L, M, Q, or H (default: M)
+  --dark <color>             Dark color hex
+  --light <color>            Light color hex
+
+Examples:
+  floimg qr "https://floimg.com" -o qr.png
+  floimg qr "Hello" --size 400 --format svg -o hello.svg
+```
+
+### Chart
+
+```bash
+floimg chart <type> [options]
+
+Types: bar, line, pie, doughnut, radar, polarArea, scatter
+
+Options:
+  -o, --out <path>           Output file (default: chart.png)
+  -l, --labels <items>       Comma-separated labels
+  -v, --values <items>       Comma-separated values
+  -d, --data <file>          JSON file with Chart.js config
+  --title <text>             Chart title
+  -w, --width <pixels>       Width (default: 500)
+  -h, --height <pixels>      Height (default: 300)
+
+Examples:
+  floimg chart bar --labels "A,B,C" --values "10,20,30" -o chart.png
+  floimg chart line --data sales.json -o sales-chart.png
+```
+
+### Resize
+
+```bash
+floimg resize <input> <size> [options]
+
+Options:
+  -o, --out <path>           Output file
+  --fit <mode>               cover, contain, fill, inside, outside
+  --background <color>       Background color for contain mode
+
+Examples:
+  floimg resize photo.jpg 800x600 -o thumbnail.jpg
+  floimg resize hero.png 1200 -o hero-resized.png
+```
+
+### Convert
+
+```bash
+floimg convert <input> [options]
+
+Options:
+  -o, --out <path>           Output file (format inferred)
+  -t, --to <format>          Target format: png, jpg, webp, avif
+  -q, --quality <number>     Quality for lossy formats (1-100)
+
+Examples:
+  floimg convert photo.png -o photo.webp
+  floimg convert image.jpg --to avif -q 85
+```
+
+## Plugin Auto-Install
+
+Shorthand commands like `qr` and `chart` require plugins. On first run, floimg will prompt to install them:
+
+```
+🔍 The 'qr' command requires @teamflojo/floimg-qr
+   QR Code Generator
+
+Install it now? (y/n): y
+📦 Installing @teamflojo/floimg-qr...
+✅ Installed!
+```
+
+After installation, the plugin is cached for future use.
+
+## Full API Commands
+
+For advanced use cases, the full API provides complete flexibility:
 
 | Command | Description |
 |---------|-------------|
-| `generate` | Create an image from a workflow or params |
-| `transform` | Apply transforms to an existing image |
-| `version` | Show CLI version |
-| `help` | Show help information |
+| `generate` | Create an image from any generator |
+| `transform` | Apply any transformation to an image |
+| `save` | Save to filesystem or cloud storage |
+| `run` | Execute a YAML workflow file |
+| `config` | Manage configuration |
+| `plugins` | List and install plugins |
+| `mcp` | MCP server for AI agents |
+| `doctor` | Check environment and configuration |
 
-## Workflow Files
-
-Define reusable workflows as JSON:
-
-```json
-{
-  "generator": "quickchart",
-  "params": {
-    "type": "bar",
-    "data": {
-      "labels": ["A", "B", "C"],
-      "datasets": [{ "data": [10, 20, 30] }]
-    }
-  },
-  "transforms": [
-    { "op": "resize", "params": { "width": 800 } },
-    { "op": "convert", "params": { "format": "webp" } }
-  ]
-}
-```
-
-Run it:
+### Generate (Full API)
 
 ```bash
-floimg generate workflow.json -o output.webp
+floimg generate --generator qr --params '{"text":"hello"}' --out qr.png
+floimg generate --generator quickchart --params '{"type":"bar",...}' --out chart.png
+```
+
+### Transform (Full API)
+
+```bash
+floimg transform --in image.png --op resize --params '{"width":800}' --out resized.png
+floimg transform --in photo.jpg --op convert --to webp --out photo.webp
 ```
 
 ## Environment Variables
 
 | Variable | Description |
 |----------|-------------|
-| `FLOIMG_OUTPUT_DIR` | Default output directory |
-| `AWS_ACCESS_KEY_ID` | For S3 output |
-| `AWS_SECRET_ACCESS_KEY` | For S3 output |
-| `AWS_REGION` | For S3 output |
+| `AWS_ACCESS_KEY_ID` | For S3 storage output |
+| `AWS_SECRET_ACCESS_KEY` | For S3 storage output |
+| `AWS_REGION` | AWS region for S3 |
+| `OPENAI_API_KEY` | For AI-powered generators |
 
 ## See Also
 
 - [Generate Command](/docs/cli/generate) - Full generate options
 - [Transform Command](/docs/cli/transform) - Full transform options
+- [SDK Reference](/docs/sdk/generate) - Use floimg in code

@@ -5,7 +5,33 @@ description: Build your first floimg workflow in 5 minutes
 
 This guide walks you through creating a complete image workflow using floimg.
 
-## Prerequisites
+## Fastest Way: npx (No Install)
+
+Generate images instantly from your terminal:
+
+```bash
+# Generate a QR code
+npx @teamflojo/floimg qr "https://floimg.com" -o qr.png
+
+# Create a chart
+npx @teamflojo/floimg chart bar --labels "Q1,Q2,Q3" --values "10,20,30" -o chart.png
+
+# Resize an image
+npx @teamflojo/floimg resize photo.jpg 800x600 -o thumbnail.jpg
+
+# Convert to WebP
+npx @teamflojo/floimg convert image.png -o image.webp
+```
+
+See the [CLI docs](/docs/cli) for all available commands.
+
+---
+
+## SDK: Use in Code
+
+For integration into your applications, use the floimg SDK.
+
+### Prerequisites
 
 Make sure you have [installed floimg](/docs/getting-started/installation).
 
