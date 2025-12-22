@@ -295,7 +295,7 @@ const socialKit = await floimg.pipeline(heroImage, [
   generator: 'qr',
   params: {
     data: 'https://floimg.com',
-    color: '#7c3aed',
+    color: '#0d9488',
     backgroundColor: '#ffffff',
     margin: 2
   }

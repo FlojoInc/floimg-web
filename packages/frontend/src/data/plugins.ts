@@ -694,7 +694,7 @@ await floimg.save(image, "./futuristic-city.png");`,
         code: `await floimg.generate({
   generator: "openai",
   params: {
-    prompt: "Abstract flowing gradient with purple and blue",
+    prompt: "Abstract flowing gradient with teal and blue",
     model: "dall-e-3"
   }
 });`,

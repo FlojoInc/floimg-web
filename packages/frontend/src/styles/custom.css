@@ -5,9 +5,9 @@
 
 /* Light mode (default) */
 :root {
-  --sl-color-accent-low: #2e1065;
-  --sl-color-accent: #7c3aed;
-  --sl-color-accent-high: #c4b5fd;
+  --sl-color-accent-low: #042f2e;
+  --sl-color-accent: #0d9488;
+  --sl-color-accent-high: #99f6e4;
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #f4f4f5;
   --sl-color-gray-2: #e4e4e7;
@@ -20,15 +20,15 @@
   --sl-color-bg-nav: #f4f4f5;
   --sl-color-bg-sidebar: #f4f4f5;
   --sl-color-text: #18181b;
-  --sl-color-text-accent: #7c3aed;
+  --sl-color-text-accent: #0d9488;
 }
 
 /* Dark mode - triggered by system preference */
 @media (prefers-color-scheme: dark) {
   :root {
-    --sl-color-accent-low: #2e1065;
-    --sl-color-accent: #8b5cf6;
-    --sl-color-accent-high: #c4b5fd;
+    --sl-color-accent-low: #042f2e;
+    --sl-color-accent: #14b8a6;
+    --sl-color-accent-high: #99f6e4;
     --sl-color-white: #18181b;
     --sl-color-gray-1: #27272a;
     --sl-color-gray-2: #3f3f46;
@@ -41,15 +41,15 @@
     --sl-color-bg-nav: #27272a;
     --sl-color-bg-sidebar: #27272a;
     --sl-color-text: #fafafa;
-    --sl-color-text-accent: #a78bfa;
+    --sl-color-text-accent: #2dd4bf;
   }
 }
 
 /* Explicit light mode when manually selected */
 :root[data-theme="light"] {
-  --sl-color-accent-low: #2e1065;
-  --sl-color-accent: #7c3aed;
-  --sl-color-accent-high: #c4b5fd;
+  --sl-color-accent-low: #042f2e;
+  --sl-color-accent: #0d9488;
+  --sl-color-accent-high: #99f6e4;
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #f4f4f5;
   --sl-color-gray-2: #e4e4e7;
@@ -62,7 +62,7 @@
   --sl-color-bg-nav: #f4f4f5;
   --sl-color-bg-sidebar: #f4f4f5;
   --sl-color-text: #18181b;
-  --sl-color-text-accent: #7c3aed;
+  --sl-color-text-accent: #0d9488;
   --sl-color-hairline-light: #e4e4e7;
   --sl-color-hairline: #d4d4d8;
   color-scheme: light;
@@ -85,9 +85,9 @@
 
 /* Explicit dark mode when manually selected */
 :root[data-theme="dark"] {
-  --sl-color-accent-low: #2e1065;
-  --sl-color-accent: #8b5cf6;
-  --sl-color-accent-high: #c4b5fd;
+  --sl-color-accent-low: #042f2e;
+  --sl-color-accent: #14b8a6;
+  --sl-color-accent-high: #99f6e4;
   --sl-color-white: #18181b;
   --sl-color-gray-1: #27272a;
   --sl-color-gray-2: #3f3f46;
@@ -100,7 +100,7 @@
   --sl-color-bg-nav: #27272a;
   --sl-color-bg-sidebar: #27272a;
   --sl-color-text: #fafafa;
-  --sl-color-text-accent: #a78bfa;
+  --sl-color-text-accent: #2dd4bf;
 }
 
 /* Dark mode text color overrides */
@@ -145,7 +145,7 @@
 }
 
 .btn-primary {
-  @apply rounded-lg bg-violet-600 px-6 py-3 font-medium text-white hover:bg-violet-500 transition-colors;
+  @apply rounded-lg bg-teal-600 px-6 py-3 font-medium text-white hover:bg-teal-500 transition-colors;
 }
 
 .btn-secondary {
