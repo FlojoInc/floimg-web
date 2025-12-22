@@ -1,0 +1,71 @@
+# Filter Showcase Pipeline
+# Same image with different artistic presets
+name: filter-showcase
+steps:
+  # Generate base image
+  - kind: generate
+    generator: openai
+    params:
+      prompt: "Cozy coffee shop interior, warm lighting, wooden furniture, plants, afternoon sun through windows"
+      size: "1024x1024"
+      quality: hd
+    out: original
+
+  # Save original
+  - kind: save
+    in: original
+    destination: ./output/filter-original.png
+
+  # Vintage preset
+  - kind: transform
+    op: preset
+    in: original
+    params:
+      name: vintage
+    out: vintage
+  - kind: save
+    in: vintage
+    destination: ./output/filter-vintage.png
+
+  # Vibrant preset
+  - kind: transform
+    op: preset
+    in: original
+    params:
+      name: vibrant
+    out: vibrant
+  - kind: save
+    in: vibrant
+    destination: ./output/filter-vibrant.png
+
+  # Dramatic preset
+  - kind: transform
+    op: preset
+    in: original
+    params:
+      name: dramatic
+    out: dramatic
+  - kind: save
+    in: dramatic
+    destination: ./output/filter-dramatic.png
+
+  # Grayscale
+  - kind: transform
+    op: grayscale
+    in: original
+    params: {}
+    out: grayscale
+  - kind: save
+    in: grayscale
+    destination: ./output/filter-grayscale.png
+
+  # Blur example
+  - kind: transform
+    op: blur
+    in: original
+    params:
+      sigma: 5
+    out: blurred
+  - kind: save
+    in: blurred
+    destination: ./output/filter-blur.png

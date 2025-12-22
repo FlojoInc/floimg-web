@@ -1,0 +1,47 @@
+# Watermark & Badge Pipeline
+# Add watermark overlay and info badge to images
+name: watermark-badge
+steps:
+  # Generate a product image
+  - kind: generate
+    generator: openai
+    params:
+      prompt: "Minimalist desk setup with laptop, coffee mug, and succulent plant, top-down view, soft natural lighting"
+      size: "1024x1024"
+      quality: hd
+    out: product
+
+  # Save original for comparison
+  - kind: save
+    in: product
+    destination: ./output/watermark-original.png
+
+  # Add semi-transparent watermark
+  - kind: transform
+    op: addCaption
+    in: product
+    params:
+      text: "© FloImg 2024"
+      position: bottom-right
+      color: "rgba(255,255,255,0.5)"
+      background: "transparent"
+    out: watermarked
+
+  - kind: save
+    in: watermarked
+    destination: ./output/watermark-branded.png
+
+  # Create version with top banner
+  - kind: transform
+    op: addCaption
+    in: product
+    params:
+      text: "FEATURED PRODUCT"
+      position: top
+      background: "#6366f1"
+      color: "#ffffff"
+    out: with_banner
+
+  - kind: save
+    in: with_banner
+    destination: ./output/watermark-banner.png
