@@ -18,6 +18,16 @@ export default defineConfig({
         { icon: 'github', label: 'GitHub', href: 'https://github.com/TeamFlojo/floimg' },
       ],
       customCss: ['./src/styles/custom.css'],
+      head: [
+        {
+          tag: 'script',
+          attrs: {
+            defer: true,
+            src: 'https://analytics.goflojo.com/script.js',
+            'data-website-id': '613c8ef0-c4fc-4059-8378-7818aadfff26',
+          },
+        },
+      ],
       // Disable Starlight's default index page so our marketing page at / works
       disable404Route: false,
       sidebar: [
