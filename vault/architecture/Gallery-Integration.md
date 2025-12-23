@@ -1,6 +1,6 @@
 # Gallery Integration
 
-floimg-web provides a public gallery that showcases floimg capabilities and links to floimg-studio.
+floimg-web provides a public gallery that showcases floimg capabilities and links to FloImg Studio.
 
 ## Architecture
 
@@ -34,58 +34,59 @@ floimg-web provides a public gallery that showcases floimg capabilities and link
 
 Template data is intentionally split between repositories:
 
-| Repository | Data | Purpose |
-|------------|------|---------|
-| floimg-web | Metadata only (id, name, description) | Gallery display |
-| floimg-studio | Full workflow (nodes, edges) | Execution |
+| Repository    | Data                                  | Purpose         |
+| ------------- | ------------------------------------- | --------------- |
+| floimg-web    | Metadata only (id, name, description) | Gallery display |
+| FloImg Studio | Full workflow (nodes, edges)          | Execution       |
 
 This separation exists because:
-1. floimg-web is statically built - cannot fetch from Studio API at build time
+
+1. floimg-web is statically built - cannot fetch from FloImg Studio API at build time
 2. floimg-web only needs display metadata, not executable workflows
-3. Template IDs must match across repos for "Open in Studio" to work
+3. Template IDs must match across repos for "Open in FloImg Studio" to work
 
 ## Template Schema (floimg-web)
 
 ```typescript
 interface GalleryTemplate {
-  id: string;           // Must match floimg-studio template ID
+  id: string; // Must match FloImg Studio template ID
   name: string;
   description: string;
-  category: string;     // "Charts" | "Diagrams" | "QR Codes" | "Pipelines"
-  generator: string;    // "quickchart" | "mermaid" | "qr"
+  category: string; // "Charts" | "Diagrams" | "QR Codes" | "Pipelines"
+  generator: string; // "quickchart" | "mermaid" | "qr"
   tags?: string[];
 }
 ```
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/data/templates.ts` | Template metadata for gallery |
-| `src/pages/gallery.astro` | Gallery page rendering |
+| File                      | Purpose                       |
+| ------------------------- | ----------------------------- |
+| `src/data/templates.ts`   | Template metadata for gallery |
+| `src/pages/gallery.astro` | Gallery page rendering        |
 
 ## Adding Templates
 
 When adding a new template:
 
-1. Create the template in floimg-studio:
+1. Create the template in FloImg Studio:
    - Add `packages/frontend/src/templates/<name>.ts`
    - Export from `packages/frontend/src/templates/index.ts`
 
 2. Add metadata to floimg-web:
    - Add entry to `packages/frontend/src/data/templates.ts`
-   - Use the same `id` as floimg-studio
+   - Use the same `id` as FloImg Studio
 
 3. Verify:
    - Gallery shows the new template
-   - "Open in Studio" link loads the correct workflow
+   - "Open in FloImg Studio" link loads the correct workflow
 
 ## URL Scheme
 
-Gallery items link to Studio with the template ID:
+Gallery items link to FloImg Studio Cloud with the template ID:
 
 ```
 https://studio.floimg.com/?template=<template-id>
 ```
 
-Studio parses this URL parameter on load and applies the matching template to the workflow editor.
+FloImg Studio parses this URL parameter on load and applies the matching template to the workflow editor.
