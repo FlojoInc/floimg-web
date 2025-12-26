@@ -122,7 +122,47 @@ image = await floimg.transform(image, { op: 'convert', params: { format: 'webp' 
 await floimg.save(image, './output.webp');
 ```
 
+## AI Transforms
+
+Plugins provide AI-powered image transformations. These use external AI services for advanced operations like background removal, upscaling, and image editing.
+
+### Using AI Transforms
+
+AI transforms require registering a transform provider from a plugin:
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import { stabilityTransform } from '@teamflojo/floimg-stability';
+
+const floimg = createClient();
+
+// Register AI transform provider
+floimg.registerTransformProvider(stabilityTransform({
+  apiKey: process.env.STABILITY_API_KEY
+}));
+
+// Use AI transform with provider parameter
+const noBg = await floimg.transform({
+  blob: image,
+  op: 'removeBackground',
+  provider: 'stability-transform'
+});
+```
+
+### Available AI Transform Providers
+
+| Provider | Operations | Plugin |
+|----------|------------|--------|
+| `stability-transform` | removeBackground, upscale, searchAndReplace, outpaint | [@teamflojo/floimg-stability](/docs/plugins/stability) |
+| `openai-transform` | edit (inpainting), variations | [@teamflojo/floimg-openai](/docs/plugins/openai) |
+| `replicate-transform` | faceRestore, colorize, realEsrgan, fluxEdit | [@teamflojo/floimg-replicate](/docs/plugins/replicate) |
+
+See the individual plugin documentation for detailed parameter options.
+
 ## See Also
 
 - [Generate](/docs/sdk/generate) - Create images
 - [Save](/docs/sdk/save) - Output images to storage
+- [Stability AI](/docs/plugins/stability) - Background removal, upscale, outpaint
+- [OpenAI](/docs/plugins/openai) - Image editing and variations
+- [Replicate](/docs/plugins/replicate) - Face restore, colorize, AI upscale
