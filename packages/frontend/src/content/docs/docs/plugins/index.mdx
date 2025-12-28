@@ -1,27 +1,32 @@
 ---
 title: Plugins
-description: Extend FloImg with generators for charts, diagrams, AI images, and more
+description: Extend FloImg with AI image generators, charts, diagrams, and more
 ---
 
-FloImg plugins add image generation capabilities to your workflows. Each plugin wraps a best-in-class library or service.
+FloImg plugins add image generation capabilities to your workflows.
 
-## Standing on the Shoulders of Giants
+## How Plugins Work
 
-FloImg plugins are **thin wrappers** around amazing tools. We don't reimplement—we orchestrate.
+Plugins are thin wrappers. They expose the underlying library's API directly—[no FloImg abstraction layer](/docs/plugins#how-plugins-work).
 
-**What this means for you:**
-- **Full power** - Access 100% of the underlying library's capabilities
-- **Native formats** - Use Chart.js config directly, not a FloImg abstraction
-- **One source of truth** - Library docs are your docs; we link to them
-- **Easy to learn** - If you know Chart.js, you already know floimg-quickchart
+When you use `floimg-openai`, you're using OpenAI's API. When you use `floimg-mermaid`, you're writing Mermaid syntax. We don't invent our own config format or hide capabilities behind a "simpler" interface.
 
-**Why we built it this way:**
-- We're not trying to replace these amazing tools—we're grateful they exist
-- Abstracting away capabilities would limit what you can do
-- Maintaining parity with upstream libraries is unsustainable
-- You shouldn't have to learn "FloImg's version" of Chart.js
+**Why this matters:**
+- Their docs are your docs. We link to them, not duplicate them.
+- If you already know DALL-E or Mermaid, there's nothing new to learn.
+- Every feature the library supports, you can use.
 
-FloImg handles the pipeline (generate → transform → save). The underlying libraries do what they do best.
+FloImg handles the pipeline—generate, transform, save. The plugins handle generation by delegating to proven tools.
+
+## AI Image Generation
+
+| Plugin | Powered By | Best For |
+|--------|------------|----------|
+| [OpenAI](/docs/plugins/openai) | [DALL-E](https://openai.com/dall-e-3) | High-quality AI images |
+| [Stability AI](/docs/plugins/stability) | [Stable Diffusion](https://stability.ai/) | Open-source AI models |
+| [Google Imagen](/docs/plugins/google) | [Imagen](https://cloud.google.com/vertex-ai/docs/generative-ai/image/overview) | Google's AI image generation |
+| [Replicate](/docs/plugins/replicate) | [Replicate](https://replicate.com/) | Thousands of AI models |
+| [Ollama](/docs/plugins/ollama) | [Ollama](https://ollama.ai/) | Local AI, no API key |
 
 ## Data Visualization
 
@@ -42,16 +47,6 @@ FloImg handles the pipeline (generate → transform → save). The underlying li
 |--------|------------|----------|
 | [QR Code](/docs/plugins/qr) | [qrcode](https://www.npmjs.com/package/qrcode) | QR code generation |
 | [Screenshot](/docs/plugins/screenshot) | [Playwright](https://playwright.dev/) | Website screenshots |
-
-## AI Image Generation
-
-| Plugin | Powered By | Best For |
-|--------|------------|----------|
-| [OpenAI](/docs/plugins/openai) | [DALL-E](https://openai.com/dall-e-3) | High-quality AI images |
-| [Stability AI](/docs/plugins/stability) | [Stable Diffusion](https://stability.ai/) | Open-source AI models |
-| [Google Imagen](/docs/plugins/google) | [Imagen](https://cloud.google.com/vertex-ai/docs/generative-ai/image/overview) | Google's AI image generation |
-| [Replicate](/docs/plugins/replicate) | [Replicate](https://replicate.com/) | Thousands of AI models |
-| [Ollama](/docs/plugins/ollama) | [Ollama](https://ollama.ai/) | Local AI, no API key |
 
 ## See Also
 

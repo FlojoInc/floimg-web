@@ -9,10 +9,10 @@ The `generate` method creates images from structured parameters using registered
 
 ```typescript
 const image = await floimg.generate({
-  generator: 'quickchart',
+  generator: 'openai',
   params: {
-    type: 'bar',
-    data: { /* Chart.js config */ }
+    prompt: 'A mountain landscape at sunset',
+    size: '1024x1024'
   }
 });
 ```
@@ -34,12 +34,12 @@ Before using a generator, you must register it:
 
 ```typescript
 import createClient from '@teamflojo/floimg';
+import openai from '@teamflojo/floimg-openai';
 import quickchart from '@teamflojo/floimg-quickchart';
-import qr from '@teamflojo/floimg-qr';
 
 const floimg = createClient();
+floimg.registerGenerator(openai({ apiKey: process.env.OPENAI_API_KEY }));
 floimg.registerGenerator(quickchart());
-floimg.registerGenerator(qr());
 ```
 
 ## Error Handling
@@ -47,8 +47,8 @@ floimg.registerGenerator(qr());
 ```typescript
 try {
   const image = await floimg.generate({
-    generator: 'quickchart',
-    params: { type: 'bar', data: {} }
+    generator: 'openai',
+    params: { prompt: 'A landscape' }
   });
 } catch (error) {
   console.error('Generation failed:', error.message);
@@ -64,4 +64,4 @@ Common errors:
 
 - [Transform](/docs/sdk/transform) - Modify generated images
 - [Save](/docs/sdk/save) - Output images to storage
-- [Plugins](/docs/plugins/quickchart) - Available generators
+- [Plugins](/docs/plugins) - Available generators
