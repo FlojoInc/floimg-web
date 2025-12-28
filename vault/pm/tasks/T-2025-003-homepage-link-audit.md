@@ -1,7 +1,8 @@
 # T-2025-003: Homepage Link Audit and Improvements
 
-**Status**: IN PROGRESS
+**Status**: COMPLETE
 **Created**: 2025-12-28
+**Completed**: 2025-12-28
 
 ## Summary
 
@@ -11,19 +12,19 @@ Add missing links to homepage elements that look interactive but don't navigate 
 
 ### ImageShowcase Component
 
-- [ ] Wrap 8 hero images with `/gallery` links
+- [x] Wrap 8 hero images with `/gallery` links
 
 ### TabbedDemo Component
 
-- [ ] Wrap 3 demo images with `/gallery` links
+- [x] Wrap 3 demo images with `/gallery` links
 
 ### Generator Cards
 
-- [ ] Link 6 generator cards to their respective `/docs/plugins/{name}` pages
+- [x] Link 6 generator cards to their respective `/docs/plugins/{name}` pages
 
 ### Feature Cards
 
-- [ ] Link 8 feature cards to relevant docs pages:
+- [x] Link 8 feature cards to relevant docs pages:
   - AI Image Generation → `/docs/plugins/openai`
   - LLM-Ready → `/docs/mcp`
   - Pipeline Engine → `/docs/getting-started/concepts`
@@ -41,4 +42,4 @@ Add missing links to homepage elements that look interactive but don't navigate 
 
 ## PR
 
-(pending)
+https://github.com/TeamFlojo/floimg-web/pull/30 (merged)

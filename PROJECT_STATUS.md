@@ -8,6 +8,13 @@ No active tasks. Use `/p [description]` to plan new work.
 
 ## Just Completed
 
+**T-2025-003: Homepage Link Audit** (2025-12-28)
+
+- Added gallery links to 8 hero images and 3 demo images
+- Added docs links to 6 generator cards and 8 feature cards
+- All links have hover effects and cursor pointers
+- PR #30 merged
+
 **T-2025-002: Fix Code Example Indentation** (2025-12-28)
 
 - Fixed homepage code examples displaying with incorrect leading whitespace
