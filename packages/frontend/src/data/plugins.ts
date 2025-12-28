@@ -5,6 +5,16 @@ export interface PluginExample {
   code: string;
 }
 
+export interface PoweredBy {
+  name: string;
+  url: string;
+  description: string;
+  via?: {
+    name: string;
+    url: string;
+  };
+}
+
 export interface Plugin {
   slug: string;
   name: string;
@@ -13,6 +23,7 @@ export interface Plugin {
   category: "AI" | "Data Visualization" | "Diagrams" | "Utilities";
   heroImage: string;
   tags: string[];
+  poweredBy: PoweredBy;
   installation: {
     npm: string;
     pnpm: string;
@@ -47,6 +58,15 @@ export const plugins: Plugin[] = [
     category: "Data Visualization",
     heroImage: "/showcase/data-viz/quarterly-revenue.png",
     tags: ["charts", "graphs", "chart.js", "bar", "line", "pie", "data"],
+    poweredBy: {
+      name: "Chart.js",
+      url: "https://www.chartjs.org/",
+      description: "The popular open-source charting library.",
+      via: {
+        name: "QuickChart",
+        url: "https://quickchart.io/",
+      },
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-quickchart",
       pnpm: "pnpm add @teamflojo/floimg-quickchart",
@@ -189,6 +209,11 @@ await floimg.save(chart, "./quarterly-chart.png");`,
     category: "Diagrams",
     heroImage: "/showcase/pipelines/social-hero-final.png",
     tags: ["diagrams", "flowchart", "sequence", "class", "mermaid", "architecture"],
+    poweredBy: {
+      name: "Mermaid.js",
+      url: "https://mermaid.js.org/",
+      description: "JavaScript-based diagramming and charting tool.",
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-mermaid",
       pnpm: "pnpm add @teamflojo/floimg-mermaid",
@@ -285,6 +310,11 @@ await floimg.save(diagram, "./architecture.png");`,
     category: "Utilities",
     heroImage: "/showcase/qr-codes/qr-brand.png",
     tags: ["qr", "qrcode", "barcode", "marketing", "scan"],
+    poweredBy: {
+      name: "qrcode",
+      url: "https://www.npmjs.com/package/qrcode",
+      description: "QR code generator for Node.js and browsers.",
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-qr",
       pnpm: "pnpm add @teamflojo/floimg-qr",
@@ -407,6 +437,11 @@ await floimg.save(qrCode, "./website-qr.png");`,
     category: "Utilities",
     heroImage: "/showcase/ai-generation/developer-workspace.png",
     tags: ["screenshot", "playwright", "browser", "capture", "webpage"],
+    poweredBy: {
+      name: "Playwright",
+      url: "https://playwright.dev/",
+      description: "Reliable end-to-end testing and browser automation.",
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-screenshot",
       pnpm: "pnpm add @teamflojo/floimg-screenshot",
@@ -500,6 +535,11 @@ await floimg.save(capture, "./github-screenshot.png");`,
     category: "Data Visualization",
     heroImage: "/showcase/data-viz/framework-usage.png",
     tags: ["d3", "visualization", "charts", "svg", "data", "advanced"],
+    poweredBy: {
+      name: "D3.js",
+      url: "https://d3js.org/",
+      description: "The JavaScript library for data-driven documents.",
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-d3",
       pnpm: "pnpm add @teamflojo/floimg-d3",
@@ -607,6 +647,11 @@ await floimg.save(viz, "./framework-usage.png");`,
     category: "AI",
     heroImage: "/showcase/ai-generation/futuristic-city.png",
     tags: ["ai", "dalle", "openai", "generative", "text-to-image"],
+    poweredBy: {
+      name: "OpenAI DALL-E",
+      url: "https://openai.com/dall-e-3",
+      description: "OpenAI's image generation model.",
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-openai",
       pnpm: "pnpm add @teamflojo/floimg-openai",
@@ -727,6 +772,11 @@ await floimg.save(image, "./futuristic-city.png");`,
     category: "AI",
     heroImage: "/showcase/ai-generation/robot-mascot.png",
     tags: ["ai", "ollama", "local", "open-source", "self-hosted"],
+    poweredBy: {
+      name: "Ollama",
+      url: "https://ollama.ai/",
+      description: "Run large language models locally.",
+    },
     installation: {
       npm: "npm install @teamflojo/floimg-ollama",
       pnpm: "pnpm add @teamflojo/floimg-ollama",

@@ -1,0 +1,60 @@
+---
+title: Plugins
+description: Extend FloImg with generators for charts, diagrams, AI images, and more
+---
+
+FloImg plugins add image generation capabilities to your workflows. Each plugin wraps a best-in-class library or service.
+
+## Standing on the Shoulders of Giants
+
+FloImg plugins are **thin wrappers** around amazing tools. We don't reimplement—we orchestrate.
+
+**What this means for you:**
+- **Full power** - Access 100% of the underlying library's capabilities
+- **Native formats** - Use Chart.js config directly, not a FloImg abstraction
+- **One source of truth** - Library docs are your docs; we link to them
+- **Easy to learn** - If you know Chart.js, you already know floimg-quickchart
+
+**Why we built it this way:**
+- We're not trying to replace these amazing tools—we're grateful they exist
+- Abstracting away capabilities would limit what you can do
+- Maintaining parity with upstream libraries is unsustainable
+- You shouldn't have to learn "FloImg's version" of Chart.js
+
+FloImg handles the pipeline (generate → transform → save). The underlying libraries do what they do best.
+
+## Data Visualization
+
+| Plugin | Powered By | Best For |
+|--------|------------|----------|
+| [QuickChart](/docs/plugins/quickchart) | [Chart.js](https://www.chartjs.org/) via [QuickChart](https://quickchart.io/) | Bar, line, pie charts |
+| [D3](/docs/plugins/d3) | [D3.js](https://d3js.org/) | Custom visualizations |
+
+## Diagrams
+
+| Plugin | Powered By | Best For |
+|--------|------------|----------|
+| [Mermaid](/docs/plugins/mermaid) | [Mermaid.js](https://mermaid.js.org/) | Flowcharts, sequence diagrams |
+
+## Utilities
+
+| Plugin | Powered By | Best For |
+|--------|------------|----------|
+| [QR Code](/docs/plugins/qr) | [qrcode](https://www.npmjs.com/package/qrcode) | QR code generation |
+| [Screenshot](/docs/plugins/screenshot) | [Playwright](https://playwright.dev/) | Website screenshots |
+
+## AI Image Generation
+
+| Plugin | Powered By | Best For |
+|--------|------------|----------|
+| [OpenAI](/docs/plugins/openai) | [DALL-E](https://openai.com/dall-e-3) | High-quality AI images |
+| [Stability AI](/docs/plugins/stability) | [Stable Diffusion](https://stability.ai/) | Open-source AI models |
+| [Google Imagen](/docs/plugins/google) | [Imagen](https://cloud.google.com/vertex-ai/docs/generative-ai/image/overview) | Google's AI image generation |
+| [Replicate](/docs/plugins/replicate) | [Replicate](https://replicate.com/) | Thousands of AI models |
+| [Ollama](/docs/plugins/ollama) | [Ollama](https://ollama.ai/) | Local AI, no API key |
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Core generation method
+- [Transform](/docs/sdk/transform) - Image transforms
+- [Save](/docs/sdk/save) - Output destinations
