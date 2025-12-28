@@ -13,7 +13,7 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 **LLMs are non-deterministic.** Great for creativity, terrible for "resize to exactly 800x600."
 
-**Image libraries are fragmented.** Charts need Chart.js. Diagrams need Mermaid. QR codes need node-qrcode. Each has different APIs with no way to chain them.
+**Image workflows are fragmented.** AI images need the OpenAI SDK. Transforms need Sharp. Charts need Chart.js. Each has different APIs with no way to chain them.
 
 **FloImg solves both.** Deterministic execution with a unified abstraction. LLMs handle natural language; FloImg handles precise execution.
 
@@ -21,23 +21,23 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 ```typescript
 import createClient from '@teamflojo/floimg';
-import quickchart from '@teamflojo/floimg-quickchart';
+import openai from '@teamflojo/floimg-openai';
 
 const floimg = createClient();
-floimg.registerGenerator(quickchart());
+floimg.registerGenerator(openai({ apiKey: process.env.OPENAI_API_KEY }));
 
 // Generate → Transform → Save
-const chart = await floimg.generate({
-  generator: 'quickchart',
-  params: { type: 'bar', data: { /* Chart.js config */ } }
+const image = await floimg.generate({
+  generator: 'openai',
+  params: { prompt: 'A product photo of headphones', size: '1024x1024' }
 });
 
-const resized = await floimg.transform(chart, {
+const resized = await floimg.transform(image, {
   op: 'resize',
   params: { width: 800 }
 });
 
-await floimg.save(resized, 's3://bucket/chart.png');
+await floimg.save(resized, 's3://bucket/product.png');
 ```
 
 ## Get Started
@@ -52,8 +52,8 @@ await floimg.save(resized, 's3://bucket/chart.png');
     [Learn more →](/docs/getting-started/concepts)
   </Card>
   <Card title="Plugins" icon="puzzle">
-    Browse available generators for charts, diagrams, QR codes, and more.
-    [View plugins →](/docs/plugins/quickchart)
+    Browse generators for AI images, charts, diagrams, and more.
+    [View plugins →](/docs/plugins)
   </Card>
   <Card title="MCP Integration" icon="laptop">
     Connect FloImg to Claude and other AI agents.

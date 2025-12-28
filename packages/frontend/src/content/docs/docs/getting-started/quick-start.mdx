@@ -19,9 +19,11 @@ npx @teamflojo/floimg convert image.png -o image.webp
 # Add a caption or watermark
 npx @teamflojo/floimg caption photo.jpg "© 2025 Acme" -o watermarked.jpg
 
+# Generate with AI (requires OPENAI_API_KEY)
+npx @teamflojo/floimg generate openai "A mountain landscape at sunset" -o landscape.png
+
 # Also: charts, diagrams, QR codes
 npx @teamflojo/floimg qr "https://floimg.com" -o qr.png
-npx @teamflojo/floimg chart bar --labels "Q1,Q2,Q3" --values "10,20,30" -o chart.png
 ```
 
 See the [CLI docs](/docs/cli) for all available commands.
@@ -51,11 +53,11 @@ const floimg = createClient();
 Generators create images. Register the ones you need:
 
 ```typescript
-import quickchart from '@teamflojo/floimg-quickchart';
-import qr from '@teamflojo/floimg-qr';
+import openai from '@teamflojo/floimg-openai';
 
-floimg.registerGenerator(quickchart());
-floimg.registerGenerator(qr());
+floimg.registerGenerator(openai({
+  apiKey: process.env.OPENAI_API_KEY
+}));
 ```
 
 ## Step 3: Generate an Image
@@ -63,17 +65,11 @@ floimg.registerGenerator(qr());
 Use the `generate` method with a generator name and parameters:
 
 ```typescript
-const chart = await floimg.generate({
-  generator: 'quickchart',
+const image = await floimg.generate({
+  generator: 'openai',
   params: {
-    type: 'bar',
-    data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-      datasets: [{
-        label: 'Sales',
-        data: [10, 20, 30, 40]
-      }]
-    }
+    prompt: 'A serene mountain landscape at golden hour',
+    size: '1024x1024'
   }
 });
 ```
@@ -83,14 +79,14 @@ const chart = await floimg.generate({
 Apply transformations like resize, blur, or format conversion:
 
 ```typescript
-const resized = await floimg.transform(chart, {
+const resized = await floimg.transform(image, {
   op: 'resize',
   params: { width: 800, height: 600 }
 });
 
-const blurred = await floimg.transform(resized, {
-  op: 'blur',
-  params: { sigma: 2 }
+const final = await floimg.transform(resized, {
+  op: 'modulate',
+  params: { saturation: 1.2 }
 });
 ```
 
@@ -100,10 +96,10 @@ Save to local filesystem or cloud storage:
 
 ```typescript
 // Local file
-await floimg.save(blurred, './output/chart.png');
+await floimg.save(final, './output/landscape.png');
 
 // S3 bucket (requires AWS credentials)
-await floimg.save(blurred, 's3://my-bucket/charts/monthly.png');
+await floimg.save(final, 's3://my-bucket/images/landscape.png');
 ```
 
 ## Complete Example
@@ -112,43 +108,34 @@ Here's the full workflow:
 
 ```typescript
 import createClient from '@teamflojo/floimg';
-import quickchart from '@teamflojo/floimg-quickchart';
+import openai from '@teamflojo/floimg-openai';
 
 async function main() {
   // Initialize
   const floimg = createClient();
-  floimg.registerGenerator(quickchart());
+  floimg.registerGenerator(openai({
+    apiKey: process.env.OPENAI_API_KEY
+  }));
 
   // Generate
-  const chart = await floimg.generate({
-    generator: 'quickchart',
+  const image = await floimg.generate({
+    generator: 'openai',
     params: {
-      type: 'bar',
-      data: {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-        datasets: [{
-          label: 'Revenue',
-          data: [12000, 19000, 15000, 25000],
-          backgroundColor: '#7c3aed'
-        }]
-      },
-      options: {
-        plugins: {
-          title: { display: true, text: '2024 Revenue' }
-        }
-      }
+      prompt: 'A professional product photo of wireless headphones on a minimalist background',
+      size: '1024x1024',
+      quality: 'hd'
     }
   });
 
-  // Transform
-  const final = await floimg.transform(chart, {
+  // Transform for social media
+  const final = await floimg.transform(image, {
     op: 'resize',
-    params: { width: 800 }
+    params: { width: 1200, height: 630 }
   });
 
   // Save
-  await floimg.save(final, './revenue-chart.png');
-  console.log('Chart saved!');
+  await floimg.save(final, './product-hero.png');
+  console.log('Image saved!');
 }
 
 main();
@@ -158,4 +145,4 @@ main();
 
 - [Core Concepts](/docs/getting-started/concepts) - Understand generators, transforms, and more
 - [SDK Reference](/docs/sdk/generate) - Full API documentation
-- [Plugins](/docs/plugins/quickchart) - Explore all available generators
+- [Plugins](/docs/plugins) - Explore all available generators

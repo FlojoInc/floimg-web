@@ -21,19 +21,19 @@ yarn add @teamflojo/floimg
 floimg uses a plugin architecture. Install only the generators you need:
 
 ```bash
-# Charts via Chart.js
+# AI image generation
+npm install @teamflojo/floimg-openai
+npm install @teamflojo/floimg-stability
+
+# Charts and data visualization
 npm install @teamflojo/floimg-quickchart
-
-# Mermaid diagrams
-npm install @teamflojo/floimg-mermaid
-
-# QR codes
-npm install @teamflojo/floimg-qr
-
-# D3 visualizations
 npm install @teamflojo/floimg-d3
 
-# Screenshots via Playwright
+# Diagrams
+npm install @teamflojo/floimg-mermaid
+
+# Utilities
+npm install @teamflojo/floimg-qr
 npm install @teamflojo/floimg-screenshot
 ```
 
@@ -44,30 +44,28 @@ Create a simple test file:
 ```typescript
 // test.ts
 import createClient from '@teamflojo/floimg';
-import qr from '@teamflojo/floimg-qr';
+import openai from '@teamflojo/floimg-openai';
 
 const floimg = createClient();
-floimg.registerGenerator(qr());
+floimg.registerGenerator(openai({ apiKey: process.env.OPENAI_API_KEY }));
 
-const qrCode = await floimg.generate({
-  generator: 'qr',
-  params: { text: 'https://floimg.com' }
+const image = await floimg.generate({
+  generator: 'openai',
+  params: { prompt: 'A serene mountain landscape at sunset' }
 });
 
-await floimg.save(qrCode, './test-qr.png');
-console.log('QR code saved to test-qr.png');
+await floimg.save(image, './test-image.png');
+console.log('Image saved to test-image.png');
 ```
 
 Run it:
 
 ```bash
-npx tsx test.ts
+OPENAI_API_KEY=sk-... npx tsx test.ts
 ```
-
-You should see a QR code saved to `test-qr.png`.
 
 ## Next Steps
 
 - [Quick Start](/docs/getting-started/quick-start) - Build your first workflow
 - [Core Concepts](/docs/getting-started/concepts) - Understand how floimg works
-- [Plugins](/docs/plugins/quickchart) - Explore available generators
+- [Plugins](/docs/plugins) - Explore available generators
