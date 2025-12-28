@@ -1,12 +1,22 @@
 ---
 import type { GalleryTemplate } from "../data/templates";
 import { getStudioUrl } from "../data/templates";
+import { generateCodeFormats } from "../utils/code-format";
 
 interface Props {
   template: GalleryTemplate;
 }
 
 const { template } = Astro.props;
+
+// Generate code in all formats
+const code = template.codeExample
+  ? generateCodeFormats({
+      name: template.name,
+      generator: template.generator,
+      jsCode: template.codeExample,
+    })
+  : null;
 
 // Generator badge colors
 const generatorColors: Record<string, { bg: string; text: string }> = {
@@ -169,7 +179,7 @@ const colors = generatorColors[template.generator] || {
 
   <!-- Code Modal (hidden by default) -->
   {
-    template.codeExample && (
+    code && (
       <div class="code-modal" id={`code-modal-${template.id}`} data-modal>
         <div class="modal-backdrop" />
         <div class="modal-content">
@@ -181,12 +191,27 @@ const colors = generatorColors[template.generator] || {
               </svg>
             </button>
           </div>
-          {/* prettier-ignore */}
-          <pre class="code-block"><code set:text={template.codeExample} /></pre>
-          <div class="modal-footer">
-            <button class="copy-code-btn" data-code={template.codeExample}>
-              Copy Code
-            </button>
+          <div class="code-tabs">
+            <div class="tab-bar">
+              <button class="tab-btn active" data-tab="js">
+                JavaScript
+              </button>
+              <button class="tab-btn" data-tab="yaml">
+                YAML
+              </button>
+              <button class="tab-btn" data-tab="cli">
+                CLI
+              </button>
+            </div>
+            <button class="copy-code-btn">Copy</button>
+          </div>
+          <div class="code-panels">
+            {/* prettier-ignore */}
+            <pre class="code-block code-panel active" data-panel="js"><code set:text={code.js} /></pre>
+            {/* prettier-ignore */}
+            <pre class="code-block code-panel" data-panel="yaml"><code set:text={code.yaml} /></pre>
+            {/* prettier-ignore */}
+            <pre class="code-block code-panel" data-panel="cli"><code set:text={code.cli} /></pre>
           </div>
         </div>
       </div>
@@ -500,7 +525,75 @@ const colors = generatorColors[template.generator] || {
     height: 1.25rem;
   }
 
-  .code-block {
+  /* Code Tabs */
+  .code-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg);
+  }
+
+  .tab-bar {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background 0.15s,
+      color 0.15s;
+    background: transparent;
+    color: var(--sl-color-gray-3);
+  }
+
+  .tab-btn:hover {
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-text);
+  }
+
+  .tab-btn.active {
+    background: rgb(13 148 136);
+    color: white;
+  }
+
+  .copy-code-btn {
+    padding: 0.375rem 0.75rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-text);
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .copy-code-btn:hover {
+    background: rgb(13 148 136);
+    color: white;
+  }
+
+  /* Code Panels */
+  .code-panels {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .code-panel {
+    display: none;
     flex: 1;
     overflow: auto;
     margin: 0;
@@ -509,34 +602,16 @@ const colors = generatorColors[template.generator] || {
     font-size: 0.85rem;
   }
 
-  .code-block code {
+  .code-panel.active {
+    display: block;
+  }
+
+  .code-panel code {
     color: var(--m-code-text, #e4e4e7);
     background: transparent;
     padding: 0;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     white-space: pre;
-  }
-
-  .modal-footer {
-    padding: 1rem;
-    border-top: 1px solid var(--sl-color-gray-5);
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .copy-code-btn {
-    padding: 0.5rem 1rem;
-    background: rgb(13 148 136);
-    color: white;
-    border: none;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-  }
-
-  .copy-code-btn:hover {
-    background: rgb(15 118 110);
   }
 </style>
 
@@ -560,10 +635,33 @@ const colors = generatorColors[template.generator] || {
       });
     });
 
-    // Copy code buttons
+    // Tab switching
+    document.querySelectorAll(".tab-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const tabId = (btn as HTMLElement).dataset.tab;
+        const modal = btn.closest(".code-modal");
+        if (!modal || !tabId) return;
+
+        // Update active tab button
+        modal.querySelectorAll(".tab-btn").forEach((t) => t.classList.remove("active"));
+        btn.classList.add("active");
+
+        // Update active panel
+        modal.querySelectorAll(".code-panel").forEach((p) => p.classList.remove("active"));
+        const panel = modal.querySelector(`.code-panel[data-panel="${tabId}"]`);
+        if (panel) panel.classList.add("active");
+      });
+    });
+
+    // Copy code buttons - copy from active panel
     document.querySelectorAll(".copy-code-btn").forEach((btn) => {
       btn.addEventListener("click", async () => {
-        const code = (btn as HTMLElement).dataset.code;
+        const modal = btn.closest(".code-modal");
+        if (!modal) return;
+
+        const activePanel = modal.querySelector(".code-panel.active code");
+        const code = activePanel?.textContent || "";
+
         if (code) {
           await navigator.clipboard.writeText(code);
           const originalText = btn.textContent;
