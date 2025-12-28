@@ -50,11 +50,17 @@ export default defineConfig({
         {
           label: 'Plugins',
           items: [
+            { label: 'Overview', slug: 'docs/plugins' },
             { label: 'QuickChart', slug: 'docs/plugins/quickchart' },
             { label: 'Mermaid', slug: 'docs/plugins/mermaid' },
             { label: 'QR Code', slug: 'docs/plugins/qr' },
             { label: 'D3', slug: 'docs/plugins/d3' },
             { label: 'Screenshot', slug: 'docs/plugins/screenshot' },
+            { label: 'OpenAI', slug: 'docs/plugins/openai' },
+            { label: 'Ollama', slug: 'docs/plugins/ollama' },
+            { label: 'Google Imagen', slug: 'docs/plugins/google' },
+            { label: 'Replicate', slug: 'docs/plugins/replicate' },
+            { label: 'Stability AI', slug: 'docs/plugins/stability' },
           ],
         },
         {
