@@ -1,0 +1,243 @@
+---
+title: xAI (Grok)
+description: AI text generation and vision analysis with xAI's Grok models
+---
+
+The xAI plugin provides AI text generation and vision analysis using xAI's Grok models.
+
+## Features
+
+| Feature | Provider | Description |
+|---------|----------|-------------|
+| **Text Generation** | Grok | Generate text with structured JSON output support |
+| **Vision Analysis** | Grok Vision | Analyze images and extract information |
+
+## Installation
+
+```bash
+pnpm add @teamflojo/floimg-xai
+```
+
+## API Key
+
+Get your API key from [xAI Console](https://console.x.ai/).
+
+```bash
+export XAI_API_KEY=your-api-key
+```
+
+All providers support per-request API keys via the `apiKey` parameter, allowing users to provide their own keys.
+
+---
+
+## Grok Text
+
+Generate text using Grok with optional structured JSON output.
+
+### Registration
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import { grokText } from '@teamflojo/floimg-xai';
+
+const floimg = createClient();
+floimg.registerTextProvider(grokText());
+```
+
+### Usage
+
+```typescript
+// Simple text generation
+const result = await floimg.generateText({
+  provider: 'grok-text',
+  params: {
+    prompt: 'Write 3 creative image prompts for a cyberpunk cityscape',
+  }
+});
+
+console.log(result.content);
+```
+
+### Structured JSON Output
+
+```typescript
+// Generate structured JSON
+const result = await floimg.generateText({
+  provider: 'grok-text',
+  params: {
+    prompt: 'Generate image prompts for a tech product launch',
+    outputFormat: 'json',
+    jsonSchema: {
+      type: 'object',
+      properties: {
+        prompts: {
+          type: 'array',
+          items: { type: 'string' }
+        },
+        style: { type: 'string' },
+        mood: { type: 'string' }
+      }
+    }
+  }
+});
+
+console.log(result.parsed); // Typed JSON object
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt` | string | Yes | Text prompt for generation |
+| `systemPrompt` | string | No | System prompt to guide behavior |
+| `context` | string | No | Additional context |
+| `outputFormat` | `'text'` \| `'json'` | No | Output format (default: `'text'`) |
+| `jsonSchema` | object | No | JSON schema for structured output |
+| `temperature` | number | No | Creativity (0-2, default: 0.7) |
+| `maxTokens` | number | No | Max response tokens (default: 1000) |
+| `model` | string | No | Model name (default: `grok-2`) |
+| `apiKey` | string | No | Per-request API key override |
+
+### Models
+
+| Model | Description |
+|-------|-------------|
+| `grok-2` | Latest Grok 2 model (default) |
+| `grok-3-beta` | Grok 3 beta |
+
+---
+
+## Grok Vision
+
+Analyze images using Grok's vision capabilities.
+
+### Registration
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import { grokVision } from '@teamflojo/floimg-xai';
+
+const floimg = createClient();
+floimg.registerVisionProvider(grokVision());
+```
+
+### Usage
+
+```typescript
+// Analyze an image
+const result = await floimg.analyzeImage({
+  provider: 'grok-vision',
+  blob: imageBlob,
+  params: {
+    prompt: 'What objects are in this image? Describe the scene.',
+  }
+});
+
+console.log(result.content);
+```
+
+### Structured Output
+
+```typescript
+// Get structured analysis
+const result = await floimg.analyzeImage({
+  provider: 'grok-vision',
+  blob: imageBlob,
+  params: {
+    prompt: 'Analyze this image for content moderation',
+    outputFormat: 'json',
+    jsonSchema: {
+      type: 'object',
+      properties: {
+        objects: { type: 'array', items: { type: 'string' } },
+        people: { type: 'number' },
+        setting: { type: 'string' },
+        mood: { type: 'string' },
+        safeForWork: { type: 'boolean' }
+      }
+    }
+  }
+});
+
+console.log(result.parsed.safeForWork);
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `prompt` | string | No | What to analyze (default: "Describe this image") |
+| `outputFormat` | `'text'` \| `'json'` | No | Output format (default: `'text'`) |
+| `jsonSchema` | object | No | JSON schema for structured output |
+| `maxTokens` | number | No | Max response tokens (default: 1000) |
+| `model` | string | No | Model name (default: `grok-2-vision`) |
+| `apiKey` | string | No | Per-request API key override |
+
+### Models
+
+| Model | Description |
+|-------|-------------|
+| `grok-2-vision` | Grok 2 with vision (default) |
+
+---
+
+## Complete Pipeline Example
+
+Combine Grok text and vision in a workflow:
+
+```typescript
+import createClient from '@teamflojo/floimg';
+import { grokText, grokVision } from '@teamflojo/floimg-xai';
+
+const floimg = createClient();
+floimg.registerTextProvider(grokText());
+floimg.registerVisionProvider(grokVision());
+
+// 1. Analyze the input image
+const analysis = await floimg.analyzeImage({
+  provider: 'grok-vision',
+  blob: inputImage,
+  params: {
+    prompt: 'Describe this image in detail, including mood and style',
+  }
+});
+
+// 2. Generate enhancement suggestions based on analysis
+const suggestions = await floimg.generateText({
+  provider: 'grok-text',
+  params: {
+    prompt: 'Based on this image description, suggest 3 creative variations',
+    context: analysis.content,
+    outputFormat: 'json',
+    jsonSchema: {
+      type: 'object',
+      properties: {
+        variations: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              name: { type: 'string' },
+              prompt: { type: 'string' },
+              style: { type: 'string' }
+            }
+          }
+        }
+      }
+    }
+  }
+});
+
+console.log(suggestions.parsed.variations);
+```
+
+## API Compatibility
+
+The xAI API is OpenAI-compatible. Under the hood, the plugin uses the OpenAI SDK with xAI's base URL (`https://api.x.ai/v1`).
+
+## See Also
+
+- [Google AI (Gemini)](/docs/plugins/google) - Gemini text, vision, and image editing
+- [OpenAI](/docs/plugins/openai) - GPT and DALL-E
+- [CLI AI Commands](/docs/cli/ai) - Command-line AI tools
+- [Studio AI Nodes](/docs/studio/nodes#ai-nodes) - Visual workflow AI nodes

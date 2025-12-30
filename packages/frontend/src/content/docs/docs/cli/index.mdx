@@ -141,6 +141,7 @@ For advanced use cases, the full API provides complete flexibility:
 
 | Command | Description |
 |---------|-------------|
+| `ai` | AI text, vision, editing, and generation |
 | `generate` | Create an image from any generator |
 | `transform` | Apply any transformation to an image |
 | `save` | Save to filesystem or cloud storage |
@@ -171,10 +172,13 @@ floimg transform --in photo.jpg --op convert --to webp --out photo.webp
 | `AWS_ACCESS_KEY_ID` | For S3 storage output |
 | `AWS_SECRET_ACCESS_KEY` | For S3 storage output |
 | `AWS_REGION` | AWS region for S3 |
-| `OPENAI_API_KEY` | For AI-powered generators |
+| `GOOGLE_AI_API_KEY` | For Gemini AI commands |
+| `OPENAI_API_KEY` | For OpenAI generators |
+| `XAI_API_KEY` | For Grok AI features |
 
 ## See Also
 
+- [AI Commands](/docs/cli/ai) - Text, vision, editing, and generation with Gemini
 - [Configuration](/docs/cli/configuration) - Set up S3, OpenAI, and more
 - [Generate Command](/docs/cli/generate) - Full generate options
 - [Transform Command](/docs/cli/transform) - Full transform options

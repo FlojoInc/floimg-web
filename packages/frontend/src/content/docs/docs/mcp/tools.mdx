@@ -44,6 +44,8 @@ Generate an image from parameters.
 | `qr` | QR codes |
 | `d3` | D3 visualizations |
 | `screenshot` | Web page screenshots |
+| `gemini-generate` | AI image generation (requires `@teamflojo/floimg-google`) |
+| `google-imagen` | Google Imagen models (requires `@teamflojo/floimg-google`) |
 
 ---
 
@@ -86,6 +88,27 @@ Transform an existing image.
 | `rotate` | `angle` | Rotate by degrees |
 | `crop` | `left`, `top`, `width`, `height` | Crop to region |
 | `convert` | `format`, `quality` | Change format |
+| `edit` | `prompt`, `provider`, `apiKey` | AI image editing (see below) |
+
+### AI Transform (Edit)
+
+Use the `edit` operation with an AI provider:
+
+```json
+{
+  "input": "photo.jpg",
+  "op": "edit",
+  "params": {
+    "provider": "gemini-transform",
+    "prompt": "Make the sky more vibrant with sunset colors",
+    "apiKey": "your-google-ai-key"
+  },
+  "output": "enhanced-photo.jpg"
+}
+```
+
+Available AI transform providers:
+- `gemini-transform` - Gemini image editing (requires `@teamflojo/floimg-google`)
 
 ---
 
@@ -118,6 +141,184 @@ Save an image to storage.
 | `./` or `/` | Local filesystem |
 | `s3://` | Amazon S3 |
 | `custom://` | Registered custom storage |
+
+---
+
+## analyze_image
+
+Analyze an image using AI vision.
+
+### Parameters
+
+```typescript
+{
+  image: string;        // Image path or URL
+  prompt?: string;      // Analysis prompt (default: "Describe this image")
+  provider?: string;    // Vision provider (default: auto-detected)
+  apiKey?: string;      // API key for the provider
+  outputFormat?: 'text' | 'json';  // Response format
+  jsonSchema?: object;  // Schema for structured output
+}
+```
+
+### Example
+
+```json
+{
+  "image": "product.jpg",
+  "prompt": "List all products with their colors and estimated prices",
+  "provider": "gemini-vision",
+  "outputFormat": "json",
+  "jsonSchema": {
+    "type": "object",
+    "properties": {
+      "products": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "color": { "type": "string" },
+            "price": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Available Providers
+
+| Provider | Description |
+|----------|-------------|
+| `gemini-vision` | Gemini vision (requires `@teamflojo/floimg-google`) |
+| `grok-vision` | Grok vision (requires `@teamflojo/floimg-xai`) |
+
+---
+
+## generate_text
+
+Generate text using AI.
+
+### Parameters
+
+```typescript
+{
+  prompt: string;       // Text prompt
+  provider?: string;    // Text provider (default: auto-detected)
+  apiKey?: string;      // API key for the provider
+  context?: string;     // Additional context
+  systemPrompt?: string; // System instructions
+  outputFormat?: 'text' | 'json';  // Response format
+  jsonSchema?: object;  // Schema for structured output
+}
+```
+
+### Example
+
+```json
+{
+  "prompt": "Generate 3 creative prompts for product photography",
+  "provider": "gemini-text",
+  "outputFormat": "json",
+  "jsonSchema": {
+    "type": "object",
+    "properties": {
+      "prompts": {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      "style": { "type": "string" }
+    }
+  }
+}
+```
+
+### Available Providers
+
+| Provider | Description |
+|----------|-------------|
+| `gemini-text` | Gemini text (requires `@teamflojo/floimg-google`) |
+| `grok-text` | Grok text (requires `@teamflojo/floimg-xai`) |
+
+---
+
+## run_pipeline
+
+Execute a multi-step workflow.
+
+### Parameters
+
+```typescript
+{
+  steps: Array<{
+    type: 'generate' | 'transform' | 'text' | 'vision';
+    params: object;
+  }>;
+  output?: string;      // Final output path
+}
+```
+
+### Example
+
+```json
+{
+  "steps": [
+    {
+      "type": "vision",
+      "params": {
+        "image": "input.jpg",
+        "prompt": "Describe the mood of this image",
+        "provider": "gemini-vision"
+      }
+    },
+    {
+      "type": "text",
+      "params": {
+        "prompt": "Based on this mood description, suggest an edit",
+        "context": "{{previous.content}}"
+      }
+    },
+    {
+      "type": "transform",
+      "params": {
+        "input": "input.jpg",
+        "op": "edit",
+        "provider": "gemini-transform",
+        "prompt": "{{previous.content}}"
+      }
+    }
+  ],
+  "output": "enhanced.jpg"
+}
+```
+
+---
+
+## Provider Auto-Discovery
+
+When `@teamflojo/floimg-google` or `@teamflojo/floimg-xai` are installed, the MCP server automatically discovers and registers their providers:
+
+**floimg-google** provides:
+- `gemini-text` - Text generation
+- `gemini-vision` - Image analysis
+- `gemini-transform` - Image editing
+- `gemini-generate` - Image generation
+
+**floimg-xai** provides:
+- `grok-text` - Text generation
+- `grok-vision` - Image analysis
+
+To use these providers, install the package:
+
+```bash
+npm install @teamflojo/floimg-google
+# or
+npm install @teamflojo/floimg-xai
+```
+
+Then restart the MCP server. The providers will be automatically available.
 
 ---
 
