@@ -1,0 +1,267 @@
+---
+title: AI Commands
+description: Generate text, analyze images, and edit images with AI from the command line
+---
+
+The `floimg ai` command group provides AI-powered text generation, image analysis, and image editing using Gemini.
+
+## Prerequisites
+
+Install the Google AI plugin:
+
+```bash
+npm install -g @teamflojo/floimg-google
+```
+
+Set your API key:
+
+```bash
+export GOOGLE_AI_API_KEY=your-api-key
+```
+
+Get your API key from [Google AI Studio](https://aistudio.google.com/apikey).
+
+---
+
+## Text Generation
+
+Generate text using Gemini AI.
+
+```bash
+floimg ai text --prompt "Write 3 creative prompts for a fantasy landscape"
+```
+
+### Options
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `--prompt <text>` | Yes | Text prompt for generation |
+| `--api-key <key>` | No | API key (or use `GOOGLE_AI_API_KEY` env) |
+| `--model <name>` | No | Model name (default: `gemini-2.0-flash`) |
+| `--output-format <fmt>` | No | `text` or `json` (default: `text`) |
+| `--context <text>` | No | Additional context |
+| `--out <path>` | No | Save output to file |
+
+### Examples
+
+```bash
+# Simple text generation
+floimg ai text --prompt "Describe a cozy coffee shop in one paragraph"
+
+# Generate structured JSON
+floimg ai text \
+  --prompt "Generate 3 image prompts for product photos" \
+  --output-format json
+
+# Save to file
+floimg ai text --prompt "Write alt text for a product image" --out alt.txt
+
+# Use specific model
+floimg ai text --prompt "Complex analysis task" --model gemini-2.0-flash
+```
+
+---
+
+## Vision Analysis
+
+Analyze images using Gemini Vision.
+
+```bash
+floimg ai vision --image photo.jpg --prompt "What objects are in this image?"
+```
+
+### Options
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `--image <path>` | Yes | Input image path |
+| `--prompt <text>` | Yes | Analysis prompt |
+| `--api-key <key>` | No | API key (or use `GOOGLE_AI_API_KEY` env) |
+| `--model <name>` | No | Model name (default: `gemini-2.0-flash`) |
+| `--output-format <fmt>` | No | `text` or `json` (default: `text`) |
+| `--out <path>` | No | Save output to file |
+
+### Examples
+
+```bash
+# Describe an image
+floimg ai vision --image landscape.jpg --prompt "Describe this scene"
+
+# Extract structured data
+floimg ai vision \
+  --image product.png \
+  --prompt "List all products visible with prices" \
+  --output-format json
+
+# Generate alt text
+floimg ai vision \
+  --image hero.jpg \
+  --prompt "Write accessible alt text for this image" \
+  --out alt.txt
+
+# Content analysis
+floimg ai vision \
+  --image photo.jpg \
+  --prompt "Is this image appropriate for a family website?"
+```
+
+---
+
+## Image Editing
+
+Edit images using Gemini's native image generation (Nano Banana).
+
+```bash
+floimg ai edit --image input.jpg --prompt "Make the sky more vibrant" --out edited.jpg
+```
+
+### Options
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `--image <path>` | Yes | Input image path |
+| `--prompt <text>` | Yes | Edit instructions |
+| `--out <path>` | Yes | Output image path |
+| `--api-key <key>` | No | API key (or use `GOOGLE_AI_API_KEY` env) |
+| `--model <name>` | No | Model (default: `gemini-2.5-flash-image`) |
+| `--pre-prompt <text>` | No | Instructions prepended to prompt |
+
+### Examples
+
+```bash
+# Simple edit
+floimg ai edit \
+  --image photo.jpg \
+  --prompt "Remove the background and replace with white" \
+  --out clean.jpg
+
+# Style transfer
+floimg ai edit \
+  --image portrait.jpg \
+  --prompt "Convert to watercolor painting style" \
+  --out watercolor.jpg
+
+# Object manipulation
+floimg ai edit \
+  --image room.jpg \
+  --prompt "Add a potted plant in the corner" \
+  --out decorated.jpg
+
+# Use pre-prompt for context
+floimg ai edit \
+  --image product.jpg \
+  --pre-prompt "This is a product photo. " \
+  --prompt "Make it look more premium with dramatic lighting" \
+  --out premium.jpg
+```
+
+### Models
+
+| Model | Description |
+|-------|-------------|
+| `gemini-2.5-flash-image` | Fast, high-volume (default) |
+| `gemini-3-pro-image-preview` | Higher quality, better text rendering |
+
+---
+
+## Image Generation
+
+Generate images from text prompts using Gemini.
+
+```bash
+floimg ai generate --prompt "A cozy coffee shop interior" --out coffee-shop.png
+```
+
+### Options
+
+| Option | Required | Description |
+|--------|----------|-------------|
+| `--prompt <text>` | Yes | Image description |
+| `--out <path>` | Yes | Output image path |
+| `--api-key <key>` | No | API key (or use `GOOGLE_AI_API_KEY` env) |
+| `--model <name>` | No | Model (default: `gemini-2.5-flash-image`) |
+
+### Examples
+
+```bash
+# Generate an image
+floimg ai generate \
+  --prompt "A minimalist workspace with natural lighting" \
+  --out workspace.png
+
+# Detailed prompt
+floimg ai generate \
+  --prompt "A photorealistic mountain lake at sunrise, mist rising from the water, reflection of snow-capped peaks" \
+  --out landscape.png
+
+# Specific style
+floimg ai generate \
+  --prompt "Isometric 3D illustration of a tiny house, pastel colors, soft shadows" \
+  --out house.png
+```
+
+---
+
+## Pipeline Examples
+
+Combine AI commands with other floimg operations:
+
+### Analyze and Enhance
+
+```bash
+# 1. Analyze the image
+floimg ai vision \
+  --image photo.jpg \
+  --prompt "Suggest one improvement for this photo" \
+  --out suggestion.txt
+
+# 2. Apply the suggestion
+floimg ai edit \
+  --image photo.jpg \
+  --prompt "$(cat suggestion.txt)" \
+  --out enhanced.jpg
+```
+
+### Generate and Transform
+
+```bash
+# 1. Generate an image
+floimg ai generate \
+  --prompt "Abstract geometric pattern" \
+  --out pattern.png
+
+# 2. Resize for different uses
+floimg resize pattern.png 1920x1080 --out pattern-desktop.png
+floimg resize pattern.png 1080x1920 --out pattern-mobile.png
+```
+
+### Vision to Edit Pipeline
+
+```bash
+# 1. Analyze the current state
+floimg ai vision \
+  --image room.jpg \
+  --prompt "What furniture is missing to make this room complete?" \
+  --out analysis.txt
+
+# 2. Use vision output to guide edit
+floimg ai edit \
+  --image room.jpg \
+  --prompt "Add the following: $(cat analysis.txt)" \
+  --out furnished.jpg
+```
+
+---
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `GOOGLE_AI_API_KEY` | Google AI API key for Gemini |
+
+## See Also
+
+- [Google AI Plugin](/docs/plugins/google) - Gemini SDK documentation
+- [xAI Plugin](/docs/plugins/xai) - Grok text and vision
+- [Transform Command](/docs/cli/transform) - Non-AI image transforms
+- [MCP Tools](/docs/mcp/tools) - AI tools for MCP agents

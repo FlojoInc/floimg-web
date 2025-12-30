@@ -127,6 +127,114 @@ Change image format.
 
 ---
 
+## AI Nodes
+
+AI nodes integrate large language models and vision models into your workflows. They require API keys configured in Settings.
+
+### AI Generator (Gemini Generate)
+
+Generate images from text prompts using Gemini's native image generation.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `prompt` | text | Image description |
+| `model` | select | `gemini-2.5-flash-image` (default) |
+
+**Styling**: Purple node with sparkle icon
+
+### AI Transform (Gemini Edit)
+
+Edit images using natural language instructions.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `prompt` | text | Edit instructions |
+| `prePrompt` | text | Context prepended to prompt (optional) |
+| `model` | select | `gemini-2.5-flash-image` or `gemini-3-pro-image-preview` |
+
+**Features**:
+- Accepts image input from upstream nodes
+- Accepts dynamic text input from AI Text nodes (connects to `prompt` port)
+
+**Styling**: Purple node with wand icon
+
+### AI Text Nodes
+
+Generate text using LLMs with optional structured JSON output.
+
+#### Gemini Text
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `prompt` | text | Text prompt |
+| `systemPrompt` | text | System instructions (optional) |
+| `context` | text | Additional context (optional) |
+| `outputFormat` | select | `text` or `json` |
+| `jsonSchema` | json | Schema for structured output (if json) |
+
+**Styling**: Pink node with chat icon
+
+#### Grok Text
+
+Same parameters as Gemini Text, uses xAI's Grok models.
+
+**Styling**: Pink node with chat icon
+
+### AI Vision Nodes
+
+Analyze images using vision models.
+
+#### Gemini Vision
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `prompt` | text | Analysis prompt |
+| `outputFormat` | select | `text` or `json` |
+| `jsonSchema` | json | Schema for structured output (if json) |
+
+**Features**:
+- Accepts image input from upstream nodes
+- Outputs text that can connect to AI Transform prompts
+
+**Styling**: Cyan node with eye icon
+
+#### Grok Vision
+
+Same parameters as Gemini Vision, uses xAI's Grok vision models.
+
+**Styling**: Cyan node with eye icon
+
+### AI Node Connections
+
+AI nodes support dynamic text connections for building intelligent pipelines:
+
+```
+[Image] → [Gemini Vision] → [Gemini Text] → [Gemini Edit] → [Output]
+               │                   │               ▲
+               │                   │               │
+               │                   └───────────────┘
+               │                   (prompt output connects to edit prompt)
+               └── "Analyze mood" outputs to text node context
+```
+
+**Example Pipeline**:
+1. **Vision node** analyzes an input image: "Describe the mood"
+2. **Text node** uses vision output as context: "Suggest an enhancement"
+3. **Edit node** receives dynamic prompt from text node's output
+
+### API Key Settings
+
+Configure API keys in **Settings > AI Providers**:
+
+| Provider | Environment Variable | Settings Key |
+|----------|---------------------|--------------|
+| Google (Gemini) | `GOOGLE_AI_API_KEY` | `aiProviders.gemini.apiKey` |
+| xAI (Grok) | `XAI_API_KEY` | `aiProviders.grok.apiKey` |
+
+Users can provide their own API keys. Keys are stored locally and never sent to FloImg servers.
+
+---
+
 ## Output Nodes
 
 Output nodes save or export results.
@@ -205,3 +313,5 @@ Combine multiple inputs.
 
 - [Building Workflows](/docs/studio/workflows) - Step-by-step guide
 - [Self-Hosting](/docs/studio/self-hosting) - Deployment guide
+- [Google AI Plugin](/docs/plugins/google) - Gemini SDK documentation
+- [xAI Plugin](/docs/plugins/xai) - Grok SDK documentation
