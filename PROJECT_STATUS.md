@@ -1,10 +1,20 @@
 # PROJECT STATUS
 
-**Last Updated**: 2025-12-28
+**Last Updated**: 2025-12-31
 
 ## Current Focus
 
-No active tasks. Use `/p [description]` to plan new work.
+**T-2025-004: GDPR Cookie Consent and Privacy Policy**
+
+Implementing cookie consent for floimg.com:
+
+- [ ] Phase 1: Privacy Policy page + footer link
+- [ ] Phase 2: Consent store package
+- [ ] Phase 3: Cookie banner + customize dialog
+- [ ] Phase 4: Cookie settings page
+- [ ] Phase 5: Gate Umami behind analytics consent
+
+See: `vault/pm/tasks/T-2025-004-gdpr-cookie-consent.md`
 
 ## Just Completed
 
