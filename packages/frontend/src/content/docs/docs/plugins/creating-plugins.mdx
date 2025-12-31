@@ -1,0 +1,441 @@
+---
+title: Creating Plugins
+description: Build your own FloImg generator plugins
+---
+
+FloImg plugins are thin wrappers around image generation libraries. This guide walks you through creating your own.
+
+## Plugin Architecture
+
+A FloImg plugin exports a factory function that returns an `ImageGenerator` object:
+
+```typescript
+interface ImageGenerator {
+  name: string;                                    // Unique identifier
+  schema: GeneratorSchema;                         // Parameter definitions
+  generate(params: Record<string, unknown>): Promise<ImageBlob>;
+}
+```
+
+The `ImageBlob` is what FloImg uses internally to represent images:
+
+```typescript
+interface ImageBlob {
+  bytes: Buffer;           // Raw image data
+  mime: MimeType;          // 'image/png' | 'image/jpeg' | 'image/svg+xml' | etc.
+  width?: number;          // Image dimensions (if known)
+  height?: number;
+  source?: string;         // Identifier like 'qr' or 'openai'
+  metadata?: Record<string, unknown>;
+}
+```
+
+## Quick Start: Minimal Plugin
+
+Here's the simplest possible plugin—a colored square generator:
+
+```typescript
+// packages/floimg-square/src/index.ts
+import type { ImageGenerator, ImageBlob, GeneratorSchema } from "@teamflojo/floimg";
+import sharp from "sharp";
+
+const schema: GeneratorSchema = {
+  name: "square",
+  description: "Generate a colored square",
+  category: "Utility",
+  parameters: {
+    color: {
+      type: "string",
+      title: "Color",
+      description: "Fill color (hex or named)",
+      default: "#3b82f6",
+    },
+    size: {
+      type: "number",
+      title: "Size",
+      description: "Width and height in pixels",
+      default: 200,
+      minimum: 10,
+      maximum: 2000,
+    },
+  },
+  requiredParameters: [],
+};
+
+export default function square(): ImageGenerator {
+  return {
+    name: "square",
+    schema,
+    async generate(params) {
+      const color = (params.color as string) || "#3b82f6";
+      const size = (params.size as number) || 200;
+
+      const bytes = await sharp({
+        create: {
+          width: size,
+          height: size,
+          channels: 4,
+          background: color,
+        },
+      })
+        .png()
+        .toBuffer();
+
+      return {
+        bytes,
+        mime: "image/png",
+        width: size,
+        height: size,
+        source: "square",
+      };
+    },
+  };
+}
+```
+
+Usage:
+
+```typescript
+import createClient from "@teamflojo/floimg";
+import square from "./floimg-square";
+
+const floimg = createClient();
+floimg.registerGenerator(square());
+
+const image = await floimg.generate({
+  generator: "square",
+  params: { color: "#10b981", size: 300 },
+});
+```
+
+## Step-by-Step Guide
+
+### 1. Project Setup
+
+Create a new package in your workspace or as a standalone npm package:
+
+```bash
+mkdir floimg-myplugin
+cd floimg-myplugin
+pnpm init
+pnpm add @teamflojo/floimg   # For types only
+pnpm add -D typescript
+```
+
+Create `tsconfig.json`:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "declaration": true,
+    "outDir": "dist",
+    "strict": true
+  },
+  "include": ["src"]
+}
+```
+
+### 2. Define Your Schema
+
+The schema tells FloImg (and FloImg Studio) what parameters your generator accepts:
+
+```typescript
+import type { GeneratorSchema } from "@teamflojo/floimg";
+
+export const mySchema: GeneratorSchema = {
+  name: "myplugin",
+  description: "What your plugin does",
+  category: "AI" | "Utility" | "Visualization",  // For UI grouping
+
+  parameters: {
+    prompt: {
+      type: "string",
+      title: "Prompt",
+      description: "Describe the image",
+    },
+    width: {
+      type: "number",
+      title: "Width",
+      default: 512,
+      minimum: 64,
+      maximum: 2048,
+    },
+    style: {
+      type: "string",
+      title: "Style",
+      enum: ["realistic", "cartoon", "abstract"],
+      default: "realistic",
+    },
+  },
+
+  requiredParameters: ["prompt"],
+
+  // AI-specific (optional)
+  isAI: true,
+  requiresApiKey: true,
+  apiKeyEnvVar: "MY_API_KEY",
+};
+```
+
+### 3. Implement the Generator
+
+The generator function receives parameters and returns an `ImageBlob`:
+
+```typescript
+import type { ImageGenerator, ImageBlob } from "@teamflojo/floimg";
+
+interface MyPluginConfig {
+  apiKey?: string;
+  defaultWidth?: number;
+}
+
+export default function myPlugin(config: MyPluginConfig = {}): ImageGenerator {
+  const apiKey = config.apiKey || process.env.MY_API_KEY;
+
+  return {
+    name: "myplugin",
+    schema: mySchema,
+
+    async generate(params): Promise<ImageBlob> {
+      const prompt = params.prompt as string;
+      const width = (params.width as number) || config.defaultWidth || 512;
+
+      // Call your underlying library/API
+      const response = await fetch("https://api.example.com/generate", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt, width }),
+      });
+
+      const data = await response.json();
+      const bytes = Buffer.from(data.image, "base64");
+
+      return {
+        bytes,
+        mime: "image/png",
+        width,
+        height: width,  // Or from API response
+        source: "myplugin",
+        metadata: {
+          prompt,
+          model: data.model,
+        },
+      };
+    },
+  };
+}
+```
+
+### 4. Export Types (Optional but Recommended)
+
+Export TypeScript types for your parameters:
+
+```typescript
+export interface MyPluginParams {
+  prompt: string;
+  width?: number;
+  style?: "realistic" | "cartoon" | "abstract";
+}
+
+export interface MyPluginConfig {
+  apiKey?: string;
+  defaultWidth?: number;
+}
+```
+
+### 5. Package.json Setup
+
+```json
+{
+  "name": "@yourorg/floimg-myplugin",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "peerDependencies": {
+    "@teamflojo/floimg": ">=0.5.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "pnpm build"
+  }
+}
+```
+
+## Real-World Example: QR Code Plugin
+
+Here's a condensed version of the actual `floimg-qr` plugin:
+
+```typescript
+import type { ImageGenerator, ImageBlob, GeneratorSchema } from "@teamflojo/floimg";
+import QRCode from "qrcode";
+
+export const qrSchema: GeneratorSchema = {
+  name: "qr",
+  description: "Generate QR codes from text or URLs",
+  category: "Utility",
+  parameters: {
+    text: {
+      type: "string",
+      title: "Content",
+      description: "Text or URL to encode",
+    },
+    width: {
+      type: "number",
+      title: "Width",
+      default: 300,
+      minimum: 50,
+      maximum: 1000,
+    },
+    errorCorrectionLevel: {
+      type: "string",
+      title: "Error Correction",
+      enum: ["L", "M", "Q", "H"],
+      default: "M",
+    },
+  },
+  requiredParameters: ["text"],
+};
+
+export default function qr(): ImageGenerator {
+  return {
+    name: "qr",
+    schema: qrSchema,
+
+    async generate(params): Promise<ImageBlob> {
+      const text = params.text as string;
+      const width = (params.width as number) || 300;
+      const errorCorrectionLevel = (params.errorCorrectionLevel as string) || "M";
+
+      if (!text) {
+        throw new Error("QR code 'text' parameter is required");
+      }
+
+      const bytes = await QRCode.toBuffer(text, {
+        width,
+        errorCorrectionLevel,
+        type: "png",
+      });
+
+      return {
+        bytes,
+        mime: "image/png",
+        width,
+        height: width,
+        source: "qr",
+        metadata: { text, errorCorrectionLevel },
+      };
+    },
+  };
+}
+```
+
+## Testing Your Plugin
+
+Create a simple test file:
+
+```typescript
+// test/basic.test.ts
+import { describe, it, expect } from "vitest";
+import createClient from "@teamflojo/floimg";
+import myPlugin from "../src";
+
+describe("myPlugin", () => {
+  it("generates an image", async () => {
+    const floimg = createClient();
+    floimg.registerGenerator(myPlugin());
+
+    const result = await floimg.generate({
+      generator: "myplugin",
+      params: { prompt: "test" },
+    });
+
+    expect(result.bytes).toBeInstanceOf(Buffer);
+    expect(result.mime).toBe("image/png");
+  });
+
+  it("validates required parameters", async () => {
+    const floimg = createClient();
+    floimg.registerGenerator(myPlugin());
+
+    await expect(
+      floimg.generate({ generator: "myplugin", params: {} })
+    ).rejects.toThrow();
+  });
+});
+```
+
+## Publishing to npm
+
+1. Ensure your package has a unique name (check npmjs.com)
+2. Add a README with usage examples
+3. Build and publish:
+
+```bash
+pnpm build
+npm publish --access public
+```
+
+## Plugin Design Principles
+
+FloImg plugins follow these principles:
+
+### 1. Pass-Through Pattern
+
+Expose the underlying library's API directly. Don't create abstraction layers:
+
+```typescript
+// Good: Direct pass-through
+const bytes = await QRCode.toBuffer(text, { width, errorCorrectionLevel });
+
+// Avoid: Custom abstraction
+const bytes = await this.customQRMethod(text, this.mapOptions(params));
+```
+
+### 2. Their Docs Are Your Docs
+
+Link to the underlying library's documentation rather than duplicating it:
+
+```typescript
+/**
+ * QR code generator using the qrcode library
+ *
+ * @see https://github.com/soldair/node-qrcode - Full qrcode library docs
+ */
+```
+
+### 3. Sensible Defaults
+
+Provide defaults so users can start with minimal configuration:
+
+```typescript
+const width = (params.width as number) || 300;  // Default to 300px
+```
+
+### 4. Validate Early
+
+Check required parameters at the start of `generate()`:
+
+```typescript
+if (!text) {
+  throw new Error("QR code 'text' parameter is required");
+}
+```
+
+## See Also
+
+- [Generate](/docs/sdk/generate) - Using generators in workflows
+- [Plugins Overview](/docs/plugins) - Available plugins
+- [GitHub: floimg packages](https://github.com/TeamFlojo/floimg/tree/main/packages) - Reference implementations
