@@ -855,6 +855,469 @@ await floimg.save(image, "./robot-mascot.png");`,
       docs: "/docs/plugins/ollama",
     },
   },
+  {
+    slug: "stability",
+    name: "Stability AI",
+    packageName: "@teamflojo/floimg-stability",
+    description:
+      "Generate images with Stable Diffusion models and AI-powered transforms like background removal, upscaling, and inpainting.",
+    category: "AI",
+    heroImage: "/showcase/ai-generation/futuristic-city.png",
+    tags: [
+      "ai",
+      "stable-diffusion",
+      "sdxl",
+      "sd3",
+      "generative",
+      "transforms",
+      "background-removal",
+      "upscale",
+    ],
+    poweredBy: {
+      name: "Stability AI",
+      url: "https://stability.ai/",
+      description: "Stable Diffusion image generation and AI transforms.",
+    },
+    installation: {
+      npm: "npm install @teamflojo/floimg-stability",
+      pnpm: "pnpm add @teamflojo/floimg-stability",
+    },
+    quickStart: `import createClient from "@teamflojo/floimg";
+import stability, { stabilityTransform } from "@teamflojo/floimg-stability";
+
+const floimg = createClient();
+floimg.registerGenerator(stability({ apiKey: process.env.STABILITY_API_KEY }));
+floimg.registerTransformProvider(stabilityTransform({ apiKey: process.env.STABILITY_API_KEY }));
+
+// Generate an image
+const image = await floimg.generate({
+  generator: "stability",
+  params: {
+    prompt: "A futuristic city at sunset, cyberpunk style",
+    model: "sd3-large",
+    aspectRatio: "16:9"
+  }
+});
+
+// Remove background
+const noBg = await floimg.transform({
+  blob: image,
+  op: "removeBackground",
+  provider: "stability-transform"
+});
+
+await floimg.save(noBg, "./city-no-bg.png");`,
+    apiReference: [
+      {
+        name: "prompt",
+        type: "string",
+        description: "Text description of the image to generate",
+        required: true,
+      },
+      {
+        name: "model",
+        type: '"sd3-large" | "sd3-medium" | "sdxl"',
+        description: "Stable Diffusion model (default: sd3-large)",
+        required: false,
+      },
+      {
+        name: "negativePrompt",
+        type: "string",
+        description: "What to avoid in the image",
+        required: false,
+      },
+      {
+        name: "aspectRatio",
+        type: '"1:1" | "16:9" | "9:16" | "4:3" | "3:4"',
+        description: "Image aspect ratio (default: 1:1)",
+        required: false,
+      },
+      {
+        name: "seed",
+        type: "number",
+        description: "Random seed for reproducibility",
+        required: false,
+      },
+    ],
+    examples: [
+      {
+        name: "Cyberpunk City",
+        description: "AI-generated cyberpunk cityscape",
+        image: "/showcase/ai-generation/futuristic-city.png",
+        code: `await floimg.generate({
+  generator: "stability",
+  params: {
+    prompt: "Cyberpunk city at night, neon lights",
+    model: "sd3-large",
+    aspectRatio: "16:9"
+  }
+});`,
+      },
+      {
+        name: "Remove Background",
+        description: "Remove background from product photo",
+        image: "/showcase/ai-generation/product-headphones.png",
+        code: `await floimg.transform({
+  blob: productImage,
+  op: "removeBackground",
+  provider: "stability-transform"
+});`,
+      },
+    ],
+    seo: {
+      title: "Stability AI Plugin - Stable Diffusion & AI Transforms | floimg",
+      description:
+        "Generate images with Stable Diffusion and AI transforms. Background removal, upscaling, inpainting with floimg.",
+      keywords: [
+        "stable diffusion api",
+        "sdxl npm",
+        "ai image generation",
+        "background removal api",
+        "ai upscale",
+      ],
+    },
+    links: {
+      npm: "https://www.npmjs.com/package/@teamflojo/floimg-stability",
+      github: "https://github.com/TeamFlojo/floimg/tree/main/packages/floimg-stability",
+      docs: "/docs/plugins/stability",
+    },
+  },
+  {
+    slug: "google",
+    name: "Google AI (Gemini + Imagen)",
+    packageName: "@teamflojo/floimg-google",
+    description:
+      "AI text generation, vision analysis, image editing, and generation with Google's Gemini and Imagen models.",
+    category: "AI",
+    heroImage: "/showcase/ai-generation/abstract-gradient.png",
+    tags: ["ai", "gemini", "imagen", "google", "vision", "text", "editing", "generative"],
+    poweredBy: {
+      name: "Google AI",
+      url: "https://ai.google.dev/",
+      description: "Gemini and Imagen AI models.",
+    },
+    installation: {
+      npm: "npm install @teamflojo/floimg-google",
+      pnpm: "pnpm add @teamflojo/floimg-google",
+    },
+    quickStart: `import createClient from "@teamflojo/floimg";
+import { geminiText, geminiVision, geminiEdit, imagen } from "@teamflojo/floimg-google";
+
+const floimg = createClient();
+floimg.registerTextProvider(geminiText());
+floimg.registerVisionProvider(geminiVision());
+floimg.registerTransformProvider(geminiEdit());
+floimg.registerGenerator(imagen());
+
+// Generate text
+const result = await floimg.generateText({
+  provider: "gemini-text",
+  params: { prompt: "Write 3 creative image prompts" }
+});
+
+// Analyze an image
+const analysis = await floimg.analyzeImage({
+  provider: "gemini-vision",
+  blob: image,
+  params: { prompt: "Describe this image" }
+});`,
+    apiReference: [
+      {
+        name: "prompt",
+        type: "string",
+        description: "Text prompt for generation or analysis",
+        required: true,
+      },
+      {
+        name: "systemPrompt",
+        type: "string",
+        description: "System prompt to guide behavior",
+        required: false,
+      },
+      {
+        name: "outputFormat",
+        type: '"text" | "json"',
+        description: "Output format (default: text)",
+        required: false,
+      },
+      {
+        name: "jsonSchema",
+        type: "object",
+        description: "JSON schema for structured output",
+        required: false,
+      },
+      {
+        name: "temperature",
+        type: "number",
+        description: "Creativity 0-2 (default: 0.7)",
+        required: false,
+      },
+    ],
+    examples: [
+      {
+        name: "Generate Prompts",
+        description: "Use Gemini to generate image prompts",
+        image: "/showcase/ai-generation/abstract-gradient.png",
+        code: `const result = await floimg.generateText({
+  provider: "gemini-text",
+  params: {
+    prompt: "Generate 3 prompts for product photos",
+    outputFormat: "json"
+  }
+});`,
+      },
+      {
+        name: "Analyze Image",
+        description: "Use Gemini Vision to analyze photos",
+        image: "/showcase/ai-generation/product-headphones.png",
+        code: `const analysis = await floimg.analyzeImage({
+  provider: "gemini-vision",
+  blob: image,
+  params: { prompt: "What's in this image?" }
+});`,
+      },
+    ],
+    seo: {
+      title: "Google AI Plugin - Gemini & Imagen | floimg",
+      description:
+        "AI text, vision, and image generation with Google Gemini and Imagen. Structured JSON output, image analysis, and editing.",
+      keywords: ["gemini api", "imagen api", "google ai npm", "gemini vision", "ai image analysis"],
+    },
+    links: {
+      npm: "https://www.npmjs.com/package/@teamflojo/floimg-google",
+      github: "https://github.com/TeamFlojo/floimg/tree/main/packages/floimg-google",
+      docs: "/docs/plugins/google",
+    },
+  },
+  {
+    slug: "replicate",
+    name: "Replicate",
+    packageName: "@teamflojo/floimg-replicate",
+    description:
+      "AI-powered image transforms including face restoration (GFPGAN), colorization (DeOldify), upscaling (Real-ESRGAN), and text-guided editing (FLUX).",
+    category: "AI",
+    heroImage: "/showcase/ai-generation/robot-mascot.png",
+    tags: ["ai", "replicate", "gfpgan", "esrgan", "colorize", "upscale", "face-restore", "flux"],
+    poweredBy: {
+      name: "Replicate",
+      url: "https://replicate.com/",
+      description: "Run thousands of AI models via API.",
+    },
+    installation: {
+      npm: "npm install @teamflojo/floimg-replicate",
+      pnpm: "pnpm add @teamflojo/floimg-replicate",
+    },
+    quickStart: `import createClient from "@teamflojo/floimg";
+import { replicateTransform } from "@teamflojo/floimg-replicate";
+
+const floimg = createClient();
+floimg.registerTransformProvider(replicateTransform({
+  apiToken: process.env.REPLICATE_API_TOKEN
+}));
+
+// Restore faces in old photos
+const restored = await floimg.transform({
+  blob: oldPhoto,
+  op: "faceRestore",
+  provider: "replicate-transform",
+  params: { version: "v1.4", scale: 2 }
+});
+
+// Colorize black and white photos
+const colorized = await floimg.transform({
+  blob: bwPhoto,
+  op: "colorize",
+  provider: "replicate-transform"
+});
+
+// AI upscale with Real-ESRGAN
+const upscaled = await floimg.transform({
+  blob: image,
+  op: "realEsrgan",
+  provider: "replicate-transform",
+  params: { scale: 4 }
+});`,
+    apiReference: [
+      {
+        name: "op",
+        type: '"faceRestore" | "colorize" | "realEsrgan" | "fluxEdit"',
+        description: "Transform operation to perform",
+        required: true,
+      },
+      {
+        name: "version",
+        type: '"v1.3" | "v1.4" | "RestoreFormer"',
+        description: "GFPGAN version for faceRestore (default: v1.4)",
+        required: false,
+      },
+      {
+        name: "scale",
+        type: "number",
+        description: "Upscale factor 1-4 (default: 2)",
+        required: false,
+      },
+      {
+        name: "renderFactor",
+        type: "number",
+        description: "Color intensity 7-40 for colorize (default: 35)",
+        required: false,
+      },
+      {
+        name: "prompt",
+        type: "string",
+        description: "Edit instruction for fluxEdit",
+        required: false,
+      },
+    ],
+    examples: [
+      {
+        name: "Restore Old Photo",
+        description: "Enhance faces in vintage photos",
+        image: "/showcase/ai-generation/robot-mascot.png",
+        code: `await floimg.transform({
+  blob: oldPhoto,
+  op: "faceRestore",
+  provider: "replicate-transform",
+  params: { version: "v1.4" }
+});`,
+      },
+      {
+        name: "Colorize B&W",
+        description: "Add color to black and white photos",
+        image: "/showcase/ai-generation/abstract-gradient.png",
+        code: `await floimg.transform({
+  blob: bwPhoto,
+  op: "colorize",
+  provider: "replicate-transform",
+  params: { renderFactor: 35 }
+});`,
+      },
+    ],
+    seo: {
+      title: "Replicate Plugin - AI Image Transforms | floimg",
+      description:
+        "AI image transforms with Replicate. Face restoration, colorization, upscaling, and text-guided editing.",
+      keywords: [
+        "replicate api",
+        "gfpgan npm",
+        "ai upscale",
+        "colorize photos",
+        "face restoration",
+      ],
+    },
+    links: {
+      npm: "https://www.npmjs.com/package/@teamflojo/floimg-replicate",
+      github: "https://github.com/TeamFlojo/floimg/tree/main/packages/floimg-replicate",
+      docs: "/docs/plugins/replicate",
+    },
+  },
+  {
+    slug: "xai",
+    name: "xAI (Grok)",
+    packageName: "@teamflojo/floimg-xai",
+    description:
+      "AI text generation and vision analysis with xAI's Grok models. Structured JSON output and image understanding.",
+    category: "AI",
+    heroImage: "/showcase/ai-generation/futuristic-city.png",
+    tags: ["ai", "xai", "grok", "text", "vision", "analysis", "json"],
+    poweredBy: {
+      name: "xAI",
+      url: "https://x.ai/",
+      description: "Grok AI models from xAI.",
+    },
+    installation: {
+      npm: "npm install @teamflojo/floimg-xai",
+      pnpm: "pnpm add @teamflojo/floimg-xai",
+    },
+    quickStart: `import createClient from "@teamflojo/floimg";
+import { grokText, grokVision } from "@teamflojo/floimg-xai";
+
+const floimg = createClient();
+floimg.registerTextProvider(grokText());
+floimg.registerVisionProvider(grokVision());
+
+// Generate text
+const result = await floimg.generateText({
+  provider: "grok-text",
+  params: {
+    prompt: "Write 3 creative image prompts for a cyberpunk cityscape"
+  }
+});
+
+// Analyze an image
+const analysis = await floimg.analyzeImage({
+  provider: "grok-vision",
+  blob: image,
+  params: { prompt: "Describe this image in detail" }
+});`,
+    apiReference: [
+      {
+        name: "prompt",
+        type: "string",
+        description: "Text prompt for generation or analysis",
+        required: true,
+      },
+      {
+        name: "systemPrompt",
+        type: "string",
+        description: "System prompt to guide behavior",
+        required: false,
+      },
+      {
+        name: "outputFormat",
+        type: '"text" | "json"',
+        description: "Output format (default: text)",
+        required: false,
+      },
+      {
+        name: "jsonSchema",
+        type: "object",
+        description: "JSON schema for structured output",
+        required: false,
+      },
+      {
+        name: "temperature",
+        type: "number",
+        description: "Creativity 0-2 (default: 0.7)",
+        required: false,
+      },
+    ],
+    examples: [
+      {
+        name: "Generate Prompts",
+        description: "Use Grok to generate image prompts",
+        image: "/showcase/ai-generation/futuristic-city.png",
+        code: `const result = await floimg.generateText({
+  provider: "grok-text",
+  params: {
+    prompt: "Generate creative prompts for a sci-fi scene",
+    outputFormat: "json"
+  }
+});`,
+      },
+      {
+        name: "Analyze Image",
+        description: "Use Grok Vision to understand images",
+        image: "/showcase/ai-generation/product-headphones.png",
+        code: `const analysis = await floimg.analyzeImage({
+  provider: "grok-vision",
+  blob: image,
+  params: { prompt: "What product is shown?" }
+});`,
+      },
+    ],
+    seo: {
+      title: "xAI Plugin - Grok Text & Vision | floimg",
+      description:
+        "AI text generation and vision analysis with xAI Grok. Structured JSON output and image understanding.",
+      keywords: ["grok api", "xai npm", "grok vision", "ai text generation", "image analysis"],
+    },
+    links: {
+      npm: "https://www.npmjs.com/package/@teamflojo/floimg-xai",
+      github: "https://github.com/TeamFlojo/floimg/tree/main/packages/floimg-xai",
+      docs: "/docs/plugins/xai",
+    },
+  },
 ];
 
 export function getPluginBySlug(slug: string): Plugin | undefined {
