@@ -1,0 +1,820 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+
+const API_URL = import.meta.env.PUBLIC_API_URL || "https://api.floimg.com";
+const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.com";
+
+const categories = [
+  { value: "ai-workflows", label: "AI Workflows", icon: "" },
+  { value: "data-viz", label: "Data Viz", icon: "" },
+  { value: "marketing", label: "Marketing", icon: "" },
+  { value: "utilities", label: "Utilities", icon: "" },
+];
+---
+
+<MarketingLayout
+  title="Showcase"
+  description="Explore community-created images and workflows. Get inspired by what others have built with FloImg."
+>
+  <main>
+    <!-- Hero -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <h1 class="hero-title">Community Showcase</h1>
+        <p class="hero-subtitle">
+          Discover amazing images and workflows created by the FloImg community. Get inspired, learn
+          new techniques, and share your own creations.
+        </p>
+        <div class="hero-actions">
+          <a href={STUDIO_URL} class="cta-button"> Create Your Own </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+      <div class="filter-container">
+        <div class="filter-row">
+          <div class="filter-tabs" id="category-tabs">
+            <button class="filter-tab active" data-category="all">All</button>
+            {
+              categories.map((cat) => (
+                <button class="filter-tab" data-category={cat.value}>
+                  <span class="tab-icon">{cat.icon}</span>
+                  {cat.label}
+                </button>
+              ))
+            }
+          </div>
+          <div class="sort-controls">
+            <select id="sort-select" class="sort-select">
+              <option value="recent">Recent</option>
+              <option value="popular">Popular</option>
+              <option value="trending">Trending</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Showcase Grid -->
+    <section class="showcase-section">
+      <div class="showcase-container">
+        <!-- Loading state -->
+        <div id="loading" class="loading-state">
+          <div class="loading-grid">
+            {
+              [...Array(8)].map(() => (
+                <div class="skeleton-card">
+                  <div class="skeleton-image" />
+                  <div class="skeleton-content">
+                    <div class="skeleton-title" />
+                    <div class="skeleton-meta" />
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="empty-state" class="empty-state hidden">
+          <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            ></path>
+          </svg>
+          <p class="empty-text">No items found</p>
+          <p class="empty-subtext">Be the first to share your creation!</p>
+        </div>
+
+        <!-- Error state -->
+        <div id="error-state" class="error-state hidden">
+          <p class="error-text">Failed to load showcase</p>
+          <button id="retry-btn" class="retry-button">Try Again</button>
+        </div>
+
+        <!-- Showcase grid -->
+        <div id="showcase-grid" class="showcase-grid hidden"></div>
+
+        <!-- Load more -->
+        <div id="load-more-container" class="load-more-container hidden">
+          <button id="load-more-btn" class="load-more-button"> Load More </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Share Your Work</h2>
+        <p class="cta-description">
+          Created something amazing with FloImg? Share it with the community and inspire others.
+        </p>
+        <div class="cta-buttons">
+          <a href={STUDIO_URL} class="cta-primary">Open Studio</a>
+          <a href="/docs/getting-started/quick-start" class="cta-secondary">Learn More</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script define:vars={{ API_URL, STUDIO_URL }}>
+    // State
+    let currentCategory = "all";
+    let currentSort = "recent";
+    let currentOffset = 0;
+    const limit = 20;
+    let isLoading = false;
+    let hasMore = true;
+
+    // Elements
+    const loadingEl = document.getElementById("loading");
+    const emptyEl = document.getElementById("empty-state");
+    const errorEl = document.getElementById("error-state");
+    const gridEl = document.getElementById("showcase-grid");
+    const loadMoreContainer = document.getElementById("load-more-container");
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    const retryBtn = document.getElementById("retry-btn");
+    const sortSelect = document.getElementById("sort-select");
+    const categoryTabs = document.querySelectorAll(".filter-tab");
+
+    function formatRelativeTime(dateStr) {
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diffMs = now - date;
+      const diffSec = Math.floor(diffMs / 1000);
+      const diffMin = Math.floor(diffSec / 60);
+      const diffHour = Math.floor(diffMin / 60);
+      const diffDay = Math.floor(diffHour / 24);
+
+      if (diffDay > 30) return date.toLocaleDateString();
+      if (diffDay > 0) return `${diffDay}d ago`;
+      if (diffHour > 0) return `${diffHour}h ago`;
+      if (diffMin > 0) return `${diffMin}m ago`;
+      return "just now";
+    }
+
+    function createCard(item) {
+      const imageUrl = `${API_URL}/api/storage/images/${item.image.id}/content`;
+      const userUrl = item.user.username ? `/profile?username=${item.user.username}` : "#";
+
+      return `
+        <div class="showcase-card" data-id="${item.id}">
+          <a href="/showcase/item?id=${item.id}" class="card-image-link">
+            <img
+              src="${imageUrl}"
+              alt="${item.title}"
+              class="card-image"
+              loading="lazy"
+            />
+            ${item.workflowShared ? '<span class="workflow-badge" title="Workflow included">Workflow</span>' : ""}
+          </a>
+          <div class="card-content">
+            <a href="/showcase/item?id=${item.id}" class="card-title">${item.title}</a>
+            <div class="card-meta">
+              <a href="${userUrl}" class="card-author">
+                <span class="author-avatar">${item.user.name?.[0]?.toUpperCase() || item.user.username?.[0]?.toUpperCase() || "?"}</span>
+                <span class="author-name">${item.user.name || item.user.username || "Anonymous"}</span>
+              </a>
+              <span class="card-time">${formatRelativeTime(item.createdAt)}</span>
+            </div>
+            <div class="card-stats">
+              <button class="stat-btn like-btn ${item.isLiked ? "liked" : ""}" data-id="${item.id}" data-count="${item.likeCount}">
+                <svg class="stat-icon" fill="${item.isLiked ? "currentColor" : "none"}" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                <span class="stat-count">${item.likeCount}</span>
+              </button>
+              <span class="stat">
+                <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span>${item.viewCount}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function fetchShowcase(append = false) {
+      if (isLoading) return;
+      isLoading = true;
+
+      if (!append) {
+        loadingEl.classList.remove("hidden");
+        gridEl.classList.add("hidden");
+        emptyEl.classList.add("hidden");
+        errorEl.classList.add("hidden");
+        loadMoreContainer.classList.add("hidden");
+        currentOffset = 0;
+      } else {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = "Loading...";
+      }
+
+      try {
+        const params = new URLSearchParams({
+          sort: currentSort,
+          limit: limit.toString(),
+          offset: currentOffset.toString(),
+        });
+
+        if (currentCategory !== "all") {
+          params.set("category", currentCategory);
+        }
+
+        const res = await fetch(`${API_URL}/api/showcase?${params}`, {
+          credentials: "include",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch");
+
+        const data = await res.json();
+        const items = data.items;
+
+        if (!append) {
+          gridEl.innerHTML = "";
+        }
+
+        if (items.length === 0 && currentOffset === 0) {
+          loadingEl.classList.add("hidden");
+          emptyEl.classList.remove("hidden");
+          return;
+        }
+
+        items.forEach((item) => {
+          gridEl.insertAdjacentHTML("beforeend", createCard(item));
+        });
+
+        hasMore = items.length === limit;
+        currentOffset += items.length;
+
+        loadingEl.classList.add("hidden");
+        gridEl.classList.remove("hidden");
+
+        if (hasMore) {
+          loadMoreContainer.classList.remove("hidden");
+        } else {
+          loadMoreContainer.classList.add("hidden");
+        }
+      } catch (err) {
+        console.error("Failed to fetch showcase:", err);
+        loadingEl.classList.add("hidden");
+        errorEl.classList.remove("hidden");
+      } finally {
+        isLoading = false;
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.textContent = "Load More";
+      }
+    }
+
+    async function handleLike(e) {
+      const btn = e.target.closest(".like-btn");
+      if (!btn) return;
+
+      const itemId = btn.dataset.id;
+
+      try {
+        const res = await fetch(`${API_URL}/api/showcase/${itemId}/like`, {
+          method: "POST",
+          credentials: "include",
+        });
+
+        if (res.status === 401) {
+          // Redirect to login
+          window.location.href = `/login?return=${encodeURIComponent(window.location.href)}`;
+          return;
+        }
+
+        if (!res.ok) throw new Error("Failed to like");
+
+        const data = await res.json();
+        btn.classList.toggle("liked", data.liked);
+        btn.querySelector(".stat-count").textContent = data.likeCount;
+        btn.querySelector("svg").setAttribute("fill", data.liked ? "currentColor" : "none");
+      } catch (err) {
+        console.error("Failed to toggle like:", err);
+      }
+    }
+
+    // Event listeners
+    categoryTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        categoryTabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        currentCategory = tab.dataset.category;
+        fetchShowcase();
+      });
+    });
+
+    sortSelect.addEventListener("change", () => {
+      currentSort = sortSelect.value;
+      fetchShowcase();
+    });
+
+    loadMoreBtn.addEventListener("click", () => {
+      fetchShowcase(true);
+    });
+
+    retryBtn.addEventListener("click", () => {
+      fetchShowcase();
+    });
+
+    gridEl.addEventListener("click", handleLike);
+
+    // Initial load
+    fetchShowcase();
+  </script>
+</MarketingLayout>
+
+<style>
+  /* Hero Section */
+  .hero-section {
+    background: linear-gradient(to bottom, rgb(13 148 136 / 0.05), transparent);
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+
+  .hero-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--sl-color-text);
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.125rem;
+    color: var(--sl-color-gray-3);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .cta-button {
+    padding: 0.75rem 1.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .cta-button:hover {
+    background: rgb(15 118 110);
+  }
+
+  /* Filter Section */
+  .filter-section {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--sl-color-bg);
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    padding: 1rem 1.5rem;
+  }
+
+  .filter-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    flex: 1;
+  }
+
+  .filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-3);
+    transition: all 0.2s;
+  }
+
+  .filter-tab:hover {
+    background: var(--sl-color-gray-5);
+  }
+
+  .filter-tab.active {
+    background: rgb(13 148 136);
+    color: white;
+  }
+
+  .sort-select {
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--sl-color-gray-5);
+    background: var(--sl-color-bg);
+    color: var(--sl-color-text);
+    font-size: 0.875rem;
+    cursor: pointer;
+  }
+
+  /* Showcase Section */
+  .showcase-section {
+    padding: 2rem 1.5rem 4rem;
+    background: var(--sl-color-bg);
+  }
+
+  .showcase-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .showcase-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .showcase-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .showcase-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Showcase Card */
+  .showcase-card {
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .showcase-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  }
+
+  .card-image-link {
+    display: block;
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--sl-color-gray-6);
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .showcase-card:hover .card-image {
+    transform: scale(1.05);
+  }
+
+  .workflow-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+  }
+
+  .card-content {
+    padding: 0.75rem;
+  }
+
+  .card-title {
+    display: block;
+    font-weight: 600;
+    color: var(--sl-color-text);
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card-title:hover {
+    color: rgb(13 148 136);
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-author {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    text-decoration: none;
+    color: var(--sl-color-gray-3);
+    font-size: 0.75rem;
+  }
+
+  .author-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: var(--sl-color-gray-5);
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: var(--sl-color-gray-3);
+  }
+
+  .author-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100px;
+  }
+
+  .card-time {
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-4);
+  }
+
+  .card-stats {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .stat,
+  .stat-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .stat-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .stat-btn:hover,
+  .stat-btn.liked {
+    color: rgb(239 68 68);
+  }
+
+  .stat-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Loading State */
+  .loading-state,
+  .loading-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .loading-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .loading-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .skeleton-card {
+    background: var(--sl-color-gray-6);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .skeleton-image {
+    aspect-ratio: 1;
+    background: linear-gradient(
+      90deg,
+      var(--sl-color-gray-6) 0%,
+      var(--sl-color-gray-5) 50%,
+      var(--sl-color-gray-6) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton-content {
+    padding: 0.75rem;
+  }
+
+  .skeleton-title {
+    height: 1rem;
+    background: var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    width: 70%;
+  }
+
+  .skeleton-meta {
+    height: 0.75rem;
+    background: var(--sl-color-gray-5);
+    border-radius: 0.25rem;
+    width: 50%;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Empty State */
+  .empty-state,
+  .error-state {
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+
+  .empty-icon {
+    width: 4rem;
+    height: 4rem;
+    color: var(--sl-color-gray-4);
+    margin: 0 auto 1rem;
+  }
+
+  .empty-text,
+  .error-text {
+    font-size: 1.125rem;
+    color: var(--sl-color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-subtext {
+    color: var(--sl-color-gray-3);
+  }
+
+  .retry-button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgb(13 148 136);
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .retry-button:hover {
+    background: rgb(15 118 110);
+  }
+
+  /* Load More */
+  .load-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+
+  .load-more-button {
+    padding: 0.75rem 2rem;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-text);
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .load-more-button:hover {
+    background: var(--sl-color-gray-5);
+  }
+
+  .load-more-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 4rem 1.5rem;
+    background: var(--sl-color-gray-6);
+    border-top: 1px solid var(--sl-color-gray-5);
+    text-align: center;
+  }
+
+  .cta-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--sl-color-text);
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-description {
+    color: var(--sl-color-gray-3);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary {
+    padding: 0.75rem 1.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .cta-primary:hover {
+    background: rgb(15 118 110);
+  }
+
+  .cta-secondary {
+    padding: 0.75rem 1.5rem;
+    background: var(--sl-color-bg);
+    border: 1px solid var(--sl-color-gray-5);
+    color: var(--sl-color-text);
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .cta-secondary:hover {
+    background: var(--sl-color-gray-5);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>
