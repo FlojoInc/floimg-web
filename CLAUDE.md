@@ -38,9 +38,10 @@ pnpm typecheck        # TypeScript validation
 
 - `/` - Marketing home
 - `/docs` - Documentation
-- `/gallery` - Public image gallery
+- `/templates` - Workflow templates (pre-built examples)
 - `/pricing` - Pricing page
 - `/login`, `/signup` - Auth pages
+- `/gallery` - Redirects to /templates (legacy URL)
 
 ## Deployment
 
