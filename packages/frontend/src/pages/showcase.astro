@@ -28,6 +28,11 @@ const categories = [
         <div class="hero-actions">
           <a href={STUDIO_URL} class="cta-button"> Create Your Own </a>
         </div>
+        <p class="cross-link">
+          New to FloImg? <a href="/templates" class="cross-link-anchor"
+            >Browse Templates to get started</a
+          >
+        </p>
       </div>
     </section>
 
@@ -378,6 +383,26 @@ const categories = [
 
   .cta-button:hover {
     background: rgb(15 118 110);
+  }
+
+  .cross-link {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .cross-link-anchor {
+    color: rgb(13 148 136);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cross-link-anchor:hover {
+    text-decoration: underline;
+  }
+
+  :global(.dark) .cross-link-anchor {
+    color: rgb(45 212 191);
   }
 
   /* Filter Section */

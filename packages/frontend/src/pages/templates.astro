@@ -49,6 +49,11 @@ const categoryInfo: Record<string, { icon: string; description: string }> = {
             <span class="stat-label">Categories</span>
           </div>
         </div>
+        <p class="cross-link">
+          Want inspiration? <a href="/showcase" class="cross-link-anchor"
+            >Check out the Community Showcase →</a
+          >
+        </p>
       </div>
     </section>
 
@@ -197,6 +202,26 @@ const categoryInfo: Record<string, { icon: string; description: string }> = {
   .stat-label {
     font-size: 0.875rem;
     color: var(--sl-color-gray-3);
+  }
+
+  .cross-link {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--sl-color-gray-3);
+  }
+
+  .cross-link-anchor {
+    color: rgb(13 148 136);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cross-link-anchor:hover {
+    text-decoration: underline;
+  }
+
+  :global(.dark) .cross-link-anchor {
+    color: rgb(45 212 191);
   }
 
   /* Filter Section */
