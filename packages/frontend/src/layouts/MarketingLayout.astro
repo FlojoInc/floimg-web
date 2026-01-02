@@ -34,7 +34,7 @@ const developersItems = [
 
 const API_URL = import.meta.env.PUBLIC_API_URL || "https://api.floimg.com";
 const siteUrl = "https://floimg.com";
-const fullTitle = title === "Home" ? "floimg - AI Image Workflow Engine" : `${title} | floimg`;
+const fullTitle = title === "Home" ? "FloImg - AI Image Workflow Engine" : `${title} | FloImg`;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${siteUrl}${ogImage}`;
 
@@ -56,7 +56,7 @@ const allKeywords = [...new Set([...defaultKeywords, ...keywords])];
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "floimg",
+  name: "FloImg",
   applicationCategory: "DeveloperApplication",
   operatingSystem: "Cross-platform",
   description:
@@ -117,7 +117,7 @@ const structuredData = {
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:site_name" content="floimg" />
+    <meta property="og:site_name" content="FloImg" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
@@ -143,7 +143,7 @@ const structuredData = {
     <header class="border-b border-zinc-200 dark:border-white/10">
       <nav class="mx-auto max-w-7xl px-6 py-4">
         <div class="flex items-center justify-between">
-          <a href="/" class="text-xl font-bold text-zinc-900 dark:text-white">floimg</a>
+          <a href="/" class="text-xl font-bold text-zinc-900 dark:text-white">FloImg</a>
 
           <!-- Desktop Navigation -->
           <div class="hidden md:flex items-center gap-6">
