@@ -1,0 +1,117 @@
+---
+import { getAuthor } from "../../data/authors";
+
+interface Props {
+  authorId: string;
+  showAvatar?: boolean;
+  size?: "sm" | "md" | "lg";
+}
+
+const { authorId, showAvatar = true, size = "sm" } = Astro.props;
+const author = getAuthor(authorId);
+
+const hasProfile = !!author.username;
+const profileUrl = hasProfile ? `/u/${author.username}` : null;
+
+const avatarSizes = {
+  sm: "20px",
+  md: "32px",
+  lg: "48px",
+};
+
+const avatarSize = avatarSizes[size];
+---
+
+{
+  hasProfile ? (
+    <a href={profileUrl} class={`author-link ${size}`}>
+      {showAvatar && author.avatarUrl && (
+        <img
+          src={author.avatarUrl}
+          alt={author.name}
+          class="author-avatar"
+          style={`width: ${avatarSize}; height: ${avatarSize};`}
+          loading="lazy"
+        />
+      )}
+      <span class="author-name">{author.name}</span>
+    </a>
+  ) : (
+    <span class={`author-text ${size}`}>
+      {showAvatar && (
+        <span class="author-avatar-fallback" style={`width: ${avatarSize}; height: ${avatarSize};`}>
+          F
+        </span>
+      )}
+      <span class="author-name">{author.name}</span>
+    </span>
+  )
+}
+
+<style>
+  .author-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--sl-color-gray-2, rgb(82 82 91));
+    transition: color 0.2s;
+  }
+
+  .author-link:hover {
+    color: rgb(13 148 136);
+  }
+
+  :global(.dark) .author-link:hover {
+    color: rgb(45 212 191);
+  }
+
+  .author-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--sl-color-gray-3, rgb(113 113 122));
+  }
+
+  .author-avatar {
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .author-avatar-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgb(13 148 136), rgb(20 184 166));
+    color: white;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* Size variants */
+  .sm .author-name {
+    font-size: 0.75rem;
+  }
+
+  .sm .author-avatar-fallback {
+    font-size: 0.625rem;
+  }
+
+  .md .author-name {
+    font-size: 0.875rem;
+  }
+
+  .md .author-avatar-fallback {
+    font-size: 0.75rem;
+  }
+
+  .lg .author-name {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+
+  .lg .author-avatar-fallback {
+    font-size: 1rem;
+  }
+</style>
