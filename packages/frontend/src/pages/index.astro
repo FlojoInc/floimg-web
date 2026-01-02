@@ -2,6 +2,8 @@
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 import ImageShowcase from "../components/ImageShowcase.astro";
 import TabbedDemo from "../components/TabbedDemo.astro";
+import TemplateHighlights from "../components/TemplateHighlights.astro";
+import ShowcasePreview from "../components/ShowcasePreview.astro";
 import ClaudeCodeCallout from "../components/ClaudeCodeCallout.astro";
 import GitHubStars from "../components/GitHubStars.astro";
 
@@ -124,6 +126,9 @@ const generators = [
       </div>
 
       <ImageShowcase class="hero-showcase" />
+      <p class="showcase-caption">
+        <a href="/templates" class="caption-link">Browse workflow templates →</a>
+      </p>
     </div>
   </section>
 
@@ -135,6 +140,9 @@ const generators = [
       <TabbedDemo />
     </div>
   </section>
+
+  <!-- Template Highlights -->
+  <TemplateHighlights />
 
   <!-- Features Grid -->
   <section class="features-section">
@@ -160,6 +168,9 @@ const generators = [
       </div>
     </div>
   </section>
+
+  <!-- Community Showcase Preview -->
+  <ShowcasePreview />
 
   <!-- Two Ways to Use -->
   <section class="two-ways-section">
@@ -406,6 +417,33 @@ const generators = [
 
   .hero-showcase {
     margin-top: 2rem;
+  }
+
+  .showcase-caption {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #71717a;
+  }
+
+  .caption-link {
+    color: rgb(13 148 136);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .caption-link:hover {
+    color: rgb(15 118 110);
+    text-decoration: underline;
+  }
+
+  :global(.dark) .caption-link {
+    color: rgb(45 212 191);
+  }
+
+  :global(.dark) .caption-link:hover {
+    color: rgb(94 234 212);
   }
 
   /* Demo Section - always dark background */

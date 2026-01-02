@@ -1,0 +1,528 @@
+---
+/**
+ * Showcase Preview - Live community showcase items on homepage
+ * Fetches from showcase API, shows 8 trending items
+ */
+
+const API_URL = import.meta.env.PUBLIC_API_URL || "https://api.floimg.com";
+const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.com";
+---
+
+<section class="showcase-preview-section">
+  <div class="section-container">
+    <div class="section-header">
+      <h2 class="section-title">See What Others Have Built</h2>
+      <p class="section-subtitle">Real images created by the FloImg community</p>
+    </div>
+
+    <!-- Loading state -->
+    <div id="showcase-loading" class="showcase-grid">
+      {
+        [...Array(8)].map(() => (
+          <div class="skeleton-card">
+            <div class="skeleton-image" />
+            <div class="skeleton-content">
+              <div class="skeleton-title" />
+              <div class="skeleton-meta" />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Loaded content -->
+    <div id="showcase-grid" class="showcase-grid hidden"></div>
+
+    <!-- Empty state -->
+    <div id="showcase-empty" class="showcase-empty hidden">
+      <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+        ></path>
+      </svg>
+      <p class="empty-text">No showcase items yet</p>
+      <p class="empty-subtext">Be the first to share your creation!</p>
+      <a href={STUDIO_URL} class="empty-cta">Open Studio</a>
+    </div>
+
+    <div class="section-cta">
+      <a href="/showcase" class="cta-link">
+        Explore Showcase
+        <svg
+          class="cta-arrow"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ API_URL }}>
+  function formatRelativeTime(dateStr) {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffDay > 30) return date.toLocaleDateString();
+    if (diffDay > 0) return `${diffDay}d ago`;
+    if (diffHour > 0) return `${diffHour}h ago`;
+    if (diffMin > 0) return `${diffMin}m ago`;
+    return "just now";
+  }
+
+  function createCard(item) {
+    const imageUrl = `${API_URL}/api/storage/images/${item.image.id}/content`;
+    const userUrl = item.user.username ? `/profile?username=${item.user.username}` : "#";
+
+    return `
+      <a href="/showcase/item?id=${item.id}" class="showcase-card">
+        <div class="card-image-wrapper">
+          <img
+            src="${imageUrl}"
+            alt="${item.title}"
+            class="card-image"
+            loading="lazy"
+          />
+          ${item.workflowShared ? '<span class="workflow-badge">Workflow</span>' : ""}
+        </div>
+        <div class="card-content">
+          <span class="card-title">${item.title}</span>
+          <div class="card-meta">
+            <span class="card-author">
+              <span class="author-avatar">${item.user.name?.[0]?.toUpperCase() || item.user.username?.[0]?.toUpperCase() || "?"}</span>
+              <span class="author-name">${item.user.name || item.user.username || "Anonymous"}</span>
+            </span>
+          </div>
+          <div class="card-stats">
+            <span class="stat">
+              <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              ${item.likeCount}
+            </span>
+            <span class="stat">
+              <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              ${item.viewCount}
+            </span>
+          </div>
+        </div>
+      </a>
+    `;
+  }
+
+  async function loadShowcase() {
+    const loadingEl = document.getElementById("showcase-loading");
+    const gridEl = document.getElementById("showcase-grid");
+    const emptyEl = document.getElementById("showcase-empty");
+    const sectionEl = document.querySelector(".showcase-preview-section");
+
+    try {
+      const res = await fetch(`${API_URL}/api/showcase?limit=8&sort=recent`, {
+        credentials: "include",
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch");
+
+      const data = await res.json();
+      const items = data.items;
+
+      if (items.length === 0) {
+        loadingEl.classList.add("hidden");
+        emptyEl.classList.remove("hidden");
+        return;
+      }
+
+      // Populate grid
+      gridEl.innerHTML = items.map(createCard).join("");
+
+      loadingEl.classList.add("hidden");
+      gridEl.classList.remove("hidden");
+    } catch (err) {
+      console.error("Failed to load showcase:", err);
+      // Hide entire section on error - fail gracefully
+      if (sectionEl) {
+        sectionEl.style.display = "none";
+      }
+    }
+  }
+
+  loadShowcase();
+</script>
+
+<style>
+  .showcase-preview-section {
+    padding: 5rem 1.5rem;
+    background: #18181b;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fafafa;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.125rem;
+    color: #a1a1aa;
+  }
+
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 1024px) {
+    .showcase-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .showcase-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .showcase-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Showcase Card */
+  .showcase-card {
+    display: block;
+    background: #27272a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    text-decoration: none;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .showcase-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-image-wrapper {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: #3f3f46;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .showcase-card:hover .card-image {
+    transform: scale(1.05);
+  }
+
+  .workflow-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+  }
+
+  .card-content {
+    padding: 0.75rem;
+  }
+
+  .card-title {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #fafafa;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card-meta {
+    margin-bottom: 0.5rem;
+  }
+
+  .card-author {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: #a1a1aa;
+  }
+
+  .author-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: #3f3f46;
+    border-radius: 9999px;
+    font-size: 0.625rem;
+    font-weight: 600;
+    color: #a1a1aa;
+  }
+
+  .author-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: #71717a;
+  }
+
+  .stat-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  /* Skeleton Loading */
+  .skeleton-card {
+    background: #27272a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .skeleton-image {
+    aspect-ratio: 1;
+    background: linear-gradient(90deg, #3f3f46 0%, #52525b 50%, #3f3f46 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .skeleton-content {
+    padding: 0.75rem;
+  }
+
+  .skeleton-title {
+    height: 1rem;
+    background: #3f3f46;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+    width: 70%;
+  }
+
+  .skeleton-meta {
+    height: 0.75rem;
+    background: #3f3f46;
+    border-radius: 0.25rem;
+    width: 50%;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Empty State */
+  .showcase-empty {
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+
+  .empty-icon {
+    width: 4rem;
+    height: 4rem;
+    color: #52525b;
+    margin: 0 auto 1rem;
+  }
+
+  .empty-text {
+    font-size: 1.125rem;
+    color: #fafafa;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-subtext {
+    color: #71717a;
+    margin-bottom: 1.5rem;
+  }
+
+  .empty-cta {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    font-weight: 500;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .empty-cta:hover {
+    background: rgb(15 118 110);
+  }
+
+  /* Section CTA */
+  .section-cta {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(45 212 191);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .cta-link:hover {
+    color: rgb(94 234 212);
+  }
+
+  .cta-arrow {
+    width: 1rem;
+    height: 1rem;
+    transition: transform 0.2s;
+  }
+
+  .cta-link:hover .cta-arrow {
+    transform: translateX(4px);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* Light mode */
+  :global(:not(.dark)) .showcase-preview-section {
+    background: #f4f4f5;
+    border-top-color: #e4e4e7;
+  }
+
+  :global(:not(.dark)) .section-title {
+    color: #18181b;
+  }
+
+  :global(:not(.dark)) .section-subtitle {
+    color: #52525b;
+  }
+
+  :global(:not(.dark)) .showcase-card {
+    background: #ffffff;
+    border-color: #e4e4e7;
+  }
+
+  :global(:not(.dark)) .showcase-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  :global(:not(.dark)) .card-image-wrapper {
+    background: #e4e4e7;
+  }
+
+  :global(:not(.dark)) .card-title {
+    color: #18181b;
+  }
+
+  :global(:not(.dark)) .card-author {
+    color: #52525b;
+  }
+
+  :global(:not(.dark)) .author-avatar {
+    background: #e4e4e7;
+    color: #52525b;
+  }
+
+  :global(:not(.dark)) .stat {
+    color: #a1a1aa;
+  }
+
+  :global(:not(.dark)) .skeleton-card {
+    background: #ffffff;
+    border-color: #e4e4e7;
+  }
+
+  :global(:not(.dark)) .skeleton-image {
+    background: linear-gradient(90deg, #e4e4e7 0%, #f4f4f5 50%, #e4e4e7 100%);
+    background-size: 200% 100%;
+  }
+
+  :global(:not(.dark)) .skeleton-title,
+  :global(:not(.dark)) .skeleton-meta {
+    background: #e4e4e7;
+  }
+
+  :global(:not(.dark)) .empty-icon {
+    color: #a1a1aa;
+  }
+
+  :global(:not(.dark)) .empty-text {
+    color: #18181b;
+  }
+
+  :global(:not(.dark)) .empty-subtext {
+    color: #52525b;
+  }
+
+  :global(:not(.dark)) .cta-link {
+    color: rgb(13 148 136);
+  }
+
+  :global(:not(.dark)) .cta-link:hover {
+    color: rgb(15 118 110);
+  }
+</style>
