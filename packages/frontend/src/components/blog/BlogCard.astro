@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import CategoryBadge from "./CategoryBadge.astro";
 import TagBadge from "./TagBadge.astro";
+import AuthorLink from "./AuthorLink.astro";
 
 interface Props {
   post: CollectionEntry<"blog">;
@@ -69,7 +70,7 @@ const formattedDate = pubDate.toLocaleDateString("en-US", {
     }
 
     <div class="card-footer">
-      <span class="author">By {author}</span>
+      <span class="author">By <AuthorLink authorId={author} showAvatar={false} size="sm" /></span>
       <a href={`/blog/${post.id}`} class="read-more">
         Read more
         <svg
