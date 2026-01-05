@@ -10,9 +10,65 @@ import MarketingLayout from "../../layouts/MarketingLayout.astro";
 import {
   allTemplates as templates,
   getStudioUrl,
+  getNodeCount,
   type Template,
 } from "@teamflojo/floimg-templates";
 import { generateCodeFormats } from "../../utils/code-format";
+
+/**
+ * Generate human-readable step descriptions from workflow nodes
+ */
+function getWorkflowSteps(template: Template): string[] {
+  if (!template.workflow?.nodes) return [];
+
+  return template.workflow.nodes.map((node) => {
+    if (node.type === "generator") {
+      const gen = node.data.generatorName || "generator";
+      const genNames: Record<string, string> = {
+        openai: "Generate image with AI (DALL-E)",
+        quickchart: "Generate chart (QuickChart)",
+        mermaid: "Generate diagram (Mermaid)",
+        qr: "Generate QR code",
+        screenshot: "Capture screenshot",
+        d3: "Generate visualization (D3)",
+      };
+      return genNames[gen] || `Generate with ${gen}`;
+    }
+
+    if (node.type === "input") {
+      return "Input image";
+    }
+
+    if (node.type === "transform") {
+      const op = node.data.operation || "transform";
+      const params = node.data.params || {};
+
+      const opDescriptions: Record<string, string> = {
+        resize:
+          params.width && params.height
+            ? `Resize to ${params.width}×${params.height}`
+            : params.width
+              ? `Resize to ${params.width}px wide`
+              : "Resize image",
+        roundCorners: params.radius ? `Round corners (${params.radius}px radius)` : "Round corners",
+        convert: params.to
+          ? `Convert to ${params.to.replace("image/", "").toUpperCase()}`
+          : "Convert format",
+        removeBackground: "Remove background",
+        addCaption: params.text
+          ? `Add caption "${params.text.substring(0, 20)}${params.text.length > 20 ? "..." : ""}"`
+          : "Add caption",
+        extend: "Add padding/border",
+        grayscale: "Convert to grayscale",
+        crop: "Crop image",
+      };
+
+      return opDescriptions[op] || `Apply ${op} transform`;
+    }
+
+    return "Process image";
+  });
+}
 
 // Pre-render all template pages at build time
 export function getStaticPaths() {
@@ -27,6 +83,10 @@ interface Props {
 }
 
 const { template } = Astro.props;
+
+// Workflow info
+const nodeCount = getNodeCount(template);
+const workflowSteps = getWorkflowSteps(template);
 
 // Generate code examples in all formats
 const code = template.codeExample
@@ -241,6 +301,24 @@ const requiresAuth = template.requiresAuth ?? requiresCloud;
           </div>
         </div>
       </div>
+
+      <!-- How It Works Section -->
+      {
+        workflowSteps.length > 1 && (
+          <div class="workflow-section">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">{nodeCount} steps in this workflow</p>
+            <ol class="workflow-steps">
+              {workflowSteps.map((step, index) => (
+                <li class="workflow-step">
+                  <span class="step-number">{index + 1}</span>
+                  <span class="step-text">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        )
+      }
 
       <!-- Code Examples Section -->
       {
@@ -747,6 +825,50 @@ const requiresAuth = template.requiresAuth ?? requiresCloud;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-size: 0.875rem;
     white-space: pre;
+  }
+
+  /* Workflow Section */
+  .workflow-section {
+    padding: 2rem 0 3rem;
+    border-top: 1px solid var(--sl-color-gray-5);
+  }
+
+  .workflow-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .workflow-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    background: var(--sl-color-gray-6);
+    border-radius: 0.5rem;
+    border: 1px solid var(--sl-color-gray-5);
+  }
+
+  .step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: rgb(13 148 136);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 9999px;
+    flex-shrink: 0;
+  }
+
+  .step-text {
+    font-size: 0.9375rem;
+    color: var(--sl-color-text);
   }
 
   /* Related Section */

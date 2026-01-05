@@ -1,6 +1,6 @@
 ---
 import type { Template } from "@teamflojo/floimg-templates";
-import { getStudioUrl } from "@teamflojo/floimg-templates";
+import { getStudioUrl, getNodeCount } from "@teamflojo/floimg-templates";
 import { generateCodeFormats } from "../utils/code-format";
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const { template } = Astro.props;
+const nodeCount = getNodeCount(template);
 
 // Generate code in all formats
 const code = template.codeExample
@@ -103,9 +104,12 @@ const colors = generatorColors[template.generator] || {
     <!-- Header with badges -->
     <div class="card-header">
       <h3 class="card-title">{template.name}</h3>
-      <span class={`generator-badge ${colors.bg} ${colors.text}`}>
-        {template.generator}
-      </span>
+      <div class="header-badges">
+        <span class="node-count-badge">{nodeCount} {nodeCount === 1 ? "node" : "nodes"}</span>
+        <span class={`generator-badge ${colors.bg} ${colors.text}`}>
+          {template.generator}
+        </span>
+      </div>
     </div>
 
     <p class="card-description">{template.description}</p>
@@ -346,6 +350,23 @@ const colors = generatorColors[template.generator] || {
     font-weight: 600;
     color: var(--sl-color-text);
     margin: 0;
+  }
+
+  .header-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+  }
+
+  .node-count-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    white-space: nowrap;
+    font-weight: 500;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-2);
   }
 
   .generator-badge {
