@@ -8,7 +8,15 @@ interface Props {
 
 const { class: className = "" } = Astro.props;
 
-// Showcase images from T-2025-001
+// Category to URL mapping for showcase links
+const categoryLinks: Record<string, string> = {
+  AI: "/templates?category=ai-workflows",
+  Charts: "/templates?category=data-viz",
+  Pipeline: "/templates?category=marketing",
+  QR: "/plugins/qr",
+};
+
+// Showcase images demonstrating floimg's capabilities
 const showcaseImages = [
   {
     src: "/showcase/ai-generation/futuristic-city.png",
@@ -53,7 +61,11 @@ const showcaseImages = [
   <div class="showcase-grid">
     {
       showcaseImages.map((img, i) => (
-        <a href="/templates" class="showcase-item" style={`--delay: ${i * 0.1}s`}>
+        <a
+          href={categoryLinks[img.category] || "/templates"}
+          class="showcase-item"
+          style={`--delay: ${i * 0.1}s`}
+        >
           <img src={img.src} alt={img.alt} loading="lazy" />
           <span class="category-badge">{img.category}</span>
         </a>

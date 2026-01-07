@@ -4,88 +4,46 @@ import ImageShowcase from "../components/ImageShowcase.astro";
 import TabbedDemo from "../components/TabbedDemo.astro";
 import TemplateHighlights from "../components/TemplateHighlights.astro";
 import ShowcasePreview from "../components/ShowcasePreview.astro";
-import ClaudeCodeCallout from "../components/ClaudeCodeCallout.astro";
 import GitHubStars from "../components/GitHubStars.astro";
 
-// Reorganized features: AI -> Workflows -> Generators -> DevEx
+// Streamlined features: 6 cards in 3x2 grid (removed Generators category - covered in templates/plugins)
 const features = [
   {
-    category: "AI-Powered",
-    items: [
-      {
-        title: "AI Image Generation",
-        description: "Generate images with DALL-E and other AI models via a unified API.",
-        icon: "🎨",
-        link: "/docs/plugins/openai",
-      },
-      {
-        title: "LLM-Ready",
-        description: "MCP integration for Claude and other AI agents out of the box.",
-        icon: "🤖",
-        link: "/docs/mcp",
-      },
-    ],
+    title: "AI Image Generation",
+    description: "Generate images with DALL-E and other AI models via a unified API.",
+    icon: "🎨",
+    link: "/docs/plugins/openai",
   },
   {
-    category: "Workflows",
-    items: [
-      {
-        title: "Pipeline Engine",
-        description: "Chain generators and transforms into reusable, shareable workflows.",
-        icon: "⚡",
-        link: "/docs/getting-started/concepts",
-      },
-      {
-        title: "Deterministic",
-        description: "Same inputs, same outputs. Reliable execution for production.",
-        icon: "🎯",
-        link: "/docs/getting-started/concepts",
-      },
-    ],
+    title: "Deterministic Transforms",
+    description: "Same inputs, same outputs. Reliable execution for production.",
+    icon: "🎯",
+    link: "/docs/getting-started/concepts",
   },
   {
-    category: "Generators",
-    items: [
-      {
-        title: "Charts & Diagrams",
-        description: "Chart.js, D3, and Mermaid for data visualization.",
-        icon: "📊",
-        link: "/docs/plugins/quickchart",
-      },
-      {
-        title: "QR & Barcodes",
-        description: "Generate branded QR codes and barcodes with styling options.",
-        icon: "📱",
-        link: "/docs/plugins/qr",
-      },
-    ],
+    title: "Pipeline Engine",
+    description: "Chain generators and transforms into reusable, shareable workflows.",
+    icon: "⚡",
+    link: "/docs/getting-started/concepts",
   },
   {
-    category: "Developer Experience",
-    items: [
-      {
-        title: "Self-Hostable",
-        description: "Run anywhere. No vendor lock-in. MIT licensed.",
-        icon: "🏠",
-        link: "/docs/studio/self-hosting",
-      },
-      {
-        title: "TypeScript First",
-        description: "Full type safety with excellent IDE support.",
-        icon: "💻",
-        link: "/docs/sdk/fluent",
-      },
-    ],
+    title: "LLM-Ready",
+    description: "MCP integration for Claude and other AI agents out of the box.",
+    icon: "🤖",
+    link: "/docs/mcp",
   },
-];
-
-const generators = [
-  { name: "openai", desc: "AI images via DALL-E", icon: "🎨" },
-  { name: "stability", desc: "Stability AI + transforms", icon: "✨" },
-  { name: "quickchart", desc: "Charts via Chart.js", icon: "📊" },
-  { name: "mermaid", desc: "Diagrams & flowcharts", icon: "📐" },
-  { name: "qr", desc: "QR codes & barcodes", icon: "📱" },
-  { name: "screenshot", desc: "Playwright screenshots", icon: "🖼️" },
+  {
+    title: "Self-Hostable",
+    description: "Run anywhere. No vendor lock-in. MIT licensed.",
+    icon: "🏠",
+    link: "/docs/studio/self-hosting",
+  },
+  {
+    title: "TypeScript First",
+    description: "Full type safety with excellent IDE support.",
+    icon: "💻",
+    link: "/docs/sdk/fluent",
+  },
 ];
 ---
 
@@ -110,19 +68,16 @@ const generators = [
       </div>
 
       <h1 class="hero-title">
-        Image workflows for <span class="highlight">developers</span> and <span class="highlight"
-          >AI agents</span
-        >
+        The composable <span class="highlight">image workflow engine</span>
       </h1>
 
       <p class="hero-subtitle">
-        Generate AI images, apply deterministic transforms, and save to cloud—all in one pipeline.
-        When AI editing is probabilistic, FloImg transforms are precise.
+        Generate with AI. Transform with precision. Save anywhere. All in one pipeline.
       </p>
 
       <div class="hero-ctas">
-        <a href="https://studio.floimg.com" class="cta-primary"> Get Started </a>
-        <a href="/templates" class="cta-secondary"> View Templates </a>
+        <a href="https://studio.floimg.com" class="cta-primary"> Try Studio </a>
+        <a href="/docs" class="cta-secondary"> Read the Docs </a>
       </div>
 
       <ImageShowcase class="hero-showcase" />
@@ -141,28 +96,52 @@ const generators = [
     </div>
   </section>
 
+  <!-- FloImg Studio Section -->
+  <section class="studio-section">
+    <div class="studio-container">
+      <div class="studio-content">
+        <span class="studio-eyebrow">FloImg Studio</span>
+        <h2 class="studio-title">Build workflows visually</h2>
+        <p class="studio-description">
+          Drag-and-drop node editor for composing AI generation, transforms, and cloud saves. Export
+          to code when ready.
+        </p>
+        <ul class="studio-features">
+          <li><span class="check-icon">&#10003;</span> No installation required</li>
+          <li><span class="check-icon">&#10003;</span> AI providers included</li>
+          <li><span class="check-icon">&#10003;</span> Export to SDK code</li>
+          <li><span class="check-icon">&#10003;</span> Self-hostable (MIT)</li>
+        </ul>
+        <div class="studio-ctas">
+          <a href="https://studio.floimg.com" class="studio-cta-primary">Try Studio</a>
+          <a href="/docs/studio/self-hosting" class="studio-cta-secondary">Self-Host Guide</a>
+        </div>
+      </div>
+      <div class="studio-visual">
+        <img
+          src="/showcase/studio-workflow.png"
+          alt="FloImg Studio workflow editor showing an AI image generation pipeline"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
   <!-- Template Highlights -->
   <TemplateHighlights />
 
   <!-- Features Grid -->
   <section class="features-section">
     <div class="features-container">
-      <h2 class="section-title">Why floimg?</h2>
+      <h2 class="section-title">Why FloImg?</h2>
       <div class="features-grid">
         {
-          features.map((category) => (
-            <div class="feature-category">
-              <h3 class="category-title">{category.category}</h3>
-              <div class="category-items">
-                {category.items.map((item) => (
-                  <a href={item.link} class="feature-card">
-                    <span class="feature-icon">{item.icon}</span>
-                    <h4 class="feature-title">{item.title}</h4>
-                    <p class="feature-description">{item.description}</p>
-                  </a>
-                ))}
-              </div>
-            </div>
+          features.map((feature) => (
+            <a href={feature.link} class="feature-card">
+              <span class="feature-icon">{feature.icon}</span>
+              <h4 class="feature-title">{feature.title}</h4>
+              <p class="feature-description">{feature.description}</p>
+            </a>
           ))
         }
       </div>
@@ -171,113 +150,6 @@ const generators = [
 
   <!-- Community Showcase Preview -->
   <ShowcasePreview />
-
-  <!-- Two Ways to Use -->
-  <section class="two-ways-section">
-    <div class="section-container">
-      <h2 class="section-title">Two Ways to Use FloImg</h2>
-      <p class="section-subtitle">Choose the approach that fits your workflow</p>
-
-      <div class="ways-grid">
-        <!-- SDK Path -->
-        <div class="way-card">
-          <div class="way-icon">💻</div>
-          <h3 class="way-title">SDK & CLI</h3>
-          <p class="way-description">
-            For developers who want full programmatic control. Integrate floimg into your codebase,
-            build custom pipelines, and automate image workflows.
-          </p>
-          <ul class="way-features">
-            <li><span class="check">✓</span> TypeScript/JavaScript SDK</li>
-            <li><span class="check">✓</span> Command-line interface</li>
-            <li><span class="check">✓</span> MCP for AI agents</li>
-          </ul>
-          <a href="/docs/getting-started/installation" class="way-cta way-cta-primary">
-            Read the Docs
-          </a>
-        </div>
-
-        <!-- Studio Path -->
-        <div class="way-card">
-          <div class="way-icon">🎨</div>
-          <h3 class="way-title">Studio</h3>
-          <p class="way-description">
-            Visual drag-and-drop workflow builder. Create image pipelines without writing code, then
-            export to SDK or run directly in Studio.
-          </p>
-          <ul class="way-features">
-            <li><span class="check">✓</span> Node-based visual editor</li>
-            <li><span class="check">✓</span> Real-time preview</li>
-            <li><span class="check">✓</span> Self-hostable (MIT license)</li>
-          </ul>
-          <a href="https://studio.floimg.com" class="way-cta way-cta-secondary"> Try Studio </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Claude Code Callout -->
-  <ClaudeCodeCallout />
-
-  <!-- Generators -->
-  <section class="generators-section">
-    <div class="section-container">
-      <h2 class="section-title">Generators</h2>
-      <p class="section-subtitle">Install only what you need</p>
-      <div class="generators-grid">
-        {
-          generators.map((gen) => (
-            <a href={`/docs/plugins/${gen.name}`} class="generator-card">
-              <span class="generator-icon">{gen.icon}</span>
-              <div class="generator-info">
-                <code class="generator-name">@teamflojo/floimg-{gen.name}</code>
-                <span class="generator-desc">{gen.desc}</span>
-              </div>
-            </a>
-          ))
-        }
-      </div>
-      <div class="generators-link">
-        <a href="/docs/plugins/quickchart">View all plugins →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contributor CTA -->
-  <section class="contributor-section">
-    <div class="section-container">
-      <div class="contributor-content">
-        <h2 class="contributor-title">Join the Community</h2>
-        <p class="contributor-description">
-          FloImg is open source and community-driven. We welcome contributions of all kinds — code,
-          documentation, bug reports, and feature requests.
-        </p>
-        <div class="contributor-ctas">
-          <a
-            href="https://github.com/TeamFlojo/floimg"
-            class="contributor-cta-primary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <svg viewBox="0 0 16 16" fill="currentColor" class="gh-icon">
-              <path
-                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
-              ></path>
-            </svg>
-            Star on GitHub
-          </a>
-          <a
-            href="https://github.com/TeamFlojo/floimg/blob/main/CONTRIBUTING.md"
-            class="contributor-cta-secondary"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Contributing Guide
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Quick Start CTA -->
   <section class="cta-section">
@@ -345,8 +217,12 @@ const generators = [
     font-size: clamp(2.5rem, 5vw, 3.75rem);
     font-weight: 700;
     line-height: 1.1;
-    color: var(--sl-color-text);
+    color: #18181b;
     margin-bottom: 1.5rem;
+  }
+
+  :global(html.dark) .hero-title {
+    color: #fafafa;
   }
 
   .highlight {
@@ -396,7 +272,7 @@ const generators = [
     padding: 0.875rem 1.75rem;
     background: transparent;
     border: 1px solid #d4d4d8;
-    color: var(--sl-color-text);
+    color: #18181b;
     border-radius: 0.5rem;
     font-weight: 500;
     text-decoration: none;
@@ -405,6 +281,7 @@ const generators = [
 
   :global(.dark) .cta-secondary {
     border-color: #3f3f46;
+    color: #fafafa;
   }
 
   .cta-secondary:hover {
@@ -462,6 +339,169 @@ const generators = [
     color: #a1a1aa;
   }
 
+  /* Studio Section */
+  .studio-section {
+    padding: 5rem 1.5rem;
+    background: #f4f4f5;
+    border-top: 1px solid #e4e4e7;
+    border-bottom: 1px solid #e4e4e7;
+  }
+
+  :global(.dark) .studio-section {
+    background: #09090b;
+    border-top-color: #27272a;
+    border-bottom-color: #27272a;
+  }
+
+  .studio-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .studio-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .studio-visual {
+      order: -1;
+    }
+  }
+
+  .studio-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgb(13 148 136);
+    margin-bottom: 0.75rem;
+  }
+
+  :global(.dark) .studio-eyebrow {
+    color: rgb(45 212 191);
+  }
+
+  .studio-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #18181b;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  :global(.dark) .studio-title {
+    color: #fafafa;
+  }
+
+  .studio-description {
+    color: #52525b;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.dark) .studio-description {
+    color: #a1a1aa;
+  }
+
+  .studio-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem;
+  }
+
+  .studio-features li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #52525b;
+    font-size: 0.95rem;
+    padding: 0.375rem 0;
+  }
+
+  :global(.dark) .studio-features li {
+    color: #a1a1aa;
+  }
+
+  .check-icon {
+    color: rgb(13 148 136);
+    font-weight: 600;
+  }
+
+  :global(.dark) .check-icon {
+    color: rgb(45 212 191);
+  }
+
+  .studio-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .studio-cta-primary {
+    padding: 0.75rem 1.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .studio-cta-primary:hover {
+    background: rgb(15 118 110);
+  }
+
+  .studio-cta-secondary {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid #d4d4d8;
+    color: #18181b;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  :global(.dark) .studio-cta-secondary {
+    border-color: #3f3f46;
+    color: #fafafa;
+  }
+
+  .studio-cta-secondary:hover {
+    background: #e4e4e7;
+  }
+
+  :global(.dark) .studio-cta-secondary:hover {
+    background: #27272a;
+  }
+
+  .studio-visual {
+    position: relative;
+  }
+
+  .studio-visual img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow:
+      0 20px 25px -5px rgb(0 0 0 / 0.1),
+      0 8px 10px -6px rgb(0 0 0 / 0.1);
+    border: 1px solid #e4e4e7;
+  }
+
+  :global(.dark) .studio-visual img {
+    border-color: #27272a;
+    box-shadow:
+      0 20px 25px -5px rgb(0 0 0 / 0.3),
+      0 8px 10px -6px rgb(0 0 0 / 0.2);
+  }
+
   .section-container {
     max-width: 1100px;
     margin: 0 auto;
@@ -470,9 +510,13 @@ const generators = [
   .section-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--sl-color-text);
+    color: #18181b;
     text-align: center;
     margin-bottom: 0.5rem;
+  }
+
+  :global(.dark) .section-title {
+    color: #fafafa;
   }
 
   .section-subtitle {
@@ -486,9 +530,18 @@ const generators = [
     color: #a1a1aa;
   }
 
-  /* Features Section */
+  /* Features Section - subtle gray accent for visual variety */
   .features-section {
     padding: 5rem 1.5rem;
+    background: #fafafa;
+    border-top: 1px solid #e4e4e7;
+    border-bottom: 1px solid #e4e4e7;
+  }
+
+  :global(.dark) .features-section {
+    background: #0a0a0a;
+    border-top-color: #27272a;
+    border-bottom-color: #27272a;
   }
 
   .features-container {
@@ -498,12 +551,12 @@ const generators = [
 
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     margin-top: 3rem;
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 900px) {
     .features-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -515,37 +568,12 @@ const generators = [
     }
   }
 
-  .feature-category {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .category-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: rgb(13 148 136);
-    margin-bottom: 0.5rem;
-  }
-
-  :global(.dark) .category-title {
-    color: rgb(45 212 191);
-  }
-
-  .category-items {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
   .feature-card {
     display: block;
     text-decoration: none;
     cursor: pointer;
     padding: 1.25rem;
-    background: var(--sl-color-bg);
+    background: white;
     border: 1px solid #e4e4e7;
     border-radius: 0.75rem;
     transition: all 0.2s ease;
@@ -557,6 +585,7 @@ const generators = [
   }
 
   :global(.dark) .feature-card {
+    background: #18181b;
     border-color: #27272a;
   }
 
@@ -573,8 +602,12 @@ const generators = [
   .feature-title {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--sl-color-text);
+    color: #18181b;
     margin-bottom: 0.5rem;
+  }
+
+  :global(.dark) .feature-title {
+    color: #fafafa;
   }
 
   .feature-description {
@@ -586,315 +619,6 @@ const generators = [
 
   :global(.dark) .feature-description {
     color: #a1a1aa;
-  }
-
-  /* Two Ways Section */
-  .two-ways-section {
-    padding: 5rem 1.5rem;
-    background: #f4f4f5;
-    border-top: 1px solid #e4e4e7;
-    border-bottom: 1px solid #e4e4e7;
-  }
-
-  :global(.dark) .two-ways-section {
-    background: #18181b;
-    border-top-color: #27272a;
-    border-bottom-color: #27272a;
-  }
-
-  .ways-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 1rem;
-  }
-
-  @media (max-width: 768px) {
-    .ways-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .way-card {
-    padding: 2rem;
-    background: var(--sl-color-bg);
-    border: 1px solid #e4e4e7;
-    border-radius: 1rem;
-  }
-
-  :global(.dark) .way-card {
-    border-color: #27272a;
-  }
-
-  .way-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .way-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--sl-color-text);
-    margin-bottom: 0.75rem;
-  }
-
-  .way-description {
-    color: #52525b;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  :global(.dark) .way-description {
-    color: #a1a1aa;
-  }
-
-  .way-features {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-  }
-
-  .way-features li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #52525b;
-    font-size: 0.95rem;
-    padding: 0.375rem 0;
-  }
-
-  :global(.dark) .way-features li {
-    color: #a1a1aa;
-  }
-
-  .check {
-    color: rgb(13 148 136);
-  }
-
-  :global(.dark) .check {
-    color: rgb(45 212 191);
-  }
-
-  .way-cta {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .way-cta-primary {
-    background: rgb(13 148 136);
-    color: white;
-  }
-
-  .way-cta-primary:hover {
-    background: rgb(15 118 110);
-  }
-
-  .way-cta-secondary {
-    background: #e4e4e7;
-    color: #18181b;
-  }
-
-  :global(.dark) .way-cta-secondary {
-    background: #3f3f46;
-    color: #fafafa;
-  }
-
-  .way-cta-secondary:hover {
-    background: #d4d4d8;
-  }
-
-  :global(.dark) .way-cta-secondary:hover {
-    background: #52525b;
-  }
-
-  /* Generators Section */
-  .generators-section {
-    padding: 5rem 1.5rem;
-  }
-
-  .generators-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 2rem;
-  }
-
-  @media (max-width: 768px) {
-    .generators-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (max-width: 480px) {
-    .generators-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .generator-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: #f4f4f5;
-    border: 1px solid #e4e4e7;
-    border-radius: 0.5rem;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .generator-card:hover {
-    border-color: rgb(13 148 136);
-    transform: translateY(-2px);
-  }
-
-  :global(.dark) .generator-card {
-    background: #18181b;
-    border-color: #27272a;
-  }
-
-  :global(.dark) .generator-card:hover {
-    border-color: rgb(45 212 191);
-  }
-
-  .generator-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .generator-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .generator-name {
-    font-size: 0.8rem;
-    color: rgb(13 148 136);
-  }
-
-  :global(.dark) .generator-name {
-    color: rgb(45 212 191);
-  }
-
-  .generator-desc {
-    font-size: 0.85rem;
-    color: #52525b;
-  }
-
-  :global(.dark) .generator-desc {
-    color: #a1a1aa;
-  }
-
-  .generators-link {
-    text-align: center;
-    margin-top: 2rem;
-  }
-
-  .generators-link a {
-    color: rgb(13 148 136);
-    text-decoration: none;
-    font-weight: 500;
-  }
-
-  .generators-link a:hover {
-    text-decoration: underline;
-  }
-
-  :global(.dark) .generators-link a {
-    color: rgb(45 212 191);
-  }
-
-  /* Contributor Section */
-  .contributor-section {
-    padding: 5rem 1.5rem;
-    background: #f4f4f5;
-    border-top: 1px solid #e4e4e7;
-  }
-
-  :global(.dark) .contributor-section {
-    background: #18181b;
-    border-top-color: #27272a;
-  }
-
-  .contributor-content {
-    text-align: center;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .contributor-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--sl-color-text);
-    margin-bottom: 1rem;
-  }
-
-  .contributor-description {
-    color: #52525b;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-  }
-
-  :global(.dark) .contributor-description {
-    color: #a1a1aa;
-  }
-
-  .contributor-ctas {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .contributor-cta-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: var(--sl-color-text);
-    color: var(--sl-color-bg);
-    border-radius: 0.5rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: opacity 0.2s;
-  }
-
-  .contributor-cta-primary:hover {
-    opacity: 0.9;
-  }
-
-  .gh-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .contributor-cta-secondary {
-    padding: 0.75rem 1.5rem;
-    border: 1px solid #d4d4d8;
-    color: var(--sl-color-text);
-    border-radius: 0.5rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  :global(.dark) .contributor-cta-secondary {
-    border-color: #3f3f46;
-  }
-
-  .contributor-cta-secondary:hover {
-    background: #e4e4e7;
-  }
-
-  :global(.dark) .contributor-cta-secondary:hover {
-    background: #27272a;
   }
 
   /* CTA Section */
@@ -911,8 +635,12 @@ const generators = [
   .cta-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--sl-color-text);
+    color: #18181b;
     margin-bottom: 0.75rem;
+  }
+
+  :global(.dark) .cta-title {
+    color: #fafafa;
   }
 
   .cta-description {
