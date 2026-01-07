@@ -11,11 +11,11 @@ export default defineConfig({
   }),
   integrations: [
     starlight({
-      title: 'floimg',
+      title: 'FloImg',
       description: 'Universal image workflow engine for developers and AI agents',
       logo: {
-        light: './src/assets/logo-light.svg',
-        dark: './src/assets/logo-dark.svg',
+        light: './src/assets/logo-docs-light.svg',
+        dark: './src/assets/logo-docs-dark.svg',
         replacesTitle: true,
       },
       social: [
