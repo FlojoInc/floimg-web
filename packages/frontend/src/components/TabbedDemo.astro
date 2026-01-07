@@ -1,6 +1,6 @@
 ---
-// Tabbed demo section showing different use cases
-// Tabs: AI Generation, Data Visualization, Utilities
+// Tabbed demo section showing real-world use cases
+// Tabs: Marketing Assets, Web Development, Product Images
 
 interface DemoTab {
   id: string;
@@ -13,70 +13,87 @@ interface DemoTab {
 
 const tabs: DemoTab[] = [
   {
-    id: "ai",
-    label: "AI Generation",
+    id: "marketing",
+    label: "Marketing Assets",
     description:
-      "Generate images with DALL-E and other AI models. Perfect for product visuals, marketing assets, and creative content.",
+      "Generate a hero image with AI, then resize it for every social platform in one pipeline. No more manual exports.",
     image: "/showcase/ai-generation/futuristic-city.png",
-    imageAlt: "AI-generated futuristic city",
-    code: `import createClient from '@teamflojo/floimg';
+    imageAlt: "AI-generated hero image resized for social platforms",
+    code: `import floimg from '@teamflojo/floimg';
 import openai from '@teamflojo/floimg-openai';
 
-const floimg = createClient();
-floimg.registerGenerator(openai());
+floimg.use(openai());
 
-const image = await floimg.generate({
-  generator: 'openai',
-  params: {
-    prompt: 'A futuristic city at sunset',
-    size: '1024x1024'
-  }
-});`,
+// Generate hero, then create all social sizes
+const hero = await floimg.generate('openai', {
+  prompt: 'Minimal gradient background, soft purple to blue',
+});
+
+const sizes = {
+  twitter: [1200, 675],
+  linkedin: [1200, 627],
+  instagram: [1080, 1080],
+};
+
+for (const [platform, [w, h]] of Object.entries(sizes)) {
+  await floimg.pipeline(hero)
+    .resize({ width: w, height: h, fit: 'cover' })
+    .save(\`hero-\${platform}.png\`);
+}`,
   },
   {
-    id: "dataviz",
-    label: "Data Visualization",
+    id: "webdev",
+    label: "Web Development",
     description:
-      "Create charts, graphs, and diagrams programmatically. Chart.js, D3, and Mermaid support built-in.",
-    image: "/showcase/data-viz/quarterly-revenue.png",
-    imageAlt: "Revenue chart",
-    code: `import createClient from '@teamflojo/floimg';
-import quickchart from '@teamflojo/floimg-quickchart';
+      "Turn any image into a responsive srcset. Automatic WebP conversion, optimized sizes, ready for your <picture> element.",
+    image: "/showcase/pipelines/output/avatar-128.png",
+    imageAlt: "Responsive image pipeline output",
+    code: `import floimg from '@teamflojo/floimg';
 
-const floimg = createClient();
-floimg.registerGenerator(quickchart());
+const source = await floimg.load('./uploads/hero.jpg');
 
-const chart = await floimg.generate({
-  generator: 'quickchart',
-  params: {
-    type: 'bar',
-    data: {
-      labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-      datasets: [{ data: [12, 19, 8, 15] }]
-    }
-  }
-});`,
+// Generate responsive srcset in one pass
+const widths = [320, 640, 1280, 1920];
+
+await Promise.all(
+  widths.map(w =>
+    floimg.pipeline(source)
+      .resize({ width: w })
+      .sharpen({ amount: 0.5 })
+      .convert({ format: 'webp', quality: 85 })
+      .save(\`public/hero-\${w}.webp\`)
+  )
+);
+
+// Output: hero-320.webp, hero-640.webp, ...`,
   },
   {
-    id: "utilities",
-    label: "Utilities",
+    id: "product",
+    label: "Product Images",
     description:
-      "Resize, crop, watermark, convert formats. Chain transforms into powerful pipelines.",
-    image: "/showcase/pipelines/output/watermark-branded.png",
-    imageAlt: "Watermarked image",
-    code: `import createClient from '@teamflojo/floimg';
+      "Process user uploads at scale. Crop, resize, optimize, and store—all in a single workflow that runs on every upload.",
+    image: "/showcase/pipelines/output/filter-vintage.png",
+    imageAlt: "Processed user avatar",
+    code: `import floimg from '@teamflojo/floimg';
 
-const floimg = createClient();
+export async function processUserAvatar(upload: Buffer) {
+  const image = await floimg.load(upload);
 
-// Load, transform, save
-const image = await floimg.load('photo.jpg');
-const processed = await floimg.pipeline(image, [
-  { op: 'resize', params: { width: 800 } },
-  { op: 'watermark', params: { text: 'floimg' } },
-  { op: 'convert', params: { format: 'webp' } }
-]);
+  // Crop to square, create standard sizes, optimize
+  const processed = await floimg.pipeline(image)
+    .crop({ aspect: '1:1', gravity: 'face' })
+    .resize({ width: 256 })
+    .sharpen()
+    .convert({ format: 'webp', quality: 90 });
 
-await floimg.save(processed, 'output.webp');`,
+  // Save to cloud storage
+  const url = await floimg.save(processed, {
+    destination: 's3://avatars',
+    filename: \`\${userId}-256.webp\`,
+  });
+
+  return url;
+}`,
   },
 ];
 ---
