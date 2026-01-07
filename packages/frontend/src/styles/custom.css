@@ -127,19 +127,20 @@
   color-scheme: light;
 }
 
-/* Light mode text color overrides */
-:root[data-theme="light"] h1,
-:root[data-theme="light"] h2,
-:root[data-theme="light"] h3,
-:root[data-theme="light"] h4,
-:root[data-theme="light"] h5,
-:root[data-theme="light"] h6 {
-  color: #09090b !important;
+/* Light mode text color overrides - SCOPED to Starlight docs only */
+:root[data-theme="light"] .sl-markdown-content h1,
+:root[data-theme="light"] .sl-markdown-content h2,
+:root[data-theme="light"] .sl-markdown-content h3,
+:root[data-theme="light"] .sl-markdown-content h4,
+:root[data-theme="light"] .sl-markdown-content h5,
+:root[data-theme="light"] .sl-markdown-content h6,
+:root[data-theme="light"] .content-panel h1 {
+  color: #09090b;
 }
 
 :root[data-theme="light"] .sidebar-content .group-label,
 :root[data-theme="light"] .sidebar summary {
-  color: #52525b !important;
+  color: #52525b;
 }
 
 /* Explicit dark mode when manually selected */
@@ -186,43 +187,46 @@
   --sl-color-text-accent: #2dd4bf;
 }
 
-/* Dark mode text color overrides */
-:root[data-theme="dark"] h1,
-:root[data-theme="dark"] h2,
-:root[data-theme="dark"] h3,
-:root[data-theme="dark"] h4,
-:root[data-theme="dark"] h5,
-:root[data-theme="dark"] h6,
-:root.dark h1,
-:root.dark h2,
-:root.dark h3,
-:root.dark h4,
-:root.dark h5,
-:root.dark h6 {
-  color: #fafafa !important;
+/* Dark mode text color overrides - SCOPED to Starlight docs only */
+:root[data-theme="dark"] .sl-markdown-content h1,
+:root[data-theme="dark"] .sl-markdown-content h2,
+:root[data-theme="dark"] .sl-markdown-content h3,
+:root[data-theme="dark"] .sl-markdown-content h4,
+:root[data-theme="dark"] .sl-markdown-content h5,
+:root[data-theme="dark"] .sl-markdown-content h6,
+:root[data-theme="dark"] .content-panel h1,
+:root.dark .sl-markdown-content h1,
+:root.dark .sl-markdown-content h2,
+:root.dark .sl-markdown-content h3,
+:root.dark .sl-markdown-content h4,
+:root.dark .sl-markdown-content h5,
+:root.dark .sl-markdown-content h6,
+:root.dark .content-panel h1 {
+  color: #fafafa;
 }
 
 :root[data-theme="dark"] .sidebar-content .group-label,
 :root[data-theme="dark"] .sidebar summary,
 :root.dark .sidebar-content .group-label,
 :root.dark .sidebar summary {
-  color: #a1a1aa !important;
+  color: #a1a1aa;
 }
 
-/* System preference dark mode text overrides */
+/* System preference dark mode text overrides - SCOPED to Starlight docs only */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) h1,
-  :root:not([data-theme="light"]) h2,
-  :root:not([data-theme="light"]) h3,
-  :root:not([data-theme="light"]) h4,
-  :root:not([data-theme="light"]) h5,
-  :root:not([data-theme="light"]) h6 {
-    color: #fafafa !important;
+  :root:not([data-theme="light"]) .sl-markdown-content h1,
+  :root:not([data-theme="light"]) .sl-markdown-content h2,
+  :root:not([data-theme="light"]) .sl-markdown-content h3,
+  :root:not([data-theme="light"]) .sl-markdown-content h4,
+  :root:not([data-theme="light"]) .sl-markdown-content h5,
+  :root:not([data-theme="light"]) .sl-markdown-content h6,
+  :root:not([data-theme="light"]) .content-panel h1 {
+    color: #fafafa;
   }
 
   :root:not([data-theme="light"]) .sidebar-content .group-label,
   :root:not([data-theme="light"]) .sidebar summary {
-    color: #a1a1aa !important;
+    color: #a1a1aa;
   }
 }
 

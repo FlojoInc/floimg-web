@@ -11,8 +11,10 @@ const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.c
 <section class="showcase-preview-section">
   <div class="section-container">
     <div class="section-header">
-      <h2 class="section-title">See What Others Have Built</h2>
-      <p class="section-subtitle">Real images created by the FloImg community</p>
+      <h2 class="section-title">Community</h2>
+      <p class="section-subtitle">
+        FloImg is open source and community-driven. See what others are building.
+      </p>
     </div>
 
     <!-- Loading state -->
@@ -48,19 +50,41 @@ const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.c
       <a href={STUDIO_URL} class="empty-cta">Open Studio</a>
     </div>
 
-    <div class="section-cta">
-      <a href="/showcase" class="cta-link">
-        Explore Showcase
-        <svg
-          class="cta-arrow"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
+    <!-- Community CTAs -->
+    <div class="community-ctas">
+      <div class="community-cta-card">
+        <a
+          href="https://github.com/TeamFlojo/floimg"
+          class="github-cta"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
-        </svg>
-      </a>
+          <svg viewBox="0 0 16 16" fill="currentColor" class="gh-icon">
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+            ></path>
+          </svg>
+          Star on GitHub
+        </a>
+        <p class="cta-description">Help us grow! Stars support open source development.</p>
+      </div>
+      <div class="community-cta-card">
+        <a href="/showcase" class="showcase-cta">
+          Explore Showcase
+          <svg
+            class="cta-arrow"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <p class="cta-description">
+          See what the community is creating and share your own workflows.
+        </p>
+      </div>
     </div>
   </div>
 </section>
@@ -412,25 +436,67 @@ const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.c
     background: rgb(15 118 110);
   }
 
-  /* Section CTA */
-  .section-cta {
-    text-align: center;
-    margin-top: 2.5rem;
+  /* Community CTAs */
+  .community-ctas {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
   }
 
-  .cta-link {
+  @media (max-width: 640px) {
+    .community-ctas {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .community-cta-card {
+    padding: 1.5rem;
+    background: #27272a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    text-align: center;
+  }
+
+  .github-cta {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    background: #fafafa;
+    color: #18181b;
+    border-radius: 0.5rem;
     font-weight: 500;
-    color: rgb(45 212 191);
     text-decoration: none;
-    transition: color 0.2s;
+    transition: opacity 0.2s;
   }
 
-  .cta-link:hover {
-    color: rgb(94 234 212);
+  .github-cta:hover {
+    opacity: 0.9;
+  }
+
+  .gh-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .showcase-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fafafa;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .showcase-cta:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 
   .cta-arrow {
@@ -439,8 +505,15 @@ const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.c
     transition: transform 0.2s;
   }
 
-  .cta-link:hover .cta-arrow {
+  .showcase-cta:hover .cta-arrow {
     transform: translateX(4px);
+  }
+
+  .cta-description {
+    margin-top: 0.75rem;
+    font-size: 0.875rem;
+    color: #a1a1aa;
+    line-height: 1.5;
   }
 
   .hidden {
