@@ -4,25 +4,6 @@
 
 ## Current Focus
 
-**T-2026-011: Documentation Consistency Update** (ready for PR)
-
-Updated documentation to add missing AI generators and improve workflow examples.
-
-Completed:
-
-- [x] Add AI generators to concepts.mdx (Google, Replicate, Ollama, xAI)
-- [x] Add mixed workflow examples showing AI + transforms
-- [x] Add three workflow types table to concepts.mdx
-- [x] Update installation.mdx with all AI generators
-- [x] Consolidate about.astro and claude-code.astro content
-- [x] Update homepage feature cards
-- [x] Update MCP docs with capability descriptions
-- [x] Update FAQ content
-
-Branch: `chore/T-2026-011-value-prop-consistency`
-
----
-
 **T-2026-007: Homepage Redesign** (paused)
 
 Redesigning homepage to create tighter narrative, fix dark mode bugs, improve visual variety, and make Studio more prominent.
@@ -39,6 +20,14 @@ Progress:
 - [ ] Merge community sections
 
 ## Just Completed
+
+**T-2026-011: Documentation Consistency Update** (2026-01-09)
+
+- Added AI generators to concepts.mdx and installation.mdx
+- Added mixed workflow examples and three workflow types table
+- Consolidated about.astro and claude-code.astro content
+- Updated homepage feature cards and MCP docs
+- PR #76 merged
 
 **BUG-2026-001: Remove private repo references from README** (2026-01-09)
 
