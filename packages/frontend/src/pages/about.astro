@@ -6,28 +6,20 @@ const stats = await fetchRepoStats();
 
 const problems = [
   {
-    title: "The Probabilistic Editing Problem",
+    title: "AI Editing Is Unpredictable",
     description:
       "When you ask ChatGPT to modify an image, DALL-E generates a new image—it doesn't edit pixels. Even AI 'editing' like inpainting is probabilistic. 'Change the colors' might give you a completely different composition.",
     solution:
-      "FloImg applies deterministic transforms. modulate({hue: 30}) adjusts hue mathematically—guaranteed to preserve everything else.",
+      "FloImg applies deterministic transforms: adjust hue mathematically, resize to exact dimensions, add caption at precise position. The image stays intact except for exactly what you requested.",
     icon: "dice",
   },
   {
-    title: "The Tool Fragmentation Problem",
+    title: "Tools and APIs Are Fragmented",
     description:
-      "People constantly wrangle remove.bg, Photoshop, Figma, format converters, cloud services. Each requires learning, signing up, downloading files.",
+      "People wrangle remove.bg, Photoshop, Figma, format converters, cloud services. Developers write custom code to wire together OpenAI SDK, Sharp, AWS SDK. Each tool requires learning, signing up, maintaining.",
     solution:
-      "FloImg consolidates into one pipeline. Background removal → transforms → format conversion → upload, no app-hopping.",
+      "FloImg consolidates everything into composable pipelines. One abstraction layer handles generation, transforms, and delivery—whether you use the SDK, CLI, visual builder, or MCP.",
     icon: "puzzle",
-  },
-  {
-    title: "Better Than Glue Code",
-    description:
-      "Developers write custom integration code to wire together OpenAI SDK, Sharp, AWS SDK. Brittle, hard to maintain.",
-    solution:
-      "FloImg is purpose-built orchestration with multiple modalities: Visual Builder, Natural Language (Claude Code), SDK/CLI, MCP, YAML. Use whichever fits how you think.",
-    icon: "code",
   },
 ];
 ---
@@ -50,17 +42,17 @@ const problems = [
       </div>
     </section>
 
-    <!-- Three Problems We Solve (Light) -->
+    <!-- Problems FloImg Solves (Light) -->
     <section class="bg-white dark:bg-zinc-900 py-20">
       <div class="mx-auto max-w-6xl px-6">
         <h2 class="text-3xl font-bold text-zinc-900 dark:text-white text-center mb-4">
-          Three Problems We Solve
+          What FloImg Solves
         </h2>
         <p class="text-zinc-600 dark:text-zinc-400 text-center max-w-2xl mx-auto mb-12">
-          FloImg exists because current tools leave gaps. Here's what we fix.
+          Current tools leave gaps. Here's what FloImg does differently.
         </p>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
           {
             problems.map((problem) => (
               <div class="bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg p-6">
@@ -92,21 +84,6 @@ const problems = [
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
-                      />
-                    </svg>
-                  )}
-                  {problem.icon === "code" && (
-                    <svg
-                      class="w-5 h-5 text-zinc-600 dark:text-zinc-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      stroke-width="2"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
                       />
                     </svg>
                   )}
