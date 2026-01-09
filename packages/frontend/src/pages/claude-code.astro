@@ -46,15 +46,15 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
     </div>
   </section>
 
-  <!-- The Three Problems -->
+  <!-- What FloImg Solves -->
   <section class="problems-section">
     <div class="section-container">
-      <h2 class="section-title">Three Problems FloImg Solves</h2>
+      <h2 class="section-title">What FloImg Solves</h2>
 
-      <div class="problems-grid">
+      <div class="problems-grid problems-grid-2">
         <div class="problem-card">
           <div class="problem-icon">🎲</div>
-          <h3>The Probabilistic Editing Problem</h3>
+          <h3>AI Editing Is Unpredictable</h3>
           <p class="problem-before">
             <strong>Without FloImg:</strong> AI editing is probabilistic. DALL-E generates new images.
             Even inpainting runs diffusion. "Change the colors" might give you a different composition.
@@ -67,27 +67,14 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
 
         <div class="problem-card">
           <div class="problem-icon">🧩</div>
-          <h3>The Tool Fragmentation Problem</h3>
+          <h3>Tools and APIs Are Fragmented</h3>
           <p class="problem-before">
             <strong>Without FloImg:</strong> Wrangle remove.bg, Photoshop, Figma, format converters, cloud
-            services. Each requires learning, signing up, downloading files.
+            services. Write integration code to wire together OpenAI SDK, Sharp, AWS SDK.
           </p>
           <p class="problem-after">
-            <strong>With FloImg:</strong> One pipeline. Generate, transform, upload—all through natural
-            conversation in Claude Code.
-          </p>
-        </div>
-
-        <div class="problem-card">
-          <div class="problem-icon">🔌</div>
-          <h3>Better Than Glue Code</h3>
-          <p class="problem-before">
-            <strong>Without FloImg:</strong> Write integration code: OpenAI SDK + Sharp + AWS SDK + error
-            handling. Maintain it forever.
-          </p>
-          <p class="problem-after">
-            <strong>With FloImg:</strong> Multiple modalities—natural language, visual builder, SDK, CLI,
-            MCP. Use whichever fits how you think.
+            <strong>With FloImg:</strong> One composable pipeline. Generate, transform, upload—through
+            natural conversation, visual builder, SDK, CLI, or MCP.
           </p>
         </div>
       </div>
@@ -428,8 +415,13 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
     gap: 2rem;
   }
 
+  .problems-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   @media (max-width: 900px) {
-    .problems-grid {
+    .problems-grid,
+    .problems-grid-2 {
       grid-template-columns: 1fr;
     }
   }

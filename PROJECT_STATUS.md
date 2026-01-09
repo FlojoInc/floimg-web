@@ -4,9 +4,26 @@
 
 ## Current Focus
 
-**T-2026-007: Homepage Redesign**
+**T-2026-011: Value Proposition Consistency**
 
-Redesigning homepage to create tighter narrative, fix dark mode bugs, improve visual variety, and make Studio more prominent. Reducing from 10 to 7 sections.
+Aligning messaging across site after reframing from "Three Problems" to two core concepts (Deterministic Transforms, Unified API). Key emphasis on the **composability story**: mixing AI generation with deterministic transforms in one pipeline.
+
+Progress:
+
+- [x] Consolidate about.astro (3→2 cards)
+- [x] Consolidate claude-code.astro (3→2 cards)
+- [x] Update docs/claude-code/index.mdx
+- [x] Update Glossary.md terminology
+- [ ] Fix concepts.mdx (add AI generators, mixed workflow example)
+- [ ] Strengthen index.astro composability message
+- [ ] Reframe mcp/index.mdx as AI complement
+- [ ] Audit for outdated competitive claims
+
+---
+
+**T-2026-007: Homepage Redesign** (paused)
+
+Redesigning homepage to create tighter narrative, fix dark mode bugs, improve visual variety, and make Studio more prominent.
 
 Progress:
 
