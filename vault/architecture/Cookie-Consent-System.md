@@ -124,18 +124,6 @@ window.addEventListener("consent-updated", (e) => {
 
 The following items are intentionally deferred and should be implemented when needed:
 
-### FSC (FloImg Studio Cloud) Integration
-
-**Status**: Deferred until marketing trackers are added
-
-**What's needed**:
-
-- Copy `stores/consent.ts` logic to `floimg-cloud/packages/studio-cloud/src/stores/`
-- The cross-subdomain cookie (`Domain=.floimg.com`) already works - FSC can read consent set on floimg.com
-- When marketing trackers are added, gate them behind `hasConsent("marketing")`
-
-**Why deferred**: Since Umami doesn't require consent, there's no immediate need for FSC to read consent state. The infrastructure exists and works, but there's nothing to gate yet.
-
 ### Marketing Tracker Integration
 
 **Status**: Not implemented (no marketing trackers currently used)

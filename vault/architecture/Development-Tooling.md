@@ -69,7 +69,7 @@ Since the output is static HTML:
 
 - Type errors caught at build time prevent broken deploys
 - Runtime errors are limited to client-side JavaScript
-- API calls go to floimg-cloud (external service)
+- API calls go to api.floimg.com
 
 ## Development vs Production
 

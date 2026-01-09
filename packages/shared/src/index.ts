@@ -1,4 +1,4 @@
-// Shared types between floimg-web and floimg-cloud
+// Shared types for floimg-web API integration
 
 export interface GalleryItem {
   id: string;

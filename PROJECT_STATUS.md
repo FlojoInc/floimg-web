@@ -29,10 +29,10 @@ Progress:
 - Updated homepage feature cards and MCP docs
 - PR #76 merged
 
-**BUG-2026-001: Remove private repo references from README** (2026-01-09)
+**BUG-2026-001: README cleanup** (2026-01-09)
 
-- Removed floimg-cloud reference from Related Repos section
-- Fixed "Shared types with floimg-cloud" comment in Structure section
+- Removed outdated references from Related Repos section
+- Fixed comment in Structure section
 - Updated FloImg repo link to correct GitHub URL
 
 **T-2026-005: Convert Pages to SSR** (2026-01-03)
@@ -76,11 +76,11 @@ Progress:
 
 Deployed via Coolify to Hetzner at `floimg.com`.
 
-| Domain            | Service                                |
-| ----------------- | -------------------------------------- |
-| floimg.com        | Marketing, docs, auth pages            |
-| studio.floimg.com | FloImg Studio Cloud (via floimg-cloud) |
-| api.floimg.com    | API (via floimg-cloud)                 |
+| Domain            | Service                     |
+| ----------------- | --------------------------- |
+| floimg.com        | Marketing, docs, auth pages |
+| studio.floimg.com | FloImg Studio Cloud         |
+| api.floimg.com    | API                         |
 
 ## Documentation Structure
 
