@@ -1,6 +1,7 @@
 {
   "name": "floimg-web-monorepo",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,15 +11,18 @@
     "dev": "pnpm --filter @floimg-web/frontend dev",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
-    "lint": "eslint packages/*/src --ext .ts,.tsx,.astro",
-    "lint:fix": "eslint packages/*/src --ext .ts,.tsx,.astro --fix",
+    "lint": "eslint packages/*/src --ext .ts,.tsx",
+    "lint:fix": "eslint packages/*/src --ext .ts,.tsx --fix",
     "format": "prettier --write \"packages/*/src/**/*.{ts,tsx,astro,json,css}\"",
     "format:check": "prettier --check \"packages/*/src/**/*.{ts,tsx,astro,json,css}\"",
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,astro}": [
+    "*.{ts,tsx}": [
       "eslint --fix",
+      "prettier --write"
+    ],
+    "*.astro": [
       "prettier --write"
     ],
     "*.{json,css,md}": [
@@ -30,6 +34,7 @@
     "pnpm": ">=9"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
     "@typescript-eslint/parser": "^8.50.0",
     "eslint": "^9.39.2",
