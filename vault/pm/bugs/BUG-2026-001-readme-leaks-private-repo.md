@@ -1,6 +1,6 @@
 ---
 tags: [type/bug]
-status: backlog
+status: in-progress
 priority: p1
 created: 2026-01-09
 updated: 2026-01-09
@@ -13,7 +13,7 @@ children: []
 ## Bug Details
 
 - **Bug ID**: BUG-2026-001
-- **Status**: backlog
+- **Status**: in-progress
 - **Priority**: p1
 - **Created**: 2026-01-09
 - **Resolved**:
