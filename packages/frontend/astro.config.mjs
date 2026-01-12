@@ -19,7 +19,7 @@ export default defineConfig({
         replacesTitle: true,
       },
       social: [
-        { icon: 'github', label: 'GitHub', href: 'https://github.com/TeamFlojo/FloImg' },
+        { icon: 'github', label: 'GitHub', href: 'https://github.com/FlojoInc/FloImg' },
       ],
       customCss: ['./src/styles/custom.css'],
       head: [

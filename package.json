@@ -5,7 +5,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TeamFlojo/floimg-web.git"
+    "url": "git+https://github.com/FlojoInc/floimg-web.git"
   },
   "scripts": {
     "dev": "pnpm --filter @floimg-web/frontend dev",

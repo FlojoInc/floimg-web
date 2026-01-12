@@ -97,9 +97,9 @@ This site integrates with `api.floimg.com` for:
 
 ## Related Repos
 
-| Repository                                    | Purpose                      |
-| --------------------------------------------- | ---------------------------- |
-| [FloImg](https://github.com/TeamFlojo/FloImg) | Core library + FloImg Studio |
+| Repository                                   | Purpose                      |
+| -------------------------------------------- | ---------------------------- |
+| [FloImg](https://github.com/FlojoInc/FloImg) | Core library + FloImg Studio |
 
 ## Documentation
 
@@ -117,10 +117,10 @@ This site integrates with `api.floimg.com` for:
 
 ## Contributors
 
-<a href="https://github.com/teamflojo/floimg-web/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=teamflojo/floimg-web" />
+<a href="https://github.com/FlojoInc/floimg-web/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=FlojoInc/floimg-web" />
 </a>
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=teamflojo/floimg-web&type=Date)](https://star-history.com/#teamflojo/floimg-web&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=FlojoInc/floimg-web&type=Date)](https://star-history.com/#FlojoInc/floimg-web&Date)

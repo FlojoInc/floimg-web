@@ -9,7 +9,7 @@
  */
 
 // Public URLs for changelog data
-const FLOIMG_CHANGELOG_URL = "https://raw.githubusercontent.com/TeamFlojo/FloImg/main/CHANGELOG.md";
+const FLOIMG_CHANGELOG_URL = "https://raw.githubusercontent.com/FlojoInc/FloImg/main/CHANGELOG.md";
 const FSC_CHANGELOG_API = "https://api.floimg.com/api/changelog";
 
 /**
