@@ -6,7 +6,7 @@
   "types": "./src/index.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TeamFlojo/floimg-web.git",
+    "url": "git+https://github.com/FlojoInc/floimg-web.git",
     "directory": "packages/shared"
   },
   "scripts": {

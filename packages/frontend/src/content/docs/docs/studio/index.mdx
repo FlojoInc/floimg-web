@@ -19,7 +19,7 @@ FloImg Studio provides a graphical way to:
 FloImg Studio is **open-source and self-hostable**. Run it on your own infrastructure with your own API keys.
 
 ```bash
-docker run -p 5100:5100 ghcr.io/teamflojo/floimg-studio
+docker run -p 5100:5100 ghcr.io/flojoinc/floimg-studio
 ```
 
 *Prefer not to manage infrastructure? A hosted version is available at [studio.floimg.com](https://studio.floimg.com).*
@@ -30,7 +30,7 @@ docker run -p 5100:5100 ghcr.io/teamflojo/floimg-studio
 
 ```bash
 # Pull and run
-docker run -p 5100:5100 ghcr.io/teamflojo/floimg-studio
+docker run -p 5100:5100 ghcr.io/flojoinc/floimg-studio
 
 # Open in browser
 open http://localhost:5100
@@ -41,7 +41,7 @@ open http://localhost:5100
 FloImg Studio is part of the floimg monorepo:
 
 ```bash
-git clone https://github.com/teamflojo/floimg.git
+git clone https://github.com/FlojoInc/floimg.git
 cd floimg
 pnpm install
 pnpm dev:studio

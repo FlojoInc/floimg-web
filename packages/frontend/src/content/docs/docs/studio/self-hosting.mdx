@@ -13,7 +13,7 @@ FloImg Studio is open-source and designed for self-hosting. Run it on your own s
 docker run -d \
   --name floimg-studio \
   -p 5100:5100 \
-  ghcr.io/teamflojo/floimg-studio
+  ghcr.io/flojoinc/floimg-studio
 ```
 
 Open `http://localhost:5100` in your browser.
@@ -24,7 +24,7 @@ Open `http://localhost:5100` in your browser.
 version: '3.8'
 services:
   floimg-studio:
-    image: ghcr.io/teamflojo/floimg-studio
+    image: ghcr.io/flojoinc/floimg-studio
     ports:
       - "5100:5100"
     environment:
@@ -55,7 +55,7 @@ docker-compose up -d
 ```yaml
 services:
   floimg-studio:
-    image: ghcr.io/teamflojo/floimg-studio
+    image: ghcr.io/flojoinc/floimg-studio
     ports:
       - "5100:5100"
     environment:
@@ -100,7 +100,7 @@ server {
 ```yaml
 services:
   floimg-studio:
-    image: ghcr.io/teamflojo/floimg-studio
+    image: ghcr.io/flojoinc/floimg-studio
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.studio.rule=Host(`studio.yourdomain.com`)"
@@ -111,7 +111,7 @@ services:
 ### With Coolify
 
 1. Add new resource → Docker Image
-2. Image: `ghcr.io/teamflojo/floimg-studio`
+2. Image: `ghcr.io/flojoinc/floimg-studio`
 3. Port: `5100`
 4. Add environment variables as needed
 5. Deploy
@@ -135,7 +135,7 @@ spec:
     spec:
       containers:
       - name: floimg-studio
-        image: ghcr.io/teamflojo/floimg-studio
+        image: ghcr.io/flojoinc/floimg-studio
         ports:
         - containerPort: 5100
         env:
@@ -160,7 +160,7 @@ Studio is part of the floimg monorepo at `apps/studio/`:
 
 ```bash
 # Clone the floimg monorepo
-git clone https://github.com/teamflojo/floimg.git
+git clone https://github.com/FlojoInc/floimg.git
 cd floimg
 
 # Install all dependencies
@@ -203,7 +203,7 @@ For workflow persistence, mount a volume:
 ```yaml
 services:
   floimg-studio:
-    image: ghcr.io/teamflojo/floimg-studio
+    image: ghcr.io/flojoinc/floimg-studio
     volumes:
       - ./data:/app/data
     environment:

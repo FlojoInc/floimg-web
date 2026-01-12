@@ -12,7 +12,7 @@ export interface GitHubRepoStats {
 }
 
 const GITHUB_API = "https://api.github.com";
-const REPO = "TeamFlojo/FloImg";
+const REPO = "FlojoInc/FloImg";
 
 export async function fetchContributors(): Promise<GitHubContributor[]> {
   try {
