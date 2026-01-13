@@ -68,7 +68,7 @@ importers:
         version: 0.37.2(astro@5.16.9(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))
       '@astrojs/tailwind':
         specifier: ^6.0.2
-        version: 6.0.2(astro@5.16.9(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19)
+        version: 6.0.2(astro@5.16.9(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@4.1.18)
       '@teamflojo/floimg':
         specifier: ^0.14.0
         version: 0.14.0(ws@8.19.0)(zod@3.25.76)
@@ -104,8 +104,8 @@ importers:
         specifier: ^8.5.6
         version: 8.5.6
       tailwindcss:
-        specifier: ^3.4.19
-        version: 3.4.19
+        specifier: ^4.1.18
+        version: 4.1.18
       tsx:
         specifier: ^4.19.0
         version: 4.21.0
@@ -5050,6 +5050,9 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
+  tailwindcss@4.1.18:
+    resolution: {integrity: sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw==}
+
   tar-fs@3.1.1:
     resolution: {integrity: sha512-LZA0oaPOc2fVo82Txf3gw+AkEd38szODlptMYejQUhndHMLQ9M059uXR+AfS7DNo0NpINvSqDsvyaCrBVkptWg==}
 
@@ -5764,13 +5767,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/tailwind@6.0.2(astro@5.16.9(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@3.4.19)':
+  '@astrojs/tailwind@6.0.2(astro@5.16.9(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2))(tailwindcss@4.1.18)':
     dependencies:
       astro: 5.16.9(@types/node@25.0.6)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.55.1)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
       autoprefixer: 10.4.23(postcss@8.5.6)
       postcss: 8.5.6
       postcss-load-config: 4.0.2(postcss@8.5.6)
-      tailwindcss: 3.4.19
+      tailwindcss: 4.1.18
     transitivePeerDependencies:
       - ts-node
 
@@ -11965,6 +11968,8 @@ snapshots:
       sucrase: 3.35.1
     transitivePeerDependencies:
       - ts-node
+
+  tailwindcss@4.1.18: {}
 
   tar-fs@3.1.1:
     dependencies:
