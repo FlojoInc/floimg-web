@@ -140,6 +140,18 @@ const structuredData = {
       defer
       src="https://analytics.goflojo.com/script.js"
       data-website-id="613c8ef0-c4fc-4059-8378-7818aadfff26"></script>
+
+    <!-- Error Monitoring (GlitchTip/Sentry) -->
+    <script>
+      import * as Sentry from "@sentry/browser";
+      const dsn = import.meta.env.PUBLIC_GLITCHTIP_DSN;
+      if (dsn) {
+        Sentry.init({
+          dsn,
+          environment: import.meta.env.MODE,
+        });
+      }
+    </script>
   </head>
   <body class="min-h-screen bg-white text-zinc-900 dark:bg-zinc-950 dark:text-white">
     <header class="border-b border-zinc-200 dark:border-white/10">
