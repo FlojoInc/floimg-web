@@ -3,6 +3,11 @@
 
 # Stage 1: Build
 FROM node:20-alpine AS builder
+
+# Build-time arguments for environment variables
+ARG PUBLIC_GLITCHTIP_DSN
+ENV PUBLIC_GLITCHTIP_DSN=$PUBLIC_GLITCHTIP_DSN
+
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
