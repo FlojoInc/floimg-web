@@ -1,0 +1,102 @@
+---
+title: Authentication
+description: API key management and authentication for the FloImg API
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The FloImg API uses API keys for authentication. Each request must include your API key in the `Authorization` header.
+
+## Getting Your API Key
+
+1. Log in to [FloImg Studio Cloud](https://studio.floimg.com)
+2. Go to **Settings** → **API Keys**
+3. Click **Create API Key**
+4. Copy and securely store your key (it won't be shown again)
+
+<Aside type="caution">
+  API keys are secret. Never commit them to version control or expose them in client-side code.
+</Aside>
+
+## Using Your API Key
+
+Include your API key in the `Authorization` header with the `Bearer` scheme:
+
+```bash
+curl https://api.floimg.com/v1/workflows \
+  -H "Authorization: Bearer fsk_live_abc123xyz789..."
+```
+
+## API Key Format
+
+FloImg API keys follow this format:
+
+| Prefix | Environment | Example |
+|--------|-------------|---------|
+| `fsk_live_` | Production | `fsk_live_abc123xyz789...` |
+| `fsk_test_` | Test/Sandbox | `fsk_test_def456uvw012...` |
+
+Test keys are rate-limited and don't consume your plan quota. Use them for development.
+
+## Environment Variables
+
+We recommend storing your API key in environment variables:
+
+```bash
+# .env
+FLOIMG_API_KEY=fsk_live_abc123xyz789...
+```
+
+Then in your code:
+
+```typescript
+const apiKey = process.env.FLOIMG_API_KEY;
+```
+
+## Key Permissions
+
+When creating an API key, you can scope its permissions:
+
+| Permission | Description |
+|------------|-------------|
+| `workflows:read` | List and get workflow details |
+| `workflows:execute` | Execute workflows |
+| `storage:read` | List and download images |
+| `storage:write` | Upload and delete images |
+| `all` | Full access (default) |
+
+## Revoking Keys
+
+To revoke an API key:
+
+1. Go to **Settings** → **API Keys**
+2. Find the key to revoke
+3. Click **Revoke**
+
+Revoked keys immediately stop working. There's no undo.
+
+## Error Responses
+
+Authentication errors return `401 Unauthorized`:
+
+```json
+{
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid or missing API key"
+  }
+}
+```
+
+Common causes:
+- Missing `Authorization` header
+- Invalid or revoked API key
+- Using a test key in production (or vice versa)
+
+## Security Best Practices
+
+1. **Never expose keys client-side** - API calls should go through your backend
+2. **Rotate keys periodically** - Create new keys and revoke old ones
+3. **Use least privilege** - Create keys with only the permissions needed
+4. **Monitor usage** - Check your dashboard for unexpected activity
+5. **Use test keys for development** - Avoid accidental production usage

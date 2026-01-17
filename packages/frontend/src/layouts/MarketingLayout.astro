@@ -23,6 +23,7 @@ const productItems = [
   { label: "Studio", href: "https://studio.floimg.com", external: true },
   { label: "Templates", href: "/templates" },
   { label: "Showcase", href: "/showcase" },
+  { label: "API", href: "/api" },
   { label: "Pricing", href: "/pricing" },
 ];
 
@@ -164,6 +165,11 @@ const structuredData = {
             <NavDropdown label="Product" items={productItems} />
             <NavDropdown label="Developers" items={developersItems} />
             <a
+              href="/how-it-works"
+              class="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
+              >How It Works</a
+            >
+            <a
               href="https://github.com/FlojoInc/FloImg"
               class="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
               target="_blank"
@@ -247,11 +253,23 @@ const structuredData = {
                   >Showcase</a
                 >
                 <a
+                  href="/api"
+                  class="py-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                  >API</a
+                >
+                <a
                   href="/pricing"
                   class="py-2 text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
                   >Pricing</a
                 >
               </div>
+            </div>
+            <div class="py-2">
+              <a
+                href="/how-it-works"
+                class="py-2 text-sm font-medium text-zinc-900 hover:text-teal-600 dark:text-white dark:hover:text-teal-400"
+                >How It Works</a
+              >
             </div>
             <div class="py-2">
               <span
@@ -371,6 +389,13 @@ const structuredData = {
                   href="/showcase"
                   class="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
                   >Showcase</a
+                >
+              </li>
+              <li>
+                <a
+                  href="/api"
+                  class="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors"
+                  >API</a
                 >
               </li>
               <li>

@@ -1,0 +1,172 @@
+---
+title: Rate Limits
+description: Understanding and handling API rate limits
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+FloImg API rate limits are per-minute and vary by plan. Understanding these limits helps you build reliable integrations.
+
+## Limits by Plan
+
+| Plan | Requests/Minute | Burst Capacity |
+|------|-----------------|----------------|
+| Starter | 60 | 10 |
+| Pro | 300 | 50 |
+| Enterprise | Custom | Custom |
+
+**Burst capacity** allows brief spikes above your normal limit. Sustained traffic above your limit will be rate-limited.
+
+<Aside type="note">
+  The Free plan does not include API access. Upgrade to Starter or higher to use the API.
+</Aside>
+
+## Rate Limit Headers
+
+Every API response includes rate limit headers:
+
+```http
+HTTP/1.1 200 OK
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 45
+X-RateLimit-Reset: 1705312800
+```
+
+| Header | Description |
+|--------|-------------|
+| `X-RateLimit-Limit` | Your plan's requests per minute |
+| `X-RateLimit-Remaining` | Requests remaining in current window |
+| `X-RateLimit-Reset` | Unix timestamp when the window resets |
+
+## Handling Rate Limits
+
+When you exceed your rate limit, the API returns `429 Too Many Requests`:
+
+```json
+{
+  "error": {
+    "code": "rate_limited",
+    "message": "Rate limit exceeded. Retry after 15 seconds.",
+    "retryAfter": 15
+  }
+}
+```
+
+The `Retry-After` header tells you how long to wait:
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 15
+```
+
+## Best Practices
+
+### 1. Implement Exponential Backoff
+
+When rate-limited, wait before retrying and increase the delay on subsequent failures:
+
+```typescript
+async function executeWithRetry(
+  fn: () => Promise<Response>,
+  maxRetries = 3
+) {
+  let delay = 1000; // Start with 1 second
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const response = await fn();
+
+    if (response.status === 429) {
+      const retryAfter = response.headers.get('Retry-After');
+      const waitTime = retryAfter
+        ? parseInt(retryAfter) * 1000
+        : delay;
+
+      await new Promise(r => setTimeout(r, waitTime));
+      delay *= 2; // Double the delay
+      continue;
+    }
+
+    return response;
+  }
+
+  throw new Error('Max retries exceeded');
+}
+```
+
+### 2. Monitor Your Usage
+
+Check remaining requests before making calls:
+
+```typescript
+async function makeRequest(url: string) {
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${apiKey}` }
+  });
+
+  const remaining = response.headers.get('X-RateLimit-Remaining');
+
+  if (parseInt(remaining || '0') < 5) {
+    console.warn('Rate limit nearly exhausted');
+  }
+
+  return response;
+}
+```
+
+### 3. Use Async Execution for Batches
+
+For bulk operations, use async workflow execution to avoid blocking:
+
+```typescript
+// Start multiple executions
+const executions = await Promise.all(
+  items.map(item =>
+    fetch('/v1/workflows/execute', {
+      body: JSON.stringify({
+        workflowId: 'wf_abc',
+        parameters: item,
+        async: true  // Don't wait for completion
+      })
+    })
+  )
+);
+
+// Poll for results later
+for (const exec of executions) {
+  const { executionId } = await exec.json();
+  // Check status periodically
+}
+```
+
+### 4. Cache Results
+
+Cache workflow outputs when possible to reduce API calls:
+
+```typescript
+const cache = new Map();
+
+async function getOrExecute(workflowId: string, params: object) {
+  const cacheKey = `${workflowId}:${JSON.stringify(params)}`;
+
+  if (cache.has(cacheKey)) {
+    return cache.get(cacheKey);
+  }
+
+  const result = await executeWorkflow(workflowId, params);
+  cache.set(cacheKey, result);
+
+  return result;
+}
+```
+
+## Upgrading Your Limit
+
+If you consistently hit rate limits:
+
+1. **Optimize your integration** - Batch requests, cache results, use async execution
+2. **Upgrade your plan** - Pro offers 5x the rate limit of Starter
+3. **Contact sales** - Enterprise plans offer custom limits for high-volume use cases
+
+<Aside type="tip">
+  Need higher limits? [Contact sales](/contact) to discuss Enterprise options.
+</Aside>

@@ -1,0 +1,58 @@
+---
+title: API Overview
+description: Programmatic access to FloImg workflows via REST API
+---
+
+import { Aside, Badge } from '@astrojs/starlight/components';
+
+<Aside type="tip" title="Paid Feature">
+  API access requires a **Starter** ($10/mo) or higher plan. [View pricing →](/pricing)
+</Aside>
+
+The FloImg API lets you execute workflows, manage storage, and integrate image pipelines into your applications programmatically.
+
+## What You Can Do
+
+- **Execute Workflows** - Run any saved workflow with custom parameters
+- **Manage Storage** - Upload, list, and retrieve images
+- **No Key Management** - FloImg handles AI provider credentials (OpenAI, Anthropic, etc.)
+
+## Quick Example
+
+```bash
+curl -X POST https://api.floimg.com/v1/workflows/execute \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "workflowId": "wf_abc123",
+    "parameters": {
+      "prompt": "A mountain landscape at sunset",
+      "width": 1200,
+      "height": 630
+    }
+  }'
+```
+
+## Base URL
+
+All API requests use:
+
+```
+https://api.floimg.com/v1
+```
+
+## Rate Limits
+
+| Plan | Requests per Minute |
+|------|---------------------|
+| Starter | 60 |
+| Pro | 300 |
+| Enterprise | Custom |
+
+See [Rate Limits](/docs/api/rate-limits) for details on handling limits and retry logic.
+
+## Next Steps
+
+1. [Authentication](/docs/api/authentication) - Get your API key and learn authentication
+2. [Endpoints](/docs/api/endpoints) - Full endpoint reference
+3. [Examples](/docs/api/examples) - Code samples in multiple languages

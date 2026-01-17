@@ -5,7 +5,7 @@ const tiers = [
   {
     name: "Free",
     price: "$0",
-    description: "For trying out floimg",
+    description: "For trying out FloImg",
     features: [
       "50 images/month",
       "100MB storage",
@@ -27,6 +27,7 @@ const tiers = [
       "1GB storage",
       "10 projects",
       "All generators including AI",
+      "API access (60 req/min)",
       "Email support",
     ],
     cta: "Start Free Trial",
@@ -44,7 +45,7 @@ const tiers = [
       "Unlimited projects",
       "5 team seats",
       "Priority support",
-      "API access",
+      "API access (300 req/min)",
     ],
     cta: "Start Free Trial",
     href: "/signup?plan=pro",
@@ -62,6 +63,7 @@ const tiers = [
       "SLA guarantee",
       "Dedicated support",
       "SSO/SAML",
+      "Custom API limits",
     ],
     cta: "Contact Sales",
     href: "/contact",
@@ -125,6 +127,80 @@ const tiers = [
           </div>
         ))
       }
+    </div>
+
+    <div class="mt-16">
+      <h2 class="text-2xl font-bold text-center text-zinc-900 dark:text-white mb-8">
+        API Access by Plan
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="border-b border-zinc-200 dark:border-white/10">
+              <th class="py-4 px-6 text-left text-sm font-semibold text-zinc-900 dark:text-white"
+                >Feature</th
+              >
+              <th class="py-4 px-6 text-center text-sm font-semibold text-zinc-900 dark:text-white"
+                >Free</th
+              >
+              <th class="py-4 px-6 text-center text-sm font-semibold text-zinc-900 dark:text-white"
+                >Starter</th
+              >
+              <th class="py-4 px-6 text-center text-sm font-semibold text-zinc-900 dark:text-white"
+                >Pro</th
+              >
+              <th class="py-4 px-6 text-center text-sm font-semibold text-zinc-900 dark:text-white"
+                >Enterprise</th
+              >
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-zinc-200 dark:border-white/10">
+              <td class="py-4 px-6 text-sm text-zinc-700 dark:text-zinc-300">API Access</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">—</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+            </tr>
+            <tr class="border-b border-zinc-200 dark:border-white/10">
+              <td class="py-4 px-6 text-sm text-zinc-700 dark:text-zinc-300">Rate Limit</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">—</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-700 dark:text-zinc-300">60/min</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-700 dark:text-zinc-300">300/min</td
+              >
+              <td class="py-4 px-6 text-center text-sm text-zinc-700 dark:text-zinc-300">Custom</td>
+            </tr>
+            <tr class="border-b border-zinc-200 dark:border-white/10">
+              <td class="py-4 px-6 text-sm text-zinc-700 dark:text-zinc-300">Workflow Execution</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">—</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+            </tr>
+            <tr class="border-b border-zinc-200 dark:border-white/10">
+              <td class="py-4 px-6 text-sm text-zinc-700 dark:text-zinc-300">Storage API</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">—</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+            </tr>
+            <tr>
+              <td class="py-4 px-6 text-sm text-zinc-700 dark:text-zinc-300">Webhooks</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">—</td>
+              <td class="py-4 px-6 text-center text-sm text-zinc-500 dark:text-zinc-400">—</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+              <td class="py-4 px-6 text-center text-sm text-teal-600 dark:text-teal-400">✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-6 text-center text-sm text-zinc-500 dark:text-zinc-400">
+        <a
+          href="/api"
+          class="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300"
+          >Learn more about the API →</a
+        >
+      </p>
     </div>
 
     <div class="mt-16 text-center">

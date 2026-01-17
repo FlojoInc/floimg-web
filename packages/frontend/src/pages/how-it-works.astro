@@ -1,0 +1,863 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+---
+
+<MarketingLayout
+  title="How It Works"
+  description="FloImg's pipeline model - composable image workflows that work the same across SDK, CLI, Studio, YAML, and MCP."
+>
+  <!-- Hero -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <h1 class="hero-title">
+        How <span class="highlight">FloImg</span> Works
+      </h1>
+
+      <p class="hero-subtitle">
+        Image manipulation is fundamentally a series of steps. FloImg models this core abstraction
+        and exposes it through interfaces that fit different contexts.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="https://studio.floimg.com" class="cta-primary">Try It in Studio</a>
+        <a href="/docs/getting-started/quick-start" class="cta-secondary">Read the SDK Docs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Pipeline Model -->
+  <section class="pipeline-section">
+    <div class="section-container">
+      <h2 class="section-title">The Pipeline Model</h2>
+      <p class="section-subtitle">
+        Every image workflow is a pipeline: generate → transform → save
+      </p>
+
+      <div class="pipeline-visual">
+        <div class="pipeline-step">
+          <div class="step-box">
+            <span class="step-label">Generate</span>
+            <p class="step-desc">Create from scratch</p>
+            <ul class="step-items">
+              <li>AI images (DALL-E, Imagen, Flux)</li>
+              <li>Charts & diagrams</li>
+              <li>QR codes</li>
+              <li>Screenshots</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+          <div class="step-box">
+            <span class="step-label">Transform</span>
+            <p class="step-desc">Modify deterministically</p>
+            <ul class="step-items">
+              <li>Resize & crop</li>
+              <li>Add text & captions</li>
+              <li>Adjust colors</li>
+              <li>Convert formats</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">
+          <div class="step-box">
+            <span class="step-label">Save</span>
+            <p class="step-desc">Store anywhere</p>
+            <ul class="step-items">
+              <li>Local filesystem</li>
+              <li>Amazon S3</li>
+              <li>Cloudflare R2</li>
+              <li>Tigris</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <p class="pipeline-note">
+        Steps are composable. Chain as many transforms as you need. Each step takes an image and
+        returns an image.
+      </p>
+    </div>
+  </section>
+
+  <!-- Why This Matters -->
+  <section class="benefits-section">
+    <div class="section-container">
+      <h2 class="section-title">Why This Matters</h2>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+          </div>
+          <h3>Deterministic Transforms</h3>
+          <p>
+            AI editing is probabilistic—DALL-E generates new images, inpainting runs diffusion.
+            FloImg transforms are mathematical: adjust hue by 30°, resize to exactly 1200×630, add
+            caption at position (10, 10). The image stays intact except for exactly what you asked.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="3" y1="9" x2="21" y2="9"></line>
+              <line x1="9" y1="21" x2="9" y2="9"></line>
+            </svg>
+          </div>
+          <h3>One Abstraction</h3>
+          <p>
+            The same pipeline concept works everywhere. No context-switching between "the visual
+            editor's way" and "the API's way." Learn it once, use it in every interface.
+          </p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3>Unified API</h3>
+          <p>
+            Stop wrangling OpenAI SDK, Sharp, AWS SDK, remove.bg, format converters. FloImg
+            consolidates the patchwork of tools into one consistent interface.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Five Interfaces -->
+  <section class="interfaces-section">
+    <div class="section-container">
+      <h2 class="section-title">Five Interfaces, One Pipeline</h2>
+      <p class="section-subtitle">The same workflow definition is portable across all interfaces</p>
+
+      <div class="interfaces-grid">
+        <div class="interface-card">
+          <div class="interface-header">
+            <span class="interface-badge">SDK</span>
+            <h3>Programmatic</h3>
+          </div>
+          <p>Embed in any JavaScript/TypeScript application. Full type safety.</p>
+          <a href="/docs/sdk/fluent" class="interface-link">SDK Docs →</a>
+        </div>
+
+        <div class="interface-card">
+          <div class="interface-header">
+            <span class="interface-badge">CLI</span>
+            <h3>Terminal</h3>
+          </div>
+          <p>Terminal workflows and CI/CD pipelines. No code required.</p>
+          <a href="/docs/cli" class="interface-link">CLI Docs →</a>
+        </div>
+
+        <div class="interface-card">
+          <div class="interface-header">
+            <span class="interface-badge">Studio</span>
+            <h3>Visual</h3>
+          </div>
+          <p>Drag-and-drop workflow builder. Perfect for prototyping.</p>
+          <a href="https://studio.floimg.com" class="interface-link">Open Studio →</a>
+        </div>
+
+        <div class="interface-card">
+          <div class="interface-header">
+            <span class="interface-badge">YAML</span>
+            <h3>Declarative</h3>
+          </div>
+          <p>Version-controlled workflow definitions. GitOps-friendly.</p>
+          <a href="/docs/getting-started/concepts#yaml-workflows" class="interface-link"
+            >YAML Format →</a
+          >
+        </div>
+
+        <div class="interface-card">
+          <div class="interface-header">
+            <span class="interface-badge">MCP</span>
+            <h3>AI Agents</h3>
+          </div>
+          <p>Model Context Protocol for LLMs. Let Claude build workflows.</p>
+          <a href="/docs/mcp" class="interface-link">MCP Docs →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Comparison -->
+  <section class="code-section">
+    <div class="section-container">
+      <h2 class="section-title">Same Workflow, Any Interface</h2>
+      <p class="section-subtitle">Generate an AI image, resize it, and save to S3</p>
+
+      <div class="code-tabs">
+        <div class="tab-buttons">
+          <button class="tab-btn active" data-tab="sdk">SDK</button>
+          <button class="tab-btn" data-tab="yaml">YAML</button>
+          <button class="tab-btn" data-tab="cli">CLI</button>
+        </div>
+
+        <div class="code-block" id="sdk-tab">
+          <pre><code><span class="code-keyword">import</span> &#123; floimg &#125; <span class="code-keyword">from</span> <span class="code-string">'@teamflojo/floimg'</span>;
+<span class="code-keyword">import</span> &#123; openai &#125; <span class="code-keyword">from</span> <span class="code-string">'@teamflojo/floimg-openai'</span>;
+
+<span class="code-keyword">await</span> floimg()
+  .generate(openai(<span class="code-string">'dall-e-3'</span>), &#123;
+    prompt: <span class="code-string">'A mountain landscape at sunset'</span>,
+  &#125;)
+  .resize(&#123; width: <span class="code-number">1200</span>, height: <span class="code-number">630</span> &#125;)
+  .save(<span class="code-string">'s3://my-bucket/hero.png'</span>);</code></pre>
+        </div>
+
+        <div class="code-block hidden" id="yaml-tab">
+          <pre><code><span class="code-keyword">name</span>: hero-image
+<span class="code-keyword">steps</span>:
+  - <span class="code-keyword">type</span>: generate
+    <span class="code-keyword">generator</span>: openai
+    <span class="code-keyword">params</span>:
+      <span class="code-keyword">model</span>: dall-e-3
+      <span class="code-keyword">prompt</span>: A mountain landscape at sunset
+
+  - <span class="code-keyword">type</span>: transform
+    <span class="code-keyword">operation</span>: resize
+    <span class="code-keyword">params</span>:
+      <span class="code-keyword">width</span>: <span class="code-number">1200</span>
+      <span class="code-keyword">height</span>: <span class="code-number">630</span>
+
+  - <span class="code-keyword">type</span>: save
+    <span class="code-keyword">destination</span>: s3://my-bucket/hero.png</code></pre>
+        </div>
+
+        <div class="code-block hidden" id="cli-tab">
+          <pre><code><span class="code-comment"># Run a YAML workflow</span>
+floimg run hero-workflow.yaml
+
+<span class="code-comment"># Or use the full API</span>
+floimg generate \
+  --generator openai \
+  --params '&#123;"model":"dall-e-3","prompt":"A mountain landscape"&#125;' \
+  | floimg transform --op resize --params '&#123;"width":1200,"height":630&#125;' \
+  | floimg save s3://my-bucket/hero.png</code></pre>
+        </div>
+      </div>
+
+      <p class="code-note">
+        Export from Studio to YAML. Embed YAML workflows in your SDK code. Run SDK pipelines from
+        CLI. The concepts are identical—only the syntax changes.
+      </p>
+    </div>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="usecases-section">
+    <div class="section-container">
+      <h2 class="section-title">Use It Your Way</h2>
+
+      <div class="usecases-grid">
+        <div class="usecase-card">
+          <h3>Prototype → Production</h3>
+          <p>
+            Build workflows visually in Studio. Export to YAML. Embed in your app with the SDK. Same
+            pipeline, different interface.
+          </p>
+        </div>
+
+        <div class="usecase-card">
+          <h3>CI/CD Automation</h3>
+          <p>
+            Generate OG images on deploy. Resize assets in your build pipeline. Version control your
+            YAML workflows alongside code.
+          </p>
+        </div>
+
+        <div class="usecase-card">
+          <h3>AI-Powered Workflows</h3>
+          <p>
+            Let Claude or Cursor build image workflows via MCP. The LLM understands the pipeline
+            model and creates working workflows.
+          </p>
+        </div>
+
+        <div class="usecase-card">
+          <h3>Quick Tasks</h3>
+          <p>
+            Generate a QR code. Resize a batch of images. Convert to WebP. The CLI handles one-off
+            tasks without writing code.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="section-container">
+      <h2 class="cta-title">Start Building</h2>
+      <p class="cta-subtitle">Pick the interface that fits your workflow.</p>
+      <div class="cta-buttons">
+        <a href="https://studio.floimg.com" class="cta-primary">Try It in Studio</a>
+        <a href="/docs/getting-started/quick-start" class="cta-secondary">Read the Docs</a>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const tabBtns = document.querySelectorAll(".tab-btn");
+    const sdkTab = document.getElementById("sdk-tab");
+    const yamlTab = document.getElementById("yaml-tab");
+    const cliTab = document.getElementById("cli-tab");
+
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        tabBtns.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const tab = btn.getAttribute("data-tab");
+        sdkTab?.classList.add("hidden");
+        yamlTab?.classList.add("hidden");
+        cliTab?.classList.add("hidden");
+
+        if (tab === "sdk") sdkTab?.classList.remove("hidden");
+        if (tab === "yaml") yamlTab?.classList.remove("hidden");
+        if (tab === "cli") cliTab?.classList.remove("hidden");
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Hero */
+  .hero-section {
+    padding: 5rem 1.5rem 4rem;
+    text-align: center;
+    background: linear-gradient(180deg, transparent, rgb(13 148 136 / 0.05));
+  }
+
+  .hero-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--sl-color-text);
+    margin-bottom: 1.5rem;
+  }
+
+  .highlight {
+    color: rgb(13 148 136);
+  }
+
+  :global(.dark) .highlight {
+    color: rgb(45 212 191);
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: #52525b;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  :global(.dark) .hero-subtitle {
+    color: #a1a1aa;
+  }
+
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-primary {
+    padding: 0.875rem 1.75rem;
+    background: rgb(13 148 136);
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .cta-primary:hover {
+    background: rgb(15 118 110);
+  }
+
+  .cta-secondary {
+    padding: 0.875rem 1.75rem;
+    background: transparent;
+    border: 1px solid #d4d4d8;
+    color: var(--sl-color-text);
+    border-radius: 0.5rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  :global(.dark) .cta-secondary {
+    border-color: #3f3f46;
+  }
+
+  .cta-secondary:hover {
+    background: #f4f4f5;
+  }
+
+  :global(.dark) .cta-secondary:hover {
+    background: #27272a;
+  }
+
+  /* Section common */
+  .section-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--sl-color-text);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.125rem;
+    color: #52525b;
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  :global(.dark) .section-subtitle {
+    color: #a1a1aa;
+  }
+
+  /* Pipeline Section */
+  .pipeline-section {
+    padding: 5rem 0;
+  }
+
+  .pipeline-visual {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .pipeline-arrow {
+    font-size: 2rem;
+    color: rgb(13 148 136);
+    font-weight: 300;
+    margin-top: 2.5rem;
+  }
+
+  :global(.dark) .pipeline-arrow {
+    color: rgb(45 212 191);
+  }
+
+  .step-box {
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    min-width: 200px;
+  }
+
+  :global(.dark) .step-box {
+    background: #18181b;
+    border-color: #27272a;
+  }
+
+  .step-label {
+    display: block;
+    font-weight: 600;
+    color: rgb(13 148 136);
+    margin-bottom: 0.25rem;
+    font-size: 1.25rem;
+  }
+
+  :global(.dark) .step-label {
+    color: rgb(45 212 191);
+  }
+
+  .step-desc {
+    font-size: 0.875rem;
+    color: #71717a;
+    margin-bottom: 0.75rem;
+  }
+
+  .step-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.875rem;
+    color: #52525b;
+  }
+
+  :global(.dark) .step-items {
+    color: #a1a1aa;
+  }
+
+  .step-items li {
+    padding: 0.25rem 0;
+  }
+
+  .pipeline-note {
+    text-align: center;
+    color: #71717a;
+    font-size: 0.95rem;
+    margin-top: 2rem;
+  }
+
+  /* Benefits Section */
+  .benefits-section {
+    padding: 5rem 0;
+    background: #f4f4f5;
+    border-top: 1px solid #e4e4e7;
+  }
+
+  :global(.dark) .benefits-section {
+    background: #18181b;
+    border-top-color: #27272a;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .benefit-card {
+    background: var(--sl-color-bg);
+    border: 1px solid #e4e4e7;
+    border-radius: 1rem;
+    padding: 2rem;
+  }
+
+  :global(.dark) .benefit-card {
+    border-color: #27272a;
+  }
+
+  .benefit-icon {
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(13 148 136 / 0.1);
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .benefit-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: rgb(13 148 136);
+  }
+
+  :global(.dark) .benefit-icon svg {
+    color: rgb(45 212 191);
+  }
+
+  .benefit-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--sl-color-text);
+    margin-bottom: 0.75rem;
+  }
+
+  .benefit-card p {
+    font-size: 0.95rem;
+    color: #52525b;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  :global(.dark) .benefit-card p {
+    color: #a1a1aa;
+  }
+
+  /* Interfaces Section */
+  .interfaces-section {
+    padding: 5rem 0;
+  }
+
+  .interfaces-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+
+  @media (max-width: 1000px) {
+    .interfaces-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .interfaces-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .interface-card {
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  :global(.dark) .interface-card {
+    background: #18181b;
+    border-color: #27272a;
+  }
+
+  .interface-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .interface-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    background: rgb(13 148 136);
+    color: white;
+    border-radius: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .interface-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--sl-color-text);
+    margin: 0;
+  }
+
+  .interface-card p {
+    font-size: 0.875rem;
+    color: #52525b;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  :global(.dark) .interface-card p {
+    color: #a1a1aa;
+  }
+
+  .interface-link {
+    font-size: 0.875rem;
+    color: rgb(13 148 136);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  :global(.dark) .interface-link {
+    color: rgb(45 212 191);
+  }
+
+  .interface-link:hover {
+    text-decoration: underline;
+  }
+
+  /* Code Section */
+  .code-section {
+    padding: 5rem 0;
+    background: #18181b;
+    border-top: 1px solid #27272a;
+    border-bottom: 1px solid #27272a;
+  }
+
+  .code-section .section-title,
+  .code-section .section-subtitle {
+    color: #fafafa;
+  }
+
+  .code-section .section-subtitle {
+    color: #a1a1aa;
+  }
+
+  .code-tabs {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .tab-buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .tab-btn {
+    padding: 0.5rem 1rem;
+    background: #27272a;
+    border: 1px solid #3f3f46;
+    border-radius: 0.375rem;
+    color: #a1a1aa;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tab-btn:hover {
+    background: #3f3f46;
+    color: #fafafa;
+  }
+
+  .tab-btn.active {
+    background: rgb(13 148 136);
+    border-color: rgb(13 148 136);
+    color: white;
+  }
+
+  .code-block {
+    background: #09090b;
+    border: 1px solid #27272a;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .code-block.hidden {
+    display: none;
+  }
+
+  .code-block pre {
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: #e4e4e7;
+  }
+
+  .code-comment {
+    color: #71717a;
+  }
+
+  .code-keyword {
+    color: rgb(139 92 246);
+  }
+
+  .code-string {
+    color: rgb(74 222 128);
+  }
+
+  .code-number {
+    color: rgb(251 191 36);
+  }
+
+  .code-note {
+    text-align: center;
+    color: #a1a1aa;
+    font-size: 0.95rem;
+    margin-top: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Use Cases Section */
+  .usecases-section {
+    padding: 5rem 0;
+  }
+
+  .usecases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 700px) {
+    .usecases-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .usecase-card {
+    background: #f4f4f5;
+    border: 1px solid #e4e4e7;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  :global(.dark) .usecase-card {
+    background: #18181b;
+    border-color: #27272a;
+  }
+
+  .usecase-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--sl-color-text);
+    margin-bottom: 0.5rem;
+  }
+
+  .usecase-card p {
+    font-size: 0.95rem;
+    color: #52525b;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  :global(.dark) .usecase-card p {
+    color: #a1a1aa;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: 5rem 0;
+    background: linear-gradient(180deg, rgb(13 148 136 / 0.05), transparent);
+    text-align: center;
+  }
+
+  .cta-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--sl-color-text);
+    margin-bottom: 1rem;
+  }
+
+  .cta-subtitle {
+    font-size: 1.125rem;
+    color: #52525b;
+    margin-bottom: 2rem;
+  }
+
+  :global(.dark) .cta-subtitle {
+    color: #a1a1aa;
+  }
+
+  .cta-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+</style>
