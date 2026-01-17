@@ -4,7 +4,7 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
 
 <MarketingLayout
   title="How It Works"
-  description="FloImg's pipeline model - composable image workflows that work the same across SDK, CLI, Studio, YAML, and MCP."
+  description="FloImg's pipeline model - composable image workflows that work the same across SDK, CLI, Studio, YAML, MCP, and API."
 >
   <!-- Hero -->
   <section class="hero-section">
@@ -133,10 +133,10 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
     </div>
   </section>
 
-  <!-- Five Interfaces -->
+  <!-- Six Interfaces -->
   <section class="interfaces-section">
     <div class="section-container">
-      <h2 class="section-title">Five Interfaces, One Pipeline</h2>
+      <h2 class="section-title">Six Interfaces, One Pipeline</h2>
       <p class="section-subtitle">The same workflow definition is portable across all interfaces</p>
 
       <div class="interfaces-grid">
@@ -185,6 +185,15 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
           </div>
           <p>Model Context Protocol for LLMs. Let Claude build workflows.</p>
           <a href="/docs/mcp" class="interface-link">MCP Docs →</a>
+        </div>
+
+        <div class="interface-card">
+          <div class="interface-header">
+            <span class="interface-badge paid">API</span>
+            <h3>HTTP</h3>
+          </div>
+          <p>REST API for any language. Execute workflows from any backend.</p>
+          <a href="/api" class="interface-link">API Overview →</a>
         </div>
       </div>
     </div>
@@ -603,17 +612,17 @@ floimg generate \
 
   .interfaces-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
-  @media (max-width: 1000px) {
+  @media (max-width: 800px) {
     .interfaces-grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 500px) {
     .interfaces-grid {
       grid-template-columns: 1fr;
     }
@@ -647,6 +656,11 @@ floimg generate \
     border-radius: 0.25rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  .interface-badge.paid {
+    background: rgb(234 179 8);
+    color: #18181b;
   }
 
   .interface-card h3 {
