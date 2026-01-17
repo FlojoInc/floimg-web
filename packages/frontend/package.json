@@ -20,7 +20,7 @@
     "@teamflojo/floimg-qr": "^0.2.3",
     "@teamflojo/floimg-quickchart": "^0.2.0",
     "@teamflojo/floimg-templates": "^0.2.1",
-    "astro": "^5.16.9",
+    "astro": "^5.16.11",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
