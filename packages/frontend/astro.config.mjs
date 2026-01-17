@@ -103,6 +103,17 @@ export default defineConfig({
             { label: 'Self-Hosting', slug: 'docs/studio/self-hosting' },
           ],
         },
+        {
+          label: 'API',
+          badge: { text: 'Paid', variant: 'note' },
+          items: [
+            { label: 'Overview', slug: 'docs/api' },
+            { label: 'Authentication', slug: 'docs/api/authentication' },
+            { label: 'Endpoints', slug: 'docs/api/endpoints' },
+            { label: 'Rate Limits', slug: 'docs/api/rate-limits' },
+            { label: 'Examples', slug: 'docs/api/examples' },
+          ],
+        },
       ],
     }),
     react(),

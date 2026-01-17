@@ -1,0 +1,304 @@
+---
+title: Endpoints
+description: Complete API endpoint reference for FloImg
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+All endpoints use the base URL `https://api.floimg.com/v1`.
+
+## Workflows
+
+### Execute Workflow
+
+Execute a saved workflow with parameters.
+
+```http
+POST /workflows/execute
+```
+
+**Request Body:**
+
+```json
+{
+  "workflowId": "wf_abc123",
+  "parameters": {
+    "prompt": "A serene mountain landscape",
+    "width": 1200,
+    "height": 630
+  },
+  "async": false
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `workflowId` | string | Yes | The workflow ID to execute |
+| `parameters` | object | No | Parameters to pass to the workflow |
+| `async` | boolean | No | If true, returns immediately with execution ID |
+
+**Response (sync):**
+
+```json
+{
+  "executionId": "exec_xyz789",
+  "status": "completed",
+  "output": {
+    "url": "https://storage.floimg.com/images/abc123.png",
+    "width": 1200,
+    "height": 630,
+    "format": "png"
+  },
+  "duration": 2340
+}
+```
+
+**Response (async):**
+
+```json
+{
+  "executionId": "exec_xyz789",
+  "status": "pending"
+}
+```
+
+### Get Execution Status
+
+Check the status of an async workflow execution.
+
+```http
+GET /workflows/executions/{executionId}
+```
+
+**Response:**
+
+```json
+{
+  "executionId": "exec_xyz789",
+  "workflowId": "wf_abc123",
+  "status": "completed",
+  "output": {
+    "url": "https://storage.floimg.com/images/abc123.png"
+  },
+  "startedAt": "2026-01-15T10:30:00Z",
+  "completedAt": "2026-01-15T10:30:02Z"
+}
+```
+
+Status values: `pending`, `running`, `completed`, `failed`
+
+### List Workflows
+
+Get all workflows in your account.
+
+```http
+GET /workflows
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `limit` | number | Max results (default: 20, max: 100) |
+| `offset` | number | Pagination offset |
+| `projectId` | string | Filter by project |
+
+**Response:**
+
+```json
+{
+  "workflows": [
+    {
+      "id": "wf_abc123",
+      "name": "Social Media Image",
+      "projectId": "proj_def456",
+      "createdAt": "2026-01-10T08:00:00Z",
+      "updatedAt": "2026-01-14T12:00:00Z"
+    }
+  ],
+  "total": 42,
+  "hasMore": true
+}
+```
+
+### Get Workflow
+
+Get details for a specific workflow.
+
+```http
+GET /workflows/{workflowId}
+```
+
+**Response:**
+
+```json
+{
+  "id": "wf_abc123",
+  "name": "Social Media Image",
+  "description": "Generate OG images for blog posts",
+  "projectId": "proj_def456",
+  "parameters": [
+    {
+      "name": "prompt",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "width",
+      "type": "number",
+      "default": 1200
+    }
+  ],
+  "createdAt": "2026-01-10T08:00:00Z"
+}
+```
+
+---
+
+## Storage
+
+### Upload Image
+
+Upload an image to your FloImg storage.
+
+```http
+POST /storage/upload
+Content-Type: multipart/form-data
+```
+
+**Form Fields:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `file` | file | Yes | Image file to upload |
+| `projectId` | string | No | Project to store in |
+| `name` | string | No | Custom filename |
+
+**Response:**
+
+```json
+{
+  "id": "img_abc123",
+  "url": "https://storage.floimg.com/images/abc123.png",
+  "name": "hero-image.png",
+  "size": 245832,
+  "format": "png",
+  "width": 1200,
+  "height": 630,
+  "createdAt": "2026-01-15T10:00:00Z"
+}
+```
+
+### List Images
+
+List images in your storage.
+
+```http
+GET /storage/images
+```
+
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `limit` | number | Max results (default: 20, max: 100) |
+| `offset` | number | Pagination offset |
+| `projectId` | string | Filter by project |
+
+**Response:**
+
+```json
+{
+  "images": [
+    {
+      "id": "img_abc123",
+      "url": "https://storage.floimg.com/images/abc123.png",
+      "name": "hero-image.png",
+      "size": 245832,
+      "createdAt": "2026-01-15T10:00:00Z"
+    }
+  ],
+  "total": 156,
+  "hasMore": true
+}
+```
+
+### Get Image
+
+Get details for a specific image.
+
+```http
+GET /storage/images/{imageId}
+```
+
+### Delete Image
+
+Delete an image from storage.
+
+```http
+DELETE /storage/images/{imageId}
+```
+
+**Response:**
+
+```json
+{
+  "deleted": true
+}
+```
+
+---
+
+## Projects
+
+### List Projects
+
+```http
+GET /projects
+```
+
+### Create Project
+
+```http
+POST /projects
+```
+
+**Request Body:**
+
+```json
+{
+  "name": "Marketing Assets",
+  "description": "Images for marketing campaigns"
+}
+```
+
+---
+
+## Error Responses
+
+All errors follow this format:
+
+```json
+{
+  "error": {
+    "code": "error_code",
+    "message": "Human-readable description",
+    "details": {}
+  }
+}
+```
+
+### Common Error Codes
+
+| Code | HTTP Status | Description |
+|------|-------------|-------------|
+| `unauthorized` | 401 | Invalid or missing API key |
+| `forbidden` | 403 | Key lacks required permissions |
+| `not_found` | 404 | Resource doesn't exist |
+| `rate_limited` | 429 | Too many requests |
+| `invalid_request` | 400 | Bad request body or parameters |
+| `workflow_failed` | 500 | Workflow execution error |
+
+<Aside type="tip">
+  For rate limit errors, check the `Retry-After` header for when to retry.
+</Aside>
