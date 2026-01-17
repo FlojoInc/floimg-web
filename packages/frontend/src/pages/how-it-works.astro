@@ -210,6 +210,7 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
           <button class="tab-btn active" data-tab="sdk">SDK</button>
           <button class="tab-btn" data-tab="yaml">YAML</button>
           <button class="tab-btn" data-tab="cli">CLI</button>
+          <button class="tab-btn" data-tab="api">API</button>
         </div>
 
         <div class="code-block" id="sdk-tab">
@@ -253,6 +254,33 @@ floimg generate \
   --params '&#123;"model":"dall-e-3","prompt":"A mountain landscape"&#125;' \
   | floimg transform --op resize --params '&#123;"width":1200,"height":630&#125;' \
   | floimg save s3://my-bucket/hero.png</code></pre>
+        </div>
+
+        <div class="code-block hidden" id="api-tab">
+          <pre><code>curl -X POST https://api.floimg.com/v1/workflows/execute \
+  -H <span class="code-string">"Authorization: Bearer $FLOIMG_API_KEY"</span> \
+  -H <span class="code-string">"Content-Type: application/json"</span> \
+  -d <span class="code-string">'&#123;
+    "steps": [
+      &#123;
+        "type": "generate",
+        "generator": "openai",
+        "params": &#123;
+          "model": "dall-e-3",
+          "prompt": "A mountain landscape at sunset"
+        &#125;
+      &#125;,
+      &#123;
+        "type": "transform",
+        "operation": "resize",
+        "params": &#123; "width": 1200, "height": 630 &#125;
+      &#125;,
+      &#123;
+        "type": "save",
+        "destination": "s3://my-bucket/hero.png"
+      &#125;
+    ]
+  &#125;'</span></code></pre>
         </div>
       </div>
 
@@ -323,6 +351,7 @@ floimg generate \
     const sdkTab = document.getElementById("sdk-tab");
     const yamlTab = document.getElementById("yaml-tab");
     const cliTab = document.getElementById("cli-tab");
+    const apiTab = document.getElementById("api-tab");
 
     tabBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -333,10 +362,12 @@ floimg generate \
         sdkTab?.classList.add("hidden");
         yamlTab?.classList.add("hidden");
         cliTab?.classList.add("hidden");
+        apiTab?.classList.add("hidden");
 
         if (tab === "sdk") sdkTab?.classList.remove("hidden");
         if (tab === "yaml") yamlTab?.classList.remove("hidden");
         if (tab === "cli") cliTab?.classList.remove("hidden");
+        if (tab === "api") apiTab?.classList.remove("hidden");
       });
     });
   });
