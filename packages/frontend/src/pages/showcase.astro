@@ -164,7 +164,8 @@ const categories = [
     }
 
     function createCard(item) {
-      const imageUrl = `${API_URL}/api/storage/images/${item.image.id}/content`;
+      // Use presigned URL from API if available, otherwise fall back to proxy URL
+      const imageUrl = item.image.url || `${API_URL}/api/storage/images/${item.image.id}/content`;
       const userUrl = item.user.username ? `/u/${item.user.username}` : "#";
 
       return `

@@ -105,7 +105,8 @@ const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.c
   }
 
   function createCard(item) {
-    const imageUrl = `${API_URL}/api/storage/images/${item.image.id}/content`;
+    // Use presigned URL from API if available, otherwise fall back to proxy URL
+    const imageUrl = item.image.url || `${API_URL}/api/storage/images/${item.image.id}/content`;
     const authorName = item.user.name || item.user.username || "Anonymous";
     const authorInitial = authorName[0]?.toUpperCase() || "?";
     // Truncate title to ~60 chars for cleaner cards
