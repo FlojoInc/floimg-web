@@ -9,8 +9,12 @@ export const prerender = false;
 
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
 
+// Browser-side URL (baked at build time)
 const API_URL = import.meta.env.PUBLIC_API_URL || "https://api.floimg.com";
 const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.com";
+
+// SSR URL - use runtime env var if available (for Docker networking)
+const SSR_API_URL = process.env.SSR_API_URL || API_URL;
 
 const { id } = Astro.params;
 
@@ -20,7 +24,7 @@ let error: string | null = null;
 
 if (id) {
   try {
-    const res = await fetch(`${API_URL}/api/showcase/${id}`);
+    const res = await fetch(`${SSR_API_URL}/api/showcase/${id}`);
     if (res.ok) {
       const data = await res.json();
       item = data.item;

@@ -6,7 +6,11 @@ FROM node:20-alpine AS builder
 
 # Build-time arguments for environment variables
 ARG PUBLIC_GLITCHTIP_DSN
+ARG PUBLIC_API_URL
+ARG PUBLIC_STUDIO_URL
 ENV PUBLIC_GLITCHTIP_DSN=$PUBLIC_GLITCHTIP_DSN
+ENV PUBLIC_API_URL=$PUBLIC_API_URL
+ENV PUBLIC_STUDIO_URL=$PUBLIC_STUDIO_URL
 
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app

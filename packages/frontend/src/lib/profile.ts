@@ -11,7 +11,11 @@
 import type { GitHubContributor } from "./github";
 import { fetchContributors } from "./github";
 
+// Browser-side URL (baked at build time)
 const API_URL = import.meta.env.PUBLIC_API_URL || "https://api.floimg.com";
+
+// SSR URL - use runtime env var if available (for Docker networking)
+const SSR_API_URL = process.env.SSR_API_URL || API_URL;
 
 export interface UserProfile {
   type: "user";
@@ -54,7 +58,7 @@ export type ProfileData = UserProfile | GitHubProfile | null;
 export async function resolveProfile(username: string): Promise<ProfileData> {
   // 1. Try registered user
   try {
-    const response = await fetch(`${API_URL}/api/users/${username}`, {
+    const response = await fetch(`${SSR_API_URL}/api/users/${username}`, {
       headers: { Accept: "application/json" },
     });
 
