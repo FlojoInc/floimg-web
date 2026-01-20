@@ -505,42 +505,60 @@ const categories = [
     }
   }
 
-  /* Showcase Card */
-  .showcase-card {
+  /* Showcase Card - using :global() for dynamically generated content */
+  :global(.showcase-card) {
     background: var(--sl-color-bg);
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
     overflow: hidden;
     transition:
       transform 0.2s,
-      box-shadow 0.2s;
+      box-shadow 0.2s,
+      border-color 0.2s;
   }
 
-  .showcase-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+  :global(.showcase-card:hover) {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.15);
+    border-color: var(--sl-color-gray-4);
   }
 
-  .card-image-link {
+  :global(.dark .showcase-card) {
+    background: #1a1a1c;
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.3);
+  }
+
+  :global(.dark .showcase-card:hover) {
+    box-shadow: 0 12px 32px rgb(0 0 0 / 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  :global(.card-image-link) {
     display: block;
     position: relative;
     aspect-ratio: 1;
     overflow: hidden;
-    background: var(--sl-color-gray-6);
+    background: linear-gradient(135deg, var(--sl-color-gray-6) 0%, var(--sl-color-gray-5) 100%);
   }
 
-  .card-image {
+  :global(.dark .card-image-link) {
+    background: linear-gradient(135deg, #27272a 0%, #3f3f46 100%);
+  }
+
+  :global(.card-image) {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s;
+    transition: transform 0.4s ease;
   }
 
-  .showcase-card:hover .card-image {
-    transform: scale(1.05);
+  :global(.showcase-card:hover .card-image) {
+    transform: scale(1.08);
   }
 
-  .workflow-badge {
+  :global(.workflow-badge) {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -552,33 +570,35 @@ const categories = [
     border-radius: 0.25rem;
   }
 
-  .card-content {
-    padding: 0.75rem;
+  :global(.card-content) {
+    padding: 0.875rem;
   }
 
-  .card-title {
+  :global(.card-title) {
     display: block;
+    font-size: 0.9375rem;
     font-weight: 600;
+    line-height: 1.4;
     color: var(--sl-color-text);
     text-decoration: none;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.625rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .card-title:hover {
+  :global(.card-title:hover) {
     color: rgb(13 148 136);
   }
 
-  .card-meta {
+  :global(.card-meta) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 0.5rem;
   }
 
-  .card-author {
+  :global(.card-author) {
     display: flex;
     align-items: center;
     gap: 0.375rem;
@@ -587,7 +607,7 @@ const categories = [
     font-size: 0.75rem;
   }
 
-  .author-avatar {
+  :global(.author-avatar) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -600,49 +620,88 @@ const categories = [
     color: var(--sl-color-gray-3);
   }
 
-  .author-name {
+  :global(.dark .author-avatar) {
+    background: #3f3f46;
+  }
+
+  :global(.author-name) {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 100px;
   }
 
-  .card-time {
+  :global(.card-time) {
     font-size: 0.75rem;
     color: var(--sl-color-gray-4);
   }
 
-  .card-stats {
+  :global(.card-stats) {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
+    padding-top: 0.625rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--sl-color-gray-5);
   }
 
-  .stat,
-  .stat-btn {
-    display: flex;
+  :global(.dark .card-stats) {
+    border-top-color: rgba(255, 255, 255, 0.08);
+  }
+
+  :global(.stat),
+  :global(.stat-btn) {
+    display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.375rem;
+    padding: 0.25rem 0.625rem;
+    background: var(--sl-color-gray-6);
+    border-radius: 9999px;
     font-size: 0.75rem;
+    font-weight: 500;
     color: var(--sl-color-gray-3);
+    transition:
+      background 0.2s,
+      color 0.2s;
   }
 
-  .stat-btn {
-    background: none;
+  :global(.dark .stat),
+  :global(.dark .stat-btn) {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  :global(.stat-btn) {
     border: none;
     cursor: pointer;
-    padding: 0;
-    transition: color 0.2s;
   }
 
-  .stat-btn:hover,
-  .stat-btn.liked {
+  :global(.stat-btn:hover) {
+    background: var(--sl-color-gray-5);
+  }
+
+  :global(.dark .stat-btn:hover) {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  :global(.stat-btn.liked) {
     color: rgb(239 68 68);
+    background: rgb(239 68 68 / 0.1);
   }
 
-  .stat-icon {
-    width: 1rem;
-    height: 1rem;
+  :global(.stat-icon) {
+    width: 14px !important;
+    height: 14px !important;
+    flex-shrink: 0;
+    opacity: 0.8;
+  }
+
+  /* Colored stat icons */
+  :global(.stat-btn .stat-icon) {
+    color: #f87171;
+  }
+
+  :global(.stat:not(.stat-btn) .stat-icon) {
+    color: #60a5fa;
   }
 
   /* Loading State */
