@@ -113,7 +113,7 @@ const STUDIO_URL = import.meta.env.PUBLIC_STUDIO_URL || "https://studio.floimg.c
     const displayTitle = item.title.length > 60 ? item.title.slice(0, 57) + "..." : item.title;
 
     return `
-      <a href="/showcase/item?id=${item.id}" class="showcase-card">
+      <a href="/showcase/${item.id}" class="showcase-card">
         <div class="card-image-container">
           <img
             src="${imageUrl}"
