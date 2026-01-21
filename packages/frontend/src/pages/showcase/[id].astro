@@ -42,7 +42,10 @@ if (id) {
 // Generate metadata
 const pageTitle = item ? `${item.title} - FloImg Showcase` : "Item Not Found";
 const pageDescription = item?.description || "View this showcase item on FloImg.";
-const ogImageUrl = item ? `${API_URL}/api/storage/images/${item.image.id}/content` : undefined;
+// Use presigned URL from API if available, otherwise fall back to proxy URL
+const ogImageUrl = item
+  ? item.image.url || `${API_URL}/api/storage/images/${item.image.id}/content`
+  : undefined;
 
 // Format author info for SSR
 const authorName = item?.user?.name || item?.user?.username || "Anonymous";
@@ -80,7 +83,7 @@ const authorUrl = item?.user?.username ? `/u/${item.user.username}` : null;
               <div class="image-section">
                 <div class="image-container">
                   <img
-                    src={`${API_URL}/api/storage/images/${item.image.id}/content`}
+                    src={item.image.url || `${API_URL}/api/storage/images/${item.image.id}/content`}
                     alt={item.title}
                     class="main-image"
                   />
