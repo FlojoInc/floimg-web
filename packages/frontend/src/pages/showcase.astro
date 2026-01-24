@@ -51,6 +51,11 @@ const categories = [
               ))
             }
           </div>
+          <div class="content-type-tabs" id="content-type-tabs">
+            <button class="filter-tab small active" data-content-type="all">All</button>
+            <button class="filter-tab small" data-content-type="image">Images</button>
+            <button class="filter-tab small" data-content-type="workflow">Workflows</button>
+          </div>
           <div class="sort-controls">
             <select id="sort-select" class="sort-select">
               <option value="recent">Recent</option>
@@ -130,6 +135,7 @@ const categories = [
   <script define:vars={{ API_URL, STUDIO_URL }}>
     // State
     let currentCategory = "all";
+    let currentContentType = "all";
     let currentSort = "recent";
     let currentOffset = 0;
     const limit = 20;
@@ -145,7 +151,8 @@ const categories = [
     const loadMoreBtn = document.getElementById("load-more-btn");
     const retryBtn = document.getElementById("retry-btn");
     const sortSelect = document.getElementById("sort-select");
-    const categoryTabs = document.querySelectorAll(".filter-tab");
+    const categoryTabs = document.querySelectorAll("#category-tabs .filter-tab");
+    const contentTypeTabs = document.querySelectorAll("#content-type-tabs .filter-tab");
 
     function formatRelativeTime(dateStr) {
       const date = new Date(dateStr);
@@ -163,33 +170,58 @@ const categories = [
       return "just now";
     }
 
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
     function createCard(item) {
       // Use presigned URL from API if available, otherwise fall back to proxy URL
-      const imageUrl = item.image.url || `${API_URL}/api/storage/images/${item.image.id}/content`;
-      const userUrl = item.user.username ? `/u/${item.user.username}` : "#";
+      const imageUrl =
+        item.image?.url ||
+        (item.image?.id
+          ? `${API_URL}/api/storage/images/${item.image.id}/content`
+          : item.previewImageUrl || "");
+      const userUrl = item.user.username ? `/u/${encodeURIComponent(item.user.username)}` : "#";
+      const contentType = item.contentType || "image";
+      const hasWorkflow =
+        contentType === "workflow" || contentType === "image_workflow" || item.workflowShared;
+      const forkCount = item.forkCount || 0;
+
+      // Content type badge
+      let badge = "";
+      if (contentType === "workflow") {
+        badge = '<span class="workflow-badge" title="Workflow template">Workflow</span>';
+      } else if (hasWorkflow) {
+        badge = '<span class="workflow-badge" title="Workflow included">Workflow</span>';
+      }
+
+      const safeTitle = escapeHtml(item.title || "Untitled");
+      const safeName = escapeHtml(item.user.name || item.user.username || "Anonymous");
+      const safeInitial = escapeHtml(
+        item.user.name?.[0]?.toUpperCase() || item.user.username?.[0]?.toUpperCase() || "?"
+      );
+      const safeId = encodeURIComponent(item.id);
+      const forkParam = encodeURIComponent(item.workflowId || item.id);
 
       return `
-        <div class="showcase-card" data-id="${item.id}">
-          <a href="/showcase/${item.id}" class="card-image-link">
-            <img
-              src="${imageUrl}"
-              alt="${item.title}"
-              class="card-image"
-              loading="lazy"
-            />
-            ${item.workflowShared ? '<span class="workflow-badge" title="Workflow included">Workflow</span>' : ""}
+        <div class="showcase-card" data-id="${safeId}">
+          <a href="/showcase/${safeId}" class="card-image-link">
+            ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${safeTitle}" class="card-image" loading="lazy" />` : `<div class="card-image card-image--placeholder"><svg class="w-8 h-8 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>`}
+            ${badge}
           </a>
           <div class="card-content">
-            <a href="/showcase/${item.id}" class="card-title">${item.title}</a>
+            <a href="/showcase/${safeId}" class="card-title">${safeTitle}</a>
             <div class="card-meta">
               <a href="${userUrl}" class="card-author">
-                <span class="author-avatar">${item.user.name?.[0]?.toUpperCase() || item.user.username?.[0]?.toUpperCase() || "?"}</span>
-                <span class="author-name">${item.user.name || item.user.username || "Anonymous"}</span>
+                <span class="author-avatar">${safeInitial}</span>
+                <span class="author-name">${safeName}</span>
               </a>
               <span class="card-time">${formatRelativeTime(item.createdAt)}</span>
             </div>
             <div class="card-stats">
-              <button class="stat-btn like-btn ${item.isLiked ? "liked" : ""}" data-id="${item.id}" data-count="${item.likeCount}">
+              <button class="stat-btn like-btn ${item.isLiked ? "liked" : ""}" data-id="${safeId}" data-count="${item.likeCount}">
                 <svg class="stat-icon" fill="${item.isLiked ? "currentColor" : "none"}" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
@@ -202,6 +234,19 @@ const categories = [
                 </svg>
                 <span>${item.viewCount}</span>
               </span>
+              ${
+                forkCount > 0
+                  ? `
+                <span class="stat" title="${forkCount} remix${forkCount !== 1 ? "es" : ""}">
+                  <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                  <span>${forkCount}</span>
+                </span>
+              `
+                  : ""
+              }
+              ${hasWorkflow ? `<a href="${STUDIO_URL}?forkWorkflow=${forkParam}" class="remix-btn" title="Remix this workflow">Remix</a>` : ""}
             </div>
           </div>
         </div>
@@ -233,6 +278,9 @@ const categories = [
 
         if (currentCategory !== "all") {
           params.set("category", currentCategory);
+        }
+        if (currentContentType !== "all") {
+          params.set("contentType", currentContentType);
         }
 
         const res = await fetch(`${API_URL}/api/showcase?${params}`, {
@@ -315,6 +363,15 @@ const categories = [
         categoryTabs.forEach((t) => t.classList.remove("active"));
         tab.classList.add("active");
         currentCategory = tab.dataset.category;
+        fetchShowcase();
+      });
+    });
+
+    contentTypeTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        contentTypeTabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        currentContentType = tab.dataset.contentType;
         fetchShowcase();
       });
     });
@@ -461,6 +518,16 @@ const categories = [
     color: white;
   }
 
+  .filter-tab.small {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .content-type-tabs {
+    display: flex;
+    gap: 0.375rem;
+  }
+
   .sort-select {
     padding: 0.5rem 2rem 0.5rem 0.75rem;
     border-radius: 0.375rem;
@@ -569,6 +636,31 @@ const categories = [
     font-size: 0.75rem;
     font-weight: 500;
     border-radius: 0.25rem;
+  }
+
+  :global(.card-image--placeholder) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--sl-color-bg-nav);
+    min-height: 160px;
+  }
+
+  :global(.remix-btn) {
+    margin-left: auto;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgb(13 148 136);
+    border: 1px solid rgb(13 148 136);
+    border-radius: 0.25rem;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  :global(.remix-btn:hover) {
+    background: rgb(13 148 136);
+    color: white;
   }
 
   :global(.card-content) {
