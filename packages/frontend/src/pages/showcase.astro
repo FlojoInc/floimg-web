@@ -170,6 +170,12 @@ const categories = [
       return "just now";
     }
 
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
     function createCard(item) {
       // Use presigned URL from API if available, otherwise fall back to proxy URL
       const imageUrl =
@@ -177,7 +183,7 @@ const categories = [
         (item.image?.id
           ? `${API_URL}/api/storage/images/${item.image.id}/content`
           : item.previewImageUrl || "");
-      const userUrl = item.user.username ? `/u/${item.user.username}` : "#";
+      const userUrl = item.user.username ? `/u/${encodeURIComponent(item.user.username)}` : "#";
       const contentType = item.contentType || "image";
       const hasWorkflow =
         contentType === "workflow" || contentType === "image_workflow" || item.workflowShared;
@@ -191,23 +197,31 @@ const categories = [
         badge = '<span class="workflow-badge" title="Workflow included">Workflow</span>';
       }
 
+      const safeTitle = escapeHtml(item.title || "Untitled");
+      const safeName = escapeHtml(item.user.name || item.user.username || "Anonymous");
+      const safeInitial = escapeHtml(
+        item.user.name?.[0]?.toUpperCase() || item.user.username?.[0]?.toUpperCase() || "?"
+      );
+      const safeId = encodeURIComponent(item.id);
+      const forkParam = encodeURIComponent(item.workflowId || item.id);
+
       return `
-        <div class="showcase-card" data-id="${item.id}">
-          <a href="/showcase/${item.id}" class="card-image-link">
-            ${imageUrl ? `<img src="${imageUrl}" alt="${item.title}" class="card-image" loading="lazy" />` : `<div class="card-image card-image--placeholder"><svg class="w-8 h-8 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>`}
+        <div class="showcase-card" data-id="${safeId}">
+          <a href="/showcase/${safeId}" class="card-image-link">
+            ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${safeTitle}" class="card-image" loading="lazy" />` : `<div class="card-image card-image--placeholder"><svg class="w-8 h-8 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>`}
             ${badge}
           </a>
           <div class="card-content">
-            <a href="/showcase/${item.id}" class="card-title">${item.title}</a>
+            <a href="/showcase/${safeId}" class="card-title">${safeTitle}</a>
             <div class="card-meta">
               <a href="${userUrl}" class="card-author">
-                <span class="author-avatar">${item.user.name?.[0]?.toUpperCase() || item.user.username?.[0]?.toUpperCase() || "?"}</span>
-                <span class="author-name">${item.user.name || item.user.username || "Anonymous"}</span>
+                <span class="author-avatar">${safeInitial}</span>
+                <span class="author-name">${safeName}</span>
               </a>
               <span class="card-time">${formatRelativeTime(item.createdAt)}</span>
             </div>
             <div class="card-stats">
-              <button class="stat-btn like-btn ${item.isLiked ? "liked" : ""}" data-id="${item.id}" data-count="${item.likeCount}">
+              <button class="stat-btn like-btn ${item.isLiked ? "liked" : ""}" data-id="${safeId}" data-count="${item.likeCount}">
                 <svg class="stat-icon" fill="${item.isLiked ? "currentColor" : "none"}" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                 </svg>
@@ -232,7 +246,7 @@ const categories = [
               `
                   : ""
               }
-              ${hasWorkflow ? `<a href="${STUDIO_URL}?forkWorkflow=${item.workflowId || item.id}" class="remix-btn" title="Remix this workflow">Remix</a>` : ""}
+              ${hasWorkflow ? `<a href="${STUDIO_URL}?forkWorkflow=${forkParam}" class="remix-btn" title="Remix this workflow">Remix</a>` : ""}
             </div>
           </div>
         </div>
