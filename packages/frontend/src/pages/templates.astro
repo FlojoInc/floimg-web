@@ -1,9 +1,11 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 import TemplateCard from "../components/TemplateCard.astro";
-import { allTemplates as templates, getCategories } from "@teamflojo/floimg-templates";
+import { fetchTemplates, getCategories } from "../utils/templates";
 
-const categories = getCategories();
+// Fetch templates from API at build time
+const templates = await fetchTemplates();
+const categories = getCategories(templates);
 
 // Category icons and descriptions
 const categoryInfo: Record<string, { icon: string; description: string }> = {

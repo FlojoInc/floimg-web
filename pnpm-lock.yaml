@@ -87,9 +87,6 @@ importers:
       '@teamflojo/floimg-quickchart':
         specifier: ^0.2.0
         version: 0.2.2(@teamflojo/floimg@0.15.0(ws@8.19.0)(zod@3.25.76))
-      '@teamflojo/floimg-templates':
-        specifier: ^0.2.1
-        version: 0.2.1
       astro:
         specifier: ^5.16.11
         version: 5.16.11(@types/node@25.0.9)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.53.3)(tsx@4.21.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -1848,13 +1845,6 @@ packages:
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@teamflojo/floimg': ^0.8.0
-
-  '@teamflojo/floimg-studio-shared@0.4.0':
-    resolution: {integrity: sha512-S/rnhdyccegQwBLL12ra5eGznPKzqVhLqMpVSo0fDufYGA4sJgoQWE/stKVIplO09Kh/fIW+4o6DXxBpqeo5wQ==}
-
-  '@teamflojo/floimg-templates@0.2.1':
-    resolution: {integrity: sha512-Z4hhWU03H04obCDaK2Xbc4lpImDDbQWEqYLrRpwGOzfgp7OwCL/UK0UOTRevO2L4ucNu0AHGtoIUj7T9VYQLSw==}
-    engines: {node: '>=18.0.0'}
 
   '@teamflojo/floimg@0.15.0':
     resolution: {integrity: sha512-QGiXzdAidNoP0FwY1U5xzNq72cW2SvfzdqhNxluE6Vs3zQqF4xNLbck8Jt/xRCeifjl1CVj33NrMw8sSzj8aeQ==}
@@ -7691,12 +7681,6 @@ snapshots:
   '@teamflojo/floimg-quickchart@0.2.2(@teamflojo/floimg@0.15.0(ws@8.19.0)(zod@3.25.76))':
     dependencies:
       '@teamflojo/floimg': 0.15.0(ws@8.19.0)(zod@3.25.76)
-
-  '@teamflojo/floimg-studio-shared@0.4.0': {}
-
-  '@teamflojo/floimg-templates@0.2.1':
-    dependencies:
-      '@teamflojo/floimg-studio-shared': 0.4.0
 
   '@teamflojo/floimg@0.15.0(ws@8.19.0)(zod@3.25.76)':
     dependencies:

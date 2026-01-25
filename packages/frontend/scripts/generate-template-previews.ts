@@ -370,16 +370,23 @@ Environment:
 
   log.info("🖼️  Template Preview Generator\n");
 
-  // Dynamic import of dependencies
+  // Fetch templates from API
+  const API_URL = process.env.PUBLIC_API_URL || "https://api.floimg.com";
   let templates: Template[];
   let floimg: unknown;
 
   try {
-    const templatesModule = await import("@teamflojo/floimg-templates");
-    templates = templatesModule.getAllTemplates();
+    log.info(`📡 Fetching templates from ${API_URL}/api/templates...`);
+    const response = await fetch(`${API_URL}/api/templates?limit=100`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    templates = data.templates || [];
+    log.info(`   Found ${templates.length} templates\n`);
   } catch (err) {
-    log.error("❌ Failed to import @teamflojo/floimg-templates:", err);
-    log.error("   Run: pnpm add @teamflojo/floimg-templates");
+    log.error("❌ Failed to fetch templates from API:", err);
+    log.error("   Ensure api.floimg.com is accessible");
     process.exit(1);
   }
 
