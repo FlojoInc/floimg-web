@@ -7,12 +7,7 @@
  */
 
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
-import {
-  allTemplates as templates,
-  getStudioUrl,
-  getNodeCount,
-  type Template,
-} from "@teamflojo/floimg-templates";
+import { fetchTemplates, getStudioUrl, getNodeCount, type Template } from "../../utils/templates";
 import { generateCodeFormats } from "../../utils/code-format";
 
 /**
@@ -71,18 +66,20 @@ function getWorkflowSteps(template: Template): string[] {
 }
 
 // Pre-render all template pages at build time
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const templates = await fetchTemplates();
   return templates.map((template) => ({
     params: { id: template.id },
-    props: { template },
+    props: { template, allTemplates: templates },
   }));
 }
 
 interface Props {
   template: Template;
+  allTemplates: Template[];
 }
 
-const { template } = Astro.props;
+const { template, allTemplates } = Astro.props;
 
 // Workflow info
 const nodeCount = getNodeCount(template);
@@ -268,7 +265,7 @@ const requiresAuth = template.requiresAuth ?? requiresCloud;
           <!-- CTA Buttons -->
           <div class="cta-section">
             <a
-              href={getStudioUrl(template.id)}
+              href={getStudioUrl(template)}
               class="cta-primary"
               target="_blank"
               rel="noopener noreferrer"
@@ -363,7 +360,7 @@ const requiresAuth = template.requiresAuth ?? requiresCloud;
         <h2 class="section-title">Related Templates</h2>
         <div class="related-grid">
           {
-            templates
+            allTemplates
               .filter((t) => t.id !== template.id && t.category === template.category)
               .slice(0, 3)
               .map((related) => (

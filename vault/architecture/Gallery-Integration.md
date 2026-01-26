@@ -1,84 +1,87 @@
 # Gallery Integration
 
-floimg-web provides a public gallery that showcases floimg capabilities and links to floimg-studio.
+floimg-web provides a public template gallery that showcases floimg capabilities and links to FloImg Studio.
 
 ## Architecture
 
+**API-first with build-time fetch:**
+
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                   floimg-web Gallery                             │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │ Template Metadata                                            │ │
-│  │ - id, name, description, category, generator, tags          │ │
-│  │ - Stored in src/data/templates.ts                           │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-│                              │                                    │
-│                              │ "Open in Studio" link              │
-│                              ▼                                    │
-└─────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                api.floimg.com                                   │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ GET /api/templates                                        │  │
+│  │ - Returns all public templates with full workflow data    │  │
+│  │ - Source of truth for template data                       │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘
+                               ▲
+                               │ Build-time fetch
+                               │
+┌────────────────────────────────────────────────────────────────┐
+│                floimg-web (Astro SSG)                           │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ /templates page                                           │  │
+│  │ - Fetches from API at build time                         │  │
+│  │ - Generates static HTML for SEO                          │  │
+│  │ - "Open in Studio" links to studio.floimg.com            │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘
                                │
                                │ URL: studio.floimg.com/?template=<id>
                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                   floimg-studio                                   │
-│  ┌─────────────────────────────────────────────────────────────┐ │
-│  │ Full Template Data                                           │ │
-│  │ - id, name, description, category, generator, tags          │ │
-│  │ - workflow: { nodes, edges }                                 │ │
-│  │ - Stored in src/templates/                                   │ │
-│  └─────────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│                FloImg Studio                                    │
+│  ┌──────────────────────────────────────────────────────────┐  │
+│  │ Template Loading                                          │  │
+│  │ - Fetches from API at runtime                            │  │
+│  │ - Falls back to localStorage cache or seed data           │  │
+│  │ - Applies template workflow to editor                     │  │
+│  └──────────────────────────────────────────────────────────┘  │
+└────────────────────────────────────────────────────────────────┘
 ```
 
-## Data Separation
+## How It Works
 
-Template data is intentionally split between repositories:
+Templates are served from `GET /api/templates`. floimg-web fetches at build time and generates static HTML pages for SEO.
 
-| Repository | Data | Purpose |
-|------------|------|---------|
-| floimg-web | Metadata only (id, name, description) | Gallery display |
-| floimg-studio | Full workflow (nodes, edges) | Execution |
+| Consumer      | When       | Fallback                               |
+| ------------- | ---------- | -------------------------------------- |
+| floimg-web    | Build time | None (build fails if API unavailable)  |
+| FloImg Studio | Runtime    | localStorage cache → bundled seed data |
 
-This separation exists because:
-1. floimg-web is statically built - cannot fetch from Studio API at build time
-2. floimg-web only needs display metadata, not executable workflows
-3. Template IDs must match across repos for "Open in Studio" to work
+## Template Type
 
-## Template Schema (floimg-web)
+Templates fetched from API include full workflow data:
 
 ```typescript
-interface GalleryTemplate {
-  id: string;           // Must match floimg-studio template ID
+interface Template {
+  id: string;
   name: string;
   description: string;
-  category: string;     // "Charts" | "Diagrams" | "QR Codes" | "Pipelines"
-  generator: string;    // "quickchart" | "mermaid" | "qr"
+  category: string;
+  generator: string;
+  workflow: { nodes: StudioNode[]; edges: StudioEdge[] };
   tags?: string[];
+  requiresCloud?: boolean;
+  requiresAuth?: boolean;
+  preview?: { imageUrl: string };
+  forkCount?: number;
+  author?: { id: string; name: string | null } | null;
+  isSystem?: boolean;
 }
 ```
 
+Type definition: `src/utils/templates.ts`
+
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/data/templates.ts` | Template metadata for gallery |
-| `src/pages/gallery.astro` | Gallery page rendering |
-
-## Adding Templates
-
-When adding a new template:
-
-1. Create the template in floimg-studio:
-   - Add `packages/frontend/src/templates/<name>.ts`
-   - Export from `packages/frontend/src/templates/index.ts`
-
-2. Add metadata to floimg-web:
-   - Add entry to `packages/frontend/src/data/templates.ts`
-   - Use the same `id` as floimg-studio
-
-3. Verify:
-   - Gallery shows the new template
-   - "Open in Studio" link loads the correct workflow
+| File                                | Purpose                          |
+| ----------------------------------- | -------------------------------- |
+| `src/utils/templates.ts`            | Template type, API fetch helpers |
+| `src/pages/templates.astro`         | Gallery listing page             |
+| `src/pages/templates/[id].astro`    | Template detail pages            |
+| `src/components/TemplateCard.astro` | Card component                   |
 
 ## URL Scheme
 
@@ -88,4 +91,8 @@ Gallery items link to Studio with the template ID:
 https://studio.floimg.com/?template=<template-id>
 ```
 
-Studio parses this URL parameter on load and applies the matching template to the workflow editor.
+Studio parses this URL parameter on load, fetches the template from API, and applies it to the workflow editor.
+
+## Related Docs
+
+- `src/utils/templates.ts` - Template utilities
