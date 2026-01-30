@@ -28,7 +28,7 @@ const log = {
   info: (...args: unknown[]) => console.warn(...args),
   error: (...args: unknown[]) => console.error(...args),
 };
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync, promises as fs } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 import * as readline from "readline";
@@ -73,6 +73,9 @@ const __dirname = dirname(__filename);
 
 // Output directory (relative to frontend package)
 const OUTPUT_DIR = join(__dirname, "../public/images/templates");
+
+// Sample input image for pipeline templates
+const SAMPLE_INPUT_PATH = join(__dirname, "sample-input.jpg");
 
 // AI generators that require API keys
 const AI_GENERATORS = new Set([
@@ -179,12 +182,16 @@ async function confirm(message: string): Promise<boolean> {
 
 /**
  * Convert Studio workflow to floimg Pipeline format
- * Simplified version for templates (no input nodes, no dynamic text)
+ * Supports both generator templates and pipeline templates (with input nodes)
  */
 function workflowToPipeline(
   workflow: { nodes: StudioNode[]; edges: StudioEdge[] },
   templateId: string
-): { name: string; steps: unknown[] } {
+): { name: string; steps: unknown[]; needsInput: boolean; inputNodeId?: string } {
+  // Check if template has an input node
+  const inputNode = workflow.nodes.find((n) => n.type === "input");
+  const needsInput = !!inputNode;
+
   // Build dependency graph
   const deps = new Map<string, Set<string>>();
   for (const node of workflow.nodes) {
@@ -228,8 +235,11 @@ function workflowToPipeline(
     const varName = `v${i}`;
     nodeToVar.set(node.id, varName);
 
-    // Skip input nodes
-    if (node.type === "input") continue;
+    // For input nodes, just map the variable (input will be provided externally)
+    if (node.type === "input") {
+      // Mark as v0 for input - will be replaced with actual image bytes
+      continue;
+    }
 
     if (node.type === "generator") {
       const data = node.data as { generatorName: string; params: Record<string, unknown> };
@@ -263,7 +273,12 @@ function workflowToPipeline(
     }
   }
 
-  return { name: templateId, steps };
+  return {
+    name: templateId,
+    steps,
+    needsInput,
+    inputNodeId: inputNode?.id,
+  };
 }
 
 /**
@@ -286,9 +301,48 @@ async function generatePreview(
       return { success: false, error: "FloImg client missing expected run() method" };
     }
 
-    // Execute pipeline
-    type ClientType = { run: (p: unknown) => Promise<Array<{ value?: unknown }>> };
+    type ClientType = {
+      run: (p: unknown) => Promise<Array<{ value?: unknown }>>;
+      transform: (img: unknown, op: string, params: unknown) => Promise<unknown>;
+    };
     const client = floimg as ClientType;
+
+    // For pipeline templates, we need to provide sample input
+    if (pipeline.needsInput) {
+      // Load sample input image
+      if (!existsSync(SAMPLE_INPUT_PATH)) {
+        return { success: false, error: "Sample input image not found" };
+      }
+      const inputBytes = await fs.readFile(SAMPLE_INPUT_PATH);
+      const inputBlob = { bytes: inputBytes, mime: "image/jpeg" };
+
+      // Execute transforms manually, starting with sample input
+      let currentImage: { bytes: Buffer; mime: string } = inputBlob;
+      for (const step of pipeline.steps as Array<{ kind: string; op?: string; params?: unknown }>) {
+        if (step.kind === "transform" && step.op) {
+          const result = await client.transform(currentImage, step.op, step.params || {});
+          if (result && typeof result === "object" && "bytes" in result) {
+            currentImage = result as { bytes: Buffer; mime: string };
+          }
+        }
+      }
+
+      // Save the final image
+      const outputPath = join(OUTPUT_DIR, `${template.id}.png`);
+      const outputDir = dirname(outputPath);
+      if (!existsSync(outputDir)) {
+        mkdirSync(outputDir, { recursive: true });
+      }
+      writeFileSync(outputPath, currentImage.bytes);
+
+      // Save hash for caching
+      const hashPath = join(OUTPUT_DIR, `${template.id}.hash`);
+      writeFileSync(hashPath, computeTemplateHash(template));
+
+      return { success: true };
+    }
+
+    // Execute pipeline for generator templates
     const results = await client.run(pipeline);
 
     // Find the last image result (skip save results)
