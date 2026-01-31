@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "generate:previews": "tsx scripts/generate-template-previews.ts"
+    "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.2",
