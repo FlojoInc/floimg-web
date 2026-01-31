@@ -54,5 +54,10 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.15",
     "@sentry/browser": "^10.36.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "fast-xml-parser": ">=5.3.4"
+    }
   }
 }
