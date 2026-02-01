@@ -72,10 +72,15 @@ export interface StudioEdge {
 /**
  * Fetch all templates from the API.
  * Used at build time for static generation.
+ * Uses cache-busting timestamp to ensure fresh data on each build.
  */
 export async function fetchTemplates(): Promise<Template[]> {
   try {
-    const response = await fetch(`${API_URL}/api/templates?limit=100`);
+    // Cache-bust with timestamp to ensure fresh data on each build
+    const timestamp = Date.now();
+    const response = await fetch(`${API_URL}/api/templates?limit=100&_t=${timestamp}`, {
+      headers: { "Cache-Control": "no-cache" },
+    });
     if (!response.ok) {
       throw new Error(`API error: ${response.status}`);
     }
@@ -90,10 +95,15 @@ export async function fetchTemplates(): Promise<Template[]> {
 
 /**
  * Fetch a single template by ID.
+ * Uses cache-busting timestamp to ensure fresh data on each build.
  */
 export async function fetchTemplate(id: string): Promise<Template | null> {
   try {
-    const response = await fetch(`${API_URL}/api/templates/${encodeURIComponent(id)}`);
+    const timestamp = Date.now();
+    const response = await fetch(
+      `${API_URL}/api/templates/${encodeURIComponent(id)}?_t=${timestamp}`,
+      { headers: { "Cache-Control": "no-cache" } }
+    );
     if (!response.ok) {
       return null;
     }
