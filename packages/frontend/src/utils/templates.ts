@@ -28,8 +28,8 @@ export interface Template {
     imageUrl: string;
     width?: number;
     height?: number;
+    type?: "output" | "workflow";
   };
-  thumbnailUrl?: string;
   capabilities?: {
     claudeCodeReady?: boolean;
     pipeline?: boolean;
