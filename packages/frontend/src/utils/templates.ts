@@ -174,6 +174,11 @@ export interface PreviewBadge {
 /**
  * Get the preview badge for a template based on its preview type and outputs.
  * Returns null for standard single-output templates (no badge needed).
+ *
+ * Badge philosophy: Only show badges that communicate user value.
+ * - "N outputs" = You get multiple variations
+ * - "AI-powered" = Results will vary based on your prompt
+ * - No badge for deterministic single-output templates
  */
 export function getPreviewBadge(template: Template): PreviewBadge | null {
   const previewType = template.preview?.type;
@@ -187,33 +192,16 @@ export function getPreviewBadge(template: Template): PreviewBadge | null {
     };
   }
 
-  // AI workflow templates (workflow graph preview due to non-deterministic nature)
-  if (previewType === "workflow" && template.usesAI) {
+  // AI workflow templates - communicate that results vary
+  if (template.usesAI) {
     return {
-      text: "AI workflow",
+      text: "AI-powered",
       icon: "sparkles",
     };
   }
 
-  // Pipeline templates that show workflow graph (need sample input)
-  if (previewType === "workflow" && template.capabilities?.pipeline) {
-    return {
-      text: "Pipeline",
-      icon: "pipeline",
-    };
-  }
-
-  // Workflow graph preview for other complex templates
-  if (previewType === "workflow") {
-    const nodeCount = getNodeCount(template);
-    if (nodeCount >= 5) {
-      return {
-        text: `${nodeCount} nodes`,
-        icon: "nodes",
-      };
-    }
-  }
-
-  // No badge for standard single-output templates
+  // No badge for other templates - keep it clean
+  // Pipeline templates, complex workflows, etc. don't need badges
+  // The preview image should speak for itself
   return null;
 }
