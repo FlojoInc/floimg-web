@@ -1,6 +1,6 @@
 ---
 import type { Template } from "../utils/templates";
-import { getStudioUrl, getNodeCount } from "../utils/templates";
+import { getStudioUrl, getNodeCount, getPreviewBadge } from "../utils/templates";
 import { generateCodeFormats } from "../utils/code-format";
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
 
 const { template } = Astro.props;
 const nodeCount = getNodeCount(template);
+const previewBadge = getPreviewBadge(template);
 
 // Generate code in all formats
 const code = template.codeExample
@@ -73,6 +74,67 @@ const colors = generatorColors[template.generator] || {
           </div>
           <span class="placeholder-text">Preview coming soon</span>
         </div>
+      )
+    }
+
+    <!-- Preview Badge (bottom-left, shows output count or workflow type) -->
+    {
+      previewBadge && (
+        <span class="preview-badge">
+          {previewBadge.icon === "grid" && (
+            <svg
+              class="badge-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+            </svg>
+          )}
+          {previewBadge.icon === "sparkles" && (
+            <svg
+              class="badge-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" />
+              <path d="M19 13l.5 1.5L21 15l-1.5.5L19 17l-.5-1.5L17 15l1.5-.5L19 13z" />
+              <path d="M5 17l.5 1.5L7 19l-1.5.5L5 21l-.5-1.5L3 19l1.5-.5L5 17z" />
+            </svg>
+          )}
+          {previewBadge.icon === "pipeline" && (
+            <svg
+              class="badge-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M13 17l5-5-5-5M6 17l5-5-5-5" />
+            </svg>
+          )}
+          {previewBadge.icon === "nodes" && (
+            <svg
+              class="badge-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="5" cy="12" r="2" />
+              <circle cx="19" cy="6" r="2" />
+              <circle cx="19" cy="18" r="2" />
+              <path d="M7 12h6l4-6M13 12l4 6" />
+            </svg>
+          )}
+          {previewBadge.text}
+        </span>
       )
     }
 
@@ -284,6 +346,30 @@ const colors = generatorColors[template.generator] || {
   .placeholder-text {
     font-size: 0.75rem;
     color: var(--sl-color-gray-3);
+  }
+
+  /* Preview Badge - bottom-left overlay showing output count or workflow type */
+  .preview-badge {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgb(24 24 27 / 0.7);
+    backdrop-filter: blur(4px);
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgb(244 244 245);
+    z-index: 5;
+  }
+
+  .preview-badge .badge-icon {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-shrink: 0;
   }
 
   /* Hover Overlay */
