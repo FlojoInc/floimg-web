@@ -28,8 +28,14 @@ export interface Template {
     imageUrl: string;
     width?: number;
     height?: number;
-    type?: "output" | "workflow";
+    type?: "output" | "workflow" | "composite" | "custom";
   };
+  outputs?: {
+    imageUrl: string;
+    label?: string;
+    width: number;
+    height: number;
+  }[];
   capabilities?: {
     claudeCodeReady?: boolean;
     pipeline?: boolean;
@@ -154,4 +160,60 @@ export function getStudioUrl(
  */
 export function getNodeCount(template: Template | { workflow?: { nodes?: unknown[] } }): number {
   return template.workflow?.nodes?.length || 0;
+}
+
+/**
+ * Preview badge information for displaying on template cards.
+ * Returns null if no badge should be displayed.
+ */
+export interface PreviewBadge {
+  text: string;
+  icon?: string;
+}
+
+/**
+ * Get the preview badge for a template based on its preview type and outputs.
+ * Returns null for standard single-output templates (no badge needed).
+ */
+export function getPreviewBadge(template: Template): PreviewBadge | null {
+  const previewType = template.preview?.type;
+  const outputCount = template.outputs?.length || 0;
+
+  // Multi-output templates (composite preview)
+  if (previewType === "composite" || outputCount > 1) {
+    return {
+      text: `${outputCount} outputs`,
+      icon: "grid",
+    };
+  }
+
+  // AI workflow templates (workflow graph preview due to non-deterministic nature)
+  if (previewType === "workflow" && template.usesAI) {
+    return {
+      text: "AI workflow",
+      icon: "sparkles",
+    };
+  }
+
+  // Pipeline templates that show workflow graph (need sample input)
+  if (previewType === "workflow" && template.capabilities?.pipeline) {
+    return {
+      text: "Pipeline",
+      icon: "pipeline",
+    };
+  }
+
+  // Workflow graph preview for other complex templates
+  if (previewType === "workflow") {
+    const nodeCount = getNodeCount(template);
+    if (nodeCount >= 5) {
+      return {
+        text: `${nodeCount} nodes`,
+        icon: "nodes",
+      };
+    }
+  }
+
+  // No badge for standard single-output templates
+  return null;
 }
