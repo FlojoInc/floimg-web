@@ -199,11 +199,11 @@ export function parseChangelog(content: string): ChangelogRelease[] {
       continue;
     }
 
-    // Match section header: ### Added, ### Fixed, ### Changed, ### Repository
-    const sectionMatch = line.match(
-      /^### (Added|Fixed|Changed|Repository|Removed|Security|Notes)$/
-    );
-    if (sectionMatch) {
+    // Match section header: ### Added, ### Fixed, etc.
+    // Recognizes both standard Keep a Changelog sections AND custom sections
+    // (anything that doesn't match a @teamflojo/* package pattern)
+    const sectionMatch = line.match(/^### ([A-Z][A-Za-z ]+)$/);
+    if (sectionMatch && !line.includes("@teamflojo/")) {
       // Save previous package/section
       if (currentPackage) {
         currentRelease.packages.push(currentPackage);
